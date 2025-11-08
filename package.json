@@ -3,16 +3,29 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 18090",
     "build": "next build",
     "start": "next start",
     "lint": "biome check",
-    "format": "biome format --write"
+    "format": "biome format --write",
+    "rbac:sync": "bun run scripts/rbac-sync.ts",
+    "rbac:sync:dry": "bun run scripts/rbac-sync.ts --dry-run",
+    "rbac:sync:force": "bun run scripts/rbac-sync.ts --force"
   },
   "dependencies": {
+    "@asteasolutions/zod-to-openapi": "^8.1.0",
+    "@kibamail/owly": "^1.1.7",
+    "@logto/api": "^1.33.0",
+    "@logto/next": "^4.2.6",
+    "@logto/node": "^3.1.6",
+    "@radix-ui/react-slot": "^1.2.4",
+    "@t3-oss/env-nextjs": "^0.13.8",
+    "@tanstack/react-query": "^5.90.7",
+    "iconoir-react": "^7.11.0",
+    "next": "16.0.1",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "next": "16.0.1"
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "babel-plugin-react-compiler": "1.0.0",
