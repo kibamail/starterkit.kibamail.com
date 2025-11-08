@@ -1,0 +1,57 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+/**
+ * Invitations Schema
+ *
+ * Stores organization invitation data for user-facing queries.
+ * Logto Management API doesn't support user-scoped invitation queries,
+ * so we store minimal metadata here to show users their pending invitations.
+ */
+
+// ============================================
+// ORGANIZATION INVITATIONS
+// ============================================
+
+model Invitation {
+  /// Unique identifier for the invitation record
+  id String @id @default(cuid())
+
+  /// Logto's invitation ID (from Management API response)
+  logtoInvitationId String @unique
+
+  /// Logto organization ID (workspace)
+  workspaceId String
+
+  /// Email address of the invitee
+  inviteeEmail String
+
+  /// Invitation status
+  status InvitationStatus @default(PENDING)
+
+  /// When the invitation expires (Unix timestamp in milliseconds)
+  expiresAt DateTime
+
+  /// When the invitation was created
+  createdAt DateTime @default(now())
+
+  /// When the invitation was last updated
+  updatedAt DateTime @updatedAt
+
+  @@index([inviteeEmail])
+  @@index([workspaceId])
+  @@index([expiresAt])
+  @@index([status])
+  @@map("invitations")
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+}
