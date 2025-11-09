@@ -16,15 +16,18 @@ import { inviteMembers } from "./handler";
  * POST /api/internal/v1/workspaces/[id]/members
  *
  * Invite members to workspace
+ * Requires: invite:members permission
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const resolvedParams = await params;
   return withErrorHandling(request, () =>
-    withSession(request, (session) =>
-      inviteMembers(session, request, resolvedParams),
-    ),
+    withSession(
+      request,
+      (session) => inviteMembers(session, request, resolvedParams),
+      ["invite:members"]
+    )
   );
 }

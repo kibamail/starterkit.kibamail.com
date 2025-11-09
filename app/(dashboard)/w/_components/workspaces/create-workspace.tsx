@@ -5,10 +5,10 @@ import { Button } from "@kibamail/owly/button";
 import * as TextField from "@kibamail/owly/text-field";
 import { BookStack } from "iconoir-react";
 import type { ToggleState } from "@/hooks/utils/useToggleState";
-import { useMutation } from "@tanstack/react-query";
 import { internalApi } from "@/lib/api/client";
 import type { FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import { useMutation } from "@/hooks/use-mutation";
 
 interface CreateWorkspaceProps extends ToggleState {}
 

@@ -9,8 +9,6 @@ export default async function Home() {
     fetchUserInfo: true,
   });
 
-  console.dir({ ctx }, { depth: null });
-
   // Auto-create workspace if user is authenticated but has no organizations
   // if (ctx.isAuthenticated && ctx.userInfo && (!ctx.organizations || ctx.organizations.length === 0)) {
   //   await logto.workspaces().create({
@@ -18,8 +16,6 @@ export default async function Home() {
   //     description: "Default workspace",
   //   });
   // }
-
-  console.dir({ ctx }, { depth: null });
 
   return (
     <div className="w-full flex items-center h-screen justify-center">

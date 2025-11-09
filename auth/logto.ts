@@ -11,6 +11,12 @@
  * // Add member to workspace
  * await logto.workspaces().members(workspaceId).add(userId, [roleId])
  *
+ * // Assign roles to member
+ * await logto.workspaces().members(workspaceId).roles(userId).assign([roleId])
+ *
+ * // Remove roles from member
+ * await logto.workspaces().members(workspaceId).roles(userId).remove([roleId])
+ *
  * // List workspace members
  * const members = await logto.workspaces().members(workspaceId).list()
  *
@@ -20,6 +26,7 @@
 
 import { createManagementApi } from "@logto/api/management";
 import { env } from "@/env/schema";
+import { InternalServerError } from "@/lib/api/errors";
 
 // Initialize Management API client
 const { apiClient } = createManagementApi(env.LOGTO_TENANT_ID, {
@@ -27,6 +34,59 @@ const { apiClient } = createManagementApi(env.LOGTO_TENANT_ID, {
   clientSecret: env.LOGTO_M2M_APP_SECRET,
   baseUrl: env.LOGTO_ENDPOINT,
 });
+
+export type LogtoWorkspace = NonNullable<
+  Awaited<ReturnType<WorkspaceManager["get"]>>
+>;
+
+/**
+ * Workspace Member Roles Manager
+ *
+ * Handles role assignment and removal for workspace members.
+ */
+class WorkspaceMemberRolesManager {
+  constructor(private workspaceId: string, private userId: string) {}
+
+  /**
+   * Assign roles to member
+   */
+  async assign(roleIds: string[]) {
+    const response = await apiClient.POST(
+      "/api/organizations/{id}/users/roles",
+      {
+        params: { path: { id: this.workspaceId } },
+        body: {
+          userIds: [this.userId],
+          organizationRoleIds: roleIds,
+        },
+        parseAs: "text",
+      }
+    );
+
+    return response;
+  }
+
+  /**
+   * Remove roles from member
+   */
+  async remove(roleId: string) {
+    const response = await apiClient.DELETE(
+      "/api/organizations/{id}/users/{userId}/roles/{organizationRoleId}",
+      {
+        params: {
+          path: {
+            id: this.workspaceId,
+            organizationRoleId: roleId,
+            userId: this.userId,
+          },
+        },
+        parseAs: "text",
+      }
+    );
+
+    return response;
+  }
+}
 
 /**
  * Workspace Member Management
@@ -50,10 +110,10 @@ class WorkspaceMemberManager {
     });
 
     if (response.error) {
-      throw new Error(`Failed to add member: ${response.error}`);
+      throw new InternalServerError("Failed to add this user to organization.");
     }
 
-    return true;
+    return this.roles(userId).assign(roleIds);
   }
 
   /**
@@ -96,7 +156,7 @@ class WorkspaceMemberManager {
    * based on the configured email connector and message template.
    */
   async invite(inviterUserId: string, inviteeEmail: string, roleIds: string[]) {
-    const response = await apiClient.POST("/api/organization-invitations", {
+    return apiClient.POST("/api/organization-invitations", {
       body: {
         inviterId: inviterUserId,
         invitee: inviteeEmail,
@@ -106,12 +166,6 @@ class WorkspaceMemberManager {
         messagePayload: false,
       },
     });
-
-    if (response.error) {
-      throw new Error(`Failed to create invitation: ${response.error}`);
-    }
-
-    return response.data;
   }
 
   /**
@@ -126,6 +180,13 @@ class WorkspaceMemberManager {
 
     const role = response.data?.find((r) => r.name === roleName);
     return role?.id ?? null;
+  }
+
+  /**
+   * Access member roles operations
+   */
+  roles(userId: string) {
+    return new WorkspaceMemberRolesManager(this.workspaceId, userId);
   }
 }
 
@@ -240,15 +301,15 @@ class WorkspaceManager {
 }
 
 /**
- * User Management
+ * User Invitations Manager
  *
- * Handles user authentication and profile operations.
+ * Handles organization invitation operations.
  */
-class UserManager {
+class UserInvitationsManager {
   /**
    * Get organization invitations for the current user
    */
-  async getInvitations() {
+  async list() {
     const response = await apiClient.GET("/api/organization-invitations");
 
     if (response.error) {
@@ -256,6 +317,47 @@ class UserManager {
     }
 
     return response.data;
+  }
+
+  /**
+   * Update organization invitation status
+   *
+   * @param invitationId - The Logto invitation ID
+   * @param data - Status update data
+   */
+  async update(
+    invitationId: string,
+    data: {
+      status: "Accepted" | "Revoked";
+      acceptedUserId: string | null;
+    }
+  ) {
+    const response = await apiClient.PUT(
+      "/api/organization-invitations/{id}/status",
+      {
+        params: { path: { id: invitationId } },
+        body: data,
+      }
+    );
+
+    return {
+      data: response.data,
+      error: response.error,
+    };
+  }
+}
+
+/**
+ * User Management
+ *
+ * Handles user authentication and profile operations.
+ */
+class UserManager {
+  /**
+   * Access user invitations API
+   */
+  invitations() {
+    return new UserInvitationsManager();
   }
 
   /**

@@ -13,6 +13,7 @@ import { validateRequestBody } from "@/lib/api/validation";
 import type { UserSession } from "@/lib/auth/get-session";
 import { Cookies, CookieKey } from "@/lib/cookies";
 import { createWorkspaceSchema } from "./schema";
+import { OWNER_ROLE } from "@/config/rbac";
 
 /**
  * POST /api/internal/v1/workspaces
@@ -21,7 +22,7 @@ import { createWorkspaceSchema } from "./schema";
  */
 export async function createWorkspace(
   session: UserSession,
-  request: NextRequest,
+  request: NextRequest
 ) {
   const data = await validateRequestBody(createWorkspaceSchema, request);
 
@@ -34,9 +35,22 @@ export async function createWorkspace(
     throw new InternalServerError("Failed to create workspace");
   }
 
-  await logto.workspaces().members(workspace.id).add(session.user.sub, []);
+  const ownerRoleId = await logto
+    .workspaces()
+    .members(workspace.id)
+    .getRoleIdByName(OWNER_ROLE);
 
-  // Set the newly created workspace as active
+  if (!ownerRoleId) {
+    throw new InternalServerError("Owner role not found");
+  }
+
+  const response = await logto
+    .workspaces()
+    .members(workspace.id)
+    .add(session.user.sub, [ownerRoleId]);
+
+  console.dir(response?.error, { depth: null });
+
   await Cookies.set(CookieKey.ACTIVE_WORKSPACE_ID, workspace.id);
 
   return responseCreated({
@@ -47,4 +61,3 @@ export async function createWorkspace(
     },
   });
 }
-

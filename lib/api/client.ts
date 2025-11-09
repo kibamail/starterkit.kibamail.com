@@ -37,6 +37,12 @@ import {
   inviteMembersResponseSchema,
   inviteMembersSchema,
 } from "@/app/api/internal/v1/workspaces/[id]/members/schema";
+import {
+  type UpdateInvitationStatusInput,
+  type UpdateInvitationStatusResponse,
+  updateInvitationStatusResponseSchema,
+  updateInvitationStatusSchema,
+} from "@/app/api/internal/v1/invitations/[id]/status/schema";
 
 type ApiErrorResponse = {
   error: string;
@@ -64,21 +70,14 @@ class HttpClient {
     path: string,
     requestSchema: ZodType<TRequest> | null,
     responseSchema: ZodType<TResponse>,
-    data?: TRequest,
+    data?: TRequest
   ): Promise<TResponse> {
-    let validatedData: TRequest | undefined;
-
-    // Validate request data if schema provided
-    if (requestSchema && data) {
-      validatedData = requestSchema.parse(data);
-    }
-
     const response = await fetch(path, {
       method,
       headers: {
         "Content-Type": "application/json",
       },
-      ...(validatedData && { body: JSON.stringify(validatedData) }),
+      ...(data && { body: JSON.stringify(data) }),
     });
 
     if (!response.ok) {
@@ -92,7 +91,7 @@ class HttpClient {
               code: "custom" as const,
               path: field.split("."),
               message,
-            })),
+            }))
         );
 
         const zodError = new ZodError(issues);
@@ -107,6 +106,74 @@ class HttpClient {
 
     // Return response without validation (schema is only for type inference)
     return json as TResponse;
+  }
+}
+
+/**
+ * Invitations API namespace
+ */
+class InvitationsApi extends HttpClient {
+  /**
+   * Update invitation status
+   *
+   * @param invitationId - Invitation ID
+   * @param data - Status update data
+   * @returns Update invitation status response
+   *
+   * @example
+   * ```ts
+   * // Accept invitation
+   * await internalApi.invitations().update('inv_123', { status: 'Accepted' })
+   *
+   * // Revoke invitation
+   * await internalApi.invitations().update('inv_123', { status: 'Revoked' })
+   * ```
+   */
+  async update(
+    invitationId: string,
+    data: UpdateInvitationStatusInput
+  ): Promise<UpdateInvitationStatusResponse> {
+    return this.request(
+      "PUT",
+      `/api/internal/v1/invitations/${invitationId}/status`,
+      updateInvitationStatusSchema,
+      updateInvitationStatusResponseSchema,
+      data
+    );
+  }
+}
+
+/**
+ * Workspace Members API namespace
+ */
+class WorkspaceMembersApi extends HttpClient {
+  constructor(private workspaceId: string) {
+    super();
+  }
+
+  /**
+   * Invite member to workspace
+   *
+   * @param data - Invitation data with email and role
+   * @returns Invitation result
+   * @throws ZodError if validation fails
+   *
+   * @example
+   * ```ts
+   * const result = await internalApi.workspaces().members('org_123').invite({
+   *   email: 'user@example.com',
+   *   role: 'member'
+   * })
+   * ```
+   */
+  async invite(data: InviteMembersInput): Promise<InviteMembersResponse> {
+    return this.request(
+      "POST",
+      `/api/internal/v1/workspaces/${this.workspaceId}/members`,
+      inviteMembersSchema,
+      inviteMembersResponseSchema,
+      data
+    );
   }
 }
 
@@ -135,7 +202,7 @@ class WorkspacesApi extends HttpClient {
       "/api/internal/v1/workspaces",
       createWorkspaceSchema,
       createWorkspaceResponseSchema,
-      data,
+      data
     );
   }
 
@@ -156,40 +223,26 @@ class WorkspacesApi extends HttpClient {
       "POST",
       `/api/internal/v1/workspaces/${id}/activate`,
       null,
-      activateWorkspaceResponseSchema,
+      activateWorkspaceResponseSchema
     );
   }
 
   /**
-   * Invite members to workspace
+   * Access workspace members API
    *
    * @param workspaceId - Workspace ID
-   * @param data - Invitation data with emails and roles
-   * @returns Invitation results
-   * @throws ZodError if validation fails
+   * @returns WorkspaceMembersApi instance
    *
    * @example
    * ```ts
-   * const result = await internalApi.workspaces().inviteMembers('org_123', {
-   *   invites: [
-   *     { email: 'user@example.com', role: 'member' },
-   *     { email: 'admin@example.com', role: 'admin' }
-   *   ]
+   * await internalApi.workspaces().members('org_123').invite({
+   *   email: 'user@example.com',
+   *   role: 'member'
    * })
-   * console.log(`Invited ${result.data.invitedCount} members`)
    * ```
    */
-  async inviteMembers(
-    workspaceId: string,
-    data: InviteMembersInput,
-  ): Promise<InviteMembersResponse> {
-    return this.request(
-      "POST",
-      `/api/internal/v1/workspaces/${workspaceId}/members`,
-      inviteMembersSchema,
-      inviteMembersResponseSchema,
-      data,
-    );
+  members(workspaceId: string) {
+    return new WorkspaceMembersApi(workspaceId);
   }
 }
 
@@ -200,9 +253,11 @@ class WorkspacesApi extends HttpClient {
  */
 export class InternalApi {
   private _workspaces: WorkspacesApi;
+  private _invitations: InvitationsApi;
 
   constructor() {
     this._workspaces = new WorkspacesApi();
+    this._invitations = new InvitationsApi();
   }
 
   /**
@@ -219,9 +274,19 @@ export class InternalApi {
     return this._workspaces;
   }
 
-  // Add more namespaces here:
-  // users() { return this._users }
-  // projects() { return this._projects }
+  /**
+   * Access invitations API
+   *
+   * @returns InvitationsApi instance
+   *
+   * @example
+   * ```ts
+   * await internalApi.invitations().update('inv_123', { status: 'Accepted' })
+   * ```
+   */
+  invitations() {
+    return this._invitations;
+  }
 }
 
 /**

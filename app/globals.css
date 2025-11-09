@@ -12,15 +12,11 @@
 }
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --font-heading: "RocaTwo";
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--default-font-family-display);
 }
 
 @theme {
@@ -184,41 +180,6 @@
   --color-kb-content-disabled: var(--content-disabled);
   --color-kb-content-info: var(--content-info);
   --color-kb-content-info-bold: var(--content-info-bold);
-
-  /* ===== SPACING ===== */
-  --spacing-2xs: var(--spacing-2xs);
-  --spacing-xs: var(--spacing-xs);
-  --spacing-sm: var(--spacing-sm);
-  --spacing-md: var(--spacing-md);
-  --spacing-lg: var(--spacing-lg);
-  --spacing-xl: var(--spacing-xl);
-  --spacing-2xl: var(--spacing-2xl);
-  --spacing-3xl: var(--spacing-3xl);
-  --spacing-4xl: var(--spacing-4xl);
-  --spacing-5xl: var(--spacing-5xl);
-  --spacing-6xl: var(--spacing-6xl);
-  --spacing-7xl: var(--spacing-7xl);
-  --spacing-8xl: var(--spacing-8xl);
-  --spacing-9xl: var(--spacing-9xl);
-
-  /* ===== BORDER RADIUS ===== */
-  --radius-2xs: 2px;
-  --radius-xs: 4px;
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --radius-2xl: 20px;
-  --radius-3xl: 24px;
-  --radius-full: 9999px;
-
-  /* ===== SHADOWS ===== */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg:
-    0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-xl:
-    0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
 
 @media (prefers-color-scheme: dark) {

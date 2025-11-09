@@ -45,7 +45,7 @@
  *
  * Defines a single permission that can be assigned to roles.
  */
-export interface Permission {
+export interface PermissionDefinition {
   /**
    * Unique permission identifier
    *
@@ -123,7 +123,7 @@ export interface RBACConfig {
   /**
    * All available organization permissions
    */
-  permissions: Permission[];
+  permissions: PermissionDefinition[];
 
   /**
    * All organization roles
@@ -141,7 +141,7 @@ export interface RBACConfig {
  * permissions as your application grows (e.g., project management,
  * analytics, API keys, etc.).
  */
-export const PERMISSIONS: Permission[] = [
+export const PERMISSIONS: PermissionDefinition[] = [
   // ============================================================================
   // WORKSPACE MANAGEMENT
   // ============================================================================
@@ -251,7 +251,7 @@ export const ROLES: Role[] = [
     description:
       "Basic access to view workspace information and members. Can invite new members but cannot manage existing members or settings.",
     type: "User",
-    permissions: ["read:workspace", "read:members", "invite:members"],
+    permissions: ["read:workspace", "read:members"],
   },
 ];
 
@@ -307,6 +307,27 @@ export const ROLE_NAMES = ROLES.map((r) => r.name);
  * ```
  */
 export type PermissionName = (typeof PERMISSION_NAMES)[number];
+
+/**
+ * Type: Union of all available permissions
+ *
+ * This is a union type of all permission strings for type-safe permission checking.
+ *
+ * @example
+ * ```typescript
+ * const permission: Permission = "read:workspace"; // ✓ Valid
+ * const invalid: Permission = "invalid:permission"; // ✗ TypeScript error
+ * ```
+ */
+export type Permission =
+  | "read:workspace"
+  | "manage:workspace"
+  | "delete:workspace"
+  | "read:members"
+  | "invite:members"
+  | "manage:members"
+  | "read:billing"
+  | "manage:billing";
 
 /**
  * Type: Role name

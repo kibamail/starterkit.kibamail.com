@@ -7,16 +7,25 @@
 import type { NextRequest } from "next/server";
 import { logto } from "@/auth/logto";
 import type { UserSession } from "@/lib/auth/get-session";
-import { responseOk } from "@/lib/api/responses";
+import {
+  responseBadRequest,
+  responseCreated,
+  responseOk,
+  responseValidationFailed,
+} from "@/lib/api/responses";
 import { validateRequestBody } from "@/lib/api/validation";
 import { inviteMembersSchema } from "./schema";
+import { prisma } from "@/lib/db";
+import { BadRequestError, InternalServerError } from "@/lib/api/errors";
+import { toLogtoError } from "@/lib/logto/errors";
+import dayjs from "dayjs";
 
 /**
  * POST /api/internal/v1/workspaces/[id]/members
  *
- * Invite members to a workspace
+ * Invite a member to a workspace
  *
- * Creates organization invitations via Logto Management API.
+ * Creates organization invitation via Logto Management API.
  * Does NOT send emails - Logto handles email delivery based on connector config.
  */
 export async function inviteMembers(
@@ -25,76 +34,57 @@ export async function inviteMembers(
   params: { id: string }
 ) {
   const data = await validateRequestBody(inviteMembersSchema, request);
+
   const workspaceId = params.id;
   const inviterId = session.user.sub;
 
-  // Process all invitations in parallel
-  const results = await Promise.allSettled(
-    data.invites.map(async (invite) => {
-      try {
-        // Get role ID from role name
-        const roleId = await logto
-          .workspaces()
-          .members(workspaceId)
-          .getRoleIdByName(invite.role);
+  const roleId = await logto
+    .workspaces()
+    .members(workspaceId)
+    .getRoleIdByName(data.role);
 
-        if (!roleId) {
-          throw new Error(`Invalid role: ${invite.role}`);
-        }
+  if (!roleId) {
+    return responseBadRequest(
+      "The role you provided does not seem to be valid. Please try again."
+    );
+  }
 
-        // Create invitation in Logto (Logto handles email sending)
-        const inv = await logto
-          .workspaces()
-          .members(workspaceId)
-          .invite(inviterId, invite.email, [roleId]);
+  const { data: invitation, error } = await logto
+    .workspaces()
+    .members(workspaceId)
+    .invite(inviterId, data.email, [roleId]);
 
-        console.dir({ inv });
+  if (error) {
+    const parsedError = toLogtoError(error);
 
-        return {
-          email: invite.email,
-          status: "success" as const,
-        };
-      } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : String(error);
-        const isAlreadyMember =
-          errorMessage.toLowerCase().includes("already") ||
-          errorMessage.toLowerCase().includes("exists");
+    if (parsedError.code === "entity.unique_integrity_violation") {
+      return responseBadRequest(
+        "This user was already invited. Please delete the current invitation to invite again."
+      );
+    }
 
-        if (isAlreadyMember) {
-          return {
-            email: invite.email,
-            status: "already_member" as const,
-            error: errorMessage,
-          };
-        }
+    if (parsedError.code === "request.invalid_input") {
+      return responseBadRequest(parsedError.message);
+    }
 
-        return {
-          email: invite.email,
-          status: "failed" as const,
-          error: errorMessage,
-        };
-      }
-    })
-  );
+    throw error;
+  }
 
-  // Collect results
-  const invitations = results.map((result) =>
-    result.status === "fulfilled" ? result.value : result.reason
-  );
+  if (!invitation) {
+    throw new InternalServerError(
+      "Failed to create member invitation. Please try again.",
+      error
+    );
+  }
 
-  const invitedCount = invitations.filter(
-    (inv) => inv.status === "success"
-  ).length;
-  const failedCount = invitations.filter(
-    (inv) => inv.status === "failed"
-  ).length;
-
-  return responseOk({
+  await prisma.invitation.create({
     data: {
-      invitedCount,
-      failedCount,
-      invitations,
+      inviteeEmail: data.email,
+      logtoInvitationId: invitation.id,
+      expiresAt: dayjs(invitation.expiresAt).toDate(),
+      workspaceId,
     },
   });
+
+  return responseCreated({});
 }

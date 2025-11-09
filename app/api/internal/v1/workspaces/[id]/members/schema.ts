@@ -5,40 +5,29 @@
  */
 
 import { z } from "zod";
+import { ROLE_NAMES } from "@/config/rbac";
 
 /**
- * POST /api/internal/v1/workspaces/[id]/members - Invite Members
+ * POST /api/internal/v1/workspaces/[id]/members - Invite Member
  *
  * Request Body Schema
  */
 export const inviteMembersSchema = z.object({
-  invites: z
-    .array(
-      z.object({
-        email: z.string().email("Invalid email address"),
-        role: z.string().min(1, "Role is required"),
-      }),
-    )
-    .min(1, "At least one invite is required")
-    .max(50, "Cannot invite more than 50 members at once"),
+  email: z.email({ message: "Invalid email address" }),
+  role: z.enum(ROLE_NAMES as [string, ...string[]], {
+    message: `Role must be one of: ${ROLE_NAMES.join(", ")}`,
+  }),
 });
 
 /**
- * POST /api/internal/v1/workspaces/[id]/members - Invite Members
+ * POST /api/internal/v1/workspaces/[id]/members - Invite Member
  *
  * Response Schema
  */
 export const inviteMembersResponseSchema = z.object({
   data: z.object({
-    invitedCount: z.number(),
-    failedCount: z.number(),
-    invitations: z.array(
-      z.object({
-        email: z.string(),
-        status: z.enum(["success", "failed", "already_member"]),
-        error: z.string().optional(),
-      }),
-    ),
+    email: z.string(),
+    invitationId: z.string(),
   }),
 });
 

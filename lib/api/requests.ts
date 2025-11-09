@@ -14,13 +14,29 @@
  *   })
  * }
  *
+ * // With permission checks
+ * export async function DELETE(request: NextRequest) {
+ *   return withSession(
+ *     request,
+ *     async (session, request) => {
+ *       // Only executes if user has permission
+ *       return responseOk({})
+ *     },
+ *     ["delete:workspace"]
+ *   )
+ * }
+ *
  * // Stacked middleware with error handling
  * export async function POST(request: NextRequest) {
  *   return withErrorHandling(request, () =>
- *     withSession(request, async (session, request) => {
- *       // Can throw ApiError here, it will be caught and handled
- *       throw new NotFoundError('Resource not found')
- *     })
+ *     withSession(
+ *       request,
+ *       async (session, request) => {
+ *         // Can throw ApiError here, it will be caught and handled
+ *         throw new NotFoundError('Resource not found')
+ *       },
+ *       ["manage:members"]
+ *     )
  *   )
  * }
  * ```
@@ -36,13 +52,15 @@ import {
   responseValidationFailed,
 } from "@/lib/api/responses";
 import { getSession, type UserSession } from "@/lib/auth/get-session";
+import { requirePermissions } from "@/lib/auth/permissions";
+import type { Permission } from "@/config/rbac";
 
 /**
  * Handler that receives session and request
  */
 type SessionHandler = (
   session: UserSession,
-  request: NextRequest,
+  request: NextRequest
 ) => Promise<NextResponse> | NextResponse;
 
 /**
@@ -50,13 +68,15 @@ type SessionHandler = (
  *
  * Verifies the user is authenticated and injects the session into the handler.
  * Returns 401 if the user is not authenticated.
+ * Optionally checks for required permissions before executing the handler.
  * Automatically revalidates /w/* routes after handler executes successfully.
  *
  * @param request - Next.js request object
  * @param handler - Handler function that receives session and request
+ * @param requiredPermissions - Optional array of permissions to check before executing handler
  * @returns Response from handler or 401 Unauthorized
  *
- * @example
+ * @example Basic usage
  * ```ts
  * export async function GET(request: NextRequest) {
  *   return withSession(request, async (session, request) => {
@@ -68,14 +88,46 @@ type SessionHandler = (
  * }
  * ```
  *
+ * @example With permission checks
+ * ```ts
+ * export async function DELETE(request: NextRequest) {
+ *   return withSession(
+ *     request,
+ *     async (session, request) => {
+ *       // Only executes if user has delete:workspace permission
+ *       await deleteWorkspace(session.currentOrganization.id)
+ *       return responseOk({})
+ *     },
+ *     ["delete:workspace"]
+ *   )
+ * }
+ * ```
+ *
+ * @example Multiple permissions
+ * ```ts
+ * export async function POST(request: NextRequest) {
+ *   return withSession(
+ *     request,
+ *     async (session, request) => {
+ *       // User must have both permissions
+ *       return responseOk({ ... })
+ *     },
+ *     ["manage:billing", "read:workspace"]
+ *   )
+ * }
+ * ```
+ *
  * @example Stack with other middleware
  * ```ts
  * export async function POST(request: NextRequest) {
- *   return withSession(request, (session, req) =>
- *     withWorkspace(req, async (workspace, req) => {
- *       // Has both session and workspace
- *       return responseCreated({ workspace })
- *     })
+ *   return withErrorHandling(request, () =>
+ *     withSession(
+ *       request,
+ *       async (session, req) => {
+ *         return responseCreated({ workspace })
+ *       },
+ *       ["manage:members"]
+ *     )
  *   )
  * }
  * ```
@@ -83,18 +135,22 @@ type SessionHandler = (
 export async function withSession(
   request: NextRequest,
   handler: SessionHandler,
+  requiredPermissions?: Permission[]
 ): Promise<NextResponse> {
-  try {
-    const session = await getSession({ redirectIfUnauthenticated: false });
-    const response = await handler(session, request);
+  const session = await getSession();
 
-    revalidatePath("/w", "layout");
-
-    return response;
-  } catch (_error) {
-    console.error(_error);
-    return responseUnauthorized();
+  // Check required permissions if specified
+  if (requiredPermissions && requiredPermissions.length > 0) {
+    for (const permission of requiredPermissions) {
+      requirePermissions(session, permission);
+    }
   }
+
+  const response = await handler(session, request);
+
+  revalidatePath("/w", "layout");
+
+  return response;
 }
 
 /**
@@ -143,7 +199,7 @@ type Handler = (request: NextRequest) => Promise<NextResponse> | NextResponse;
  */
 export async function withErrorHandling(
   request: NextRequest,
-  handler: Handler,
+  handler: Handler
 ): Promise<NextResponse> {
   try {
     return await handler(request);
@@ -155,7 +211,7 @@ export async function withErrorHandling(
           error: error.message,
           ...(error.fieldErrors && { fieldErrors: error.fieldErrors }),
         },
-        { status: error.statusCode },
+        { status: error.statusCode }
       );
     }
 
@@ -163,7 +219,7 @@ export async function withErrorHandling(
       return responseValidationFailed(error);
     }
 
-    console.error("Unexpected API error:", error);
+    console.error(error);
 
     return NextResp.json(
       {
@@ -172,7 +228,7 @@ export async function withErrorHandling(
             ? error.message
             : "An unexpected error occurred",
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

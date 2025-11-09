@@ -13,6 +13,7 @@ import { internalApi } from "@/lib/api/client";
 import { useRouter } from "next/navigation";
 import { useToast } from "@kibamail/owly/toast";
 import { signOutAction } from "@/app/(auth)/actions/sign-out";
+import { hasPermission } from "@/lib/auth/permissions";
 
 interface UserDropdownComponentProps {
   session: UserSession;
@@ -25,6 +26,8 @@ export function UserSessionDropdown({ session }: UserDropdownComponentProps) {
   const toast = useToast();
 
   const router = useRouter();
+
+  const canInviteMembers = hasPermission(session, "invite:members");
 
   const { mutate: activateWorkspace } = useMutation({
     async mutationFn(workspaceId: string) {
@@ -47,9 +50,9 @@ export function UserSessionDropdown({ session }: UserDropdownComponentProps) {
       <UserDropdown.Root>
         <UserDropdown.Trigger>
           <LetterAvatar size="small" color="info">
-            {session?.user?.name || session?.user?.email}
+            {session.currentOrganization?.name}
           </LetterAvatar>
-          <span>{session.currentOrganization?.name || session.user.email}</span>
+          <span>{session.currentOrganization?.name}</span>
         </UserDropdown.Trigger>
 
         <UserDropdown.Content>
@@ -62,7 +65,7 @@ export function UserSessionDropdown({ session }: UserDropdownComponentProps) {
                 onClick={() => activateWorkspace(org.id)}
               >
                 <LetterAvatar size="small" color="info">
-                  {org.name.slice(0, 2).toUpperCase()}
+                  {org.name}
                 </LetterAvatar>
                 {org.name}
               </UserDropdown.Item>
@@ -75,12 +78,14 @@ export function UserSessionDropdown({ session }: UserDropdownComponentProps) {
             <Plus />
             New workspace
           </UserDropdown.Item>
-          <UserDropdown.Item
-            onClick={() => inviteMembersState.onOpenChange?.(true)}
-          >
-            <Mail />
-            Invite members
-          </UserDropdown.Item>
+          {canInviteMembers && (
+            <UserDropdown.Item
+              onClick={() => inviteMembersState.onOpenChange?.(true)}
+            >
+              <Mail />
+              Invite members
+            </UserDropdown.Item>
+          )}
 
           <UserDropdown.Divider />
 
@@ -92,7 +97,7 @@ export function UserSessionDropdown({ session }: UserDropdownComponentProps) {
       </UserDropdown.Root>
 
       <CreateWorkspace {...createWorkspaceState} />
-      <InviteMembers {...inviteMembersState} />
+      {canInviteMembers && <InviteMembers {...inviteMembersState} />}
     </>
   );
 }

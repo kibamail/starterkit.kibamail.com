@@ -24,6 +24,8 @@ import { redirect } from "next/navigation";
 import { logtoConfig } from "@/config/logto";
 import { Cookies, CookieKey } from "@/lib/cookies";
 import type { IdTokenClaims } from "@logto/node";
+import { UnauthorizedError } from "../api/errors";
+import { ROLES, type Permission } from "@/config/rbac";
 
 export type UserSession = {
   user: {
@@ -45,6 +47,7 @@ export type UserSession = {
     name: string;
     description: string | null;
   } | null;
+  permissions: Permission[];
 };
 
 /**
@@ -65,23 +68,16 @@ export type UserSession = {
  * console.log(session.currentOrganization?.name) // "Acme Corp"
  * ```
  */
-export async function getSession(
-  options: { redirectIfUnauthenticated?: boolean } = {}
-): Promise<UserSession> {
+export async function getSession(): Promise<UserSession> {
   try {
-    const { redirectIfUnauthenticated = true } = options;
-
     const ctx = await getLogtoContext(logtoConfig, {
       fetchUserInfo: true,
     });
 
+    console.dir(ctx);
+
     if (!ctx.isAuthenticated) {
-      // if (redirectIfUnauthenticated) {
-      //   // Redirect to API route that handles Logto sign-in
-      //   // API routes can modify cookies, unlike Server Components
-      //   redirect("/api/auth/signin");
-      // }
-      throw new Error("User is not authenticated");
+      throw new UnauthorizedError("User is not authenticated");
     }
 
     if (!ctx.userInfo?.sub || !ctx.userInfo?.email) {
@@ -108,6 +104,27 @@ export async function getSession(
       currentOrganization = organizations[0];
     }
 
+    // Extract permissions based on user's role(s) in current organization
+    const permissions: Permission[] = [];
+
+    if (currentOrganization && ctx.userInfo.organization_roles) {
+      // Filter roles for current organization (format: "orgId:roleName")
+      const currentOrgRoles = ctx.userInfo.organization_roles
+        .filter((roleStr) => roleStr.startsWith(`${currentOrganization.id}:`))
+        .map((roleStr) => roleStr.split(":")[1]); // Extract role name
+
+      // Map role names to permissions from RBAC config
+      for (const roleName of currentOrgRoles) {
+        const role = ROLES.find((r) => r.name === roleName);
+        if (role) {
+          permissions.push(...(role.permissions as Permission[]));
+        }
+      }
+    }
+
+    // Deduplicate permissions
+    const uniquePermissions = Array.from(new Set(permissions));
+
     return {
       user: {
         sub: ctx.userInfo.sub,
@@ -120,6 +137,7 @@ export async function getSession(
       claims: ctx.claims,
       organizations,
       currentOrganization,
+      permissions: uniquePermissions,
     };
   } catch (error) {
     console.error(error);

@@ -40,22 +40,16 @@ interface QueryProviderProps {
  * ```
  */
 export function QueryProvider({ children }: QueryProviderProps) {
-  // Create a new QueryClient instance for each component mount
-  // This prevents sharing state between different users on the server
   const [queryClient] = useState(
     () =>
       new QueryClient({
-        // defaultOptions: {
-        //   queries: {
-        //     // Disable automatic refetching on window focus in development
-        //     refetchOnWindowFocus: process.env.NODE_ENV === "production",
-        //     // Retry failed requests once
-        //     retry: 1,
-        //     // Cache data for 5 minutes
-        //     staleTime: 5 * 60 * 1000,
-        //   },
-        // },
-      }),
+        defaultOptions: {
+          queries: {
+            retry: 1,
+            staleTime: 5 * 60 * 1000,
+          },
+        },
+      })
   );
 
   return (
