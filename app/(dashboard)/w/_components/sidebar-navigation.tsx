@@ -1,0 +1,37 @@
+"use client";
+
+import { DashboardLayoutSidebarGroup } from "@kibamail/owly/dashboard-layout";
+import { DashboardLayoutSidebarItem } from "@kibamail/owly/dashboard-layout";
+import { HomeAltSlimHoriz, Settings } from "iconoir-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+/**
+ * Sidebar Navigation
+ *
+ * Client component that handles sidebar navigation with active state detection.
+ * Manually checks pathname to determine which navigation item is active.
+ */
+export function SidebarNavigation() {
+  const pathname = usePathname();
+
+  // Check if settings route is active (matches /w/settings or /w/settings/*)
+  const isSettingsActive = pathname.startsWith("/w/settings");
+
+  return (
+    <DashboardLayoutSidebarGroup>
+      <DashboardLayoutSidebarItem asChild>
+        <Link href="/w/">
+          <HomeAltSlimHoriz />
+          Dashboard
+        </Link>
+      </DashboardLayoutSidebarItem>
+      <DashboardLayoutSidebarItem asChild active={isSettingsActive}>
+        <Link href="/w/settings">
+          <Settings />
+          Settings
+        </Link>
+      </DashboardLayoutSidebarItem>
+    </DashboardLayoutSidebarGroup>
+  );
+}

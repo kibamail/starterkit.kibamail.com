@@ -15,6 +15,7 @@ import {
   HomeAltSlimHoriz,
   Plus,
   SecureWindow,
+  Settings,
   SwipeLeftGesture,
   User,
 } from "iconoir-react";
@@ -25,6 +26,7 @@ import { UserProvider } from "@/lib/contexts/user-context";
 import { QueryProvider } from "@/lib/providers/query-provider";
 import { UserSessionDropdown } from "./_components/profile/user-dropdown";
 import { ToastProvider } from "@kibamail/owly/toast";
+import { SidebarNavigation } from "./_components/sidebar-navigation";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -93,6 +95,8 @@ export default async function WorkspaceLayout({ children }: PropsWithChildren) {
                   <CommandSearch.Footer />
                 </CommandSearch.Content>
               </CommandSearch.Root>
+
+              <SidebarNavigation />
 
               <DashboardLayoutSidebarFooter>
                 <DashboardLayoutFooterNotes>
