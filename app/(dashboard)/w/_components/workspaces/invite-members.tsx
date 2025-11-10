@@ -12,16 +12,28 @@ import { useOrganization } from "@/lib/contexts/user-context";
 import { useMutation } from "@/hooks/use-mutation";
 import { useToast } from "@kibamail/owly/toast";
 
-interface InviteMembersProps extends ToggleState {}
+interface InviteMembersProps extends ToggleState {
+  mode?: "invite" | "change-role";
+  member?: {
+    id: string;
+    email: string;
+    role: string;
+  };
+}
 
 const LEAST_PRIVILEGE_ROLE = ROLES[ROLES.length - 1];
 
-export function InviteMembers({ open, onOpenChange }: InviteMembersProps) {
+export function InviteMembers({
+  open,
+  onOpenChange,
+  mode = "invite",
+  member
+}: InviteMembersProps) {
   const workspace = useOrganization();
 
   const { success: toast } = useToast();
 
-  const { mutate, isPending } = useMutation({
+  const inviteMutation = useMutation({
     mutationFn: async (data: { email: string; role: string }) => {
       return internalApi
         .workspaces()
@@ -37,6 +49,23 @@ export function InviteMembers({ open, onOpenChange }: InviteMembersProps) {
     },
   });
 
+  const changeRoleMutation = useMutation({
+    mutationFn: async (data: { role: string }) => {
+      // TODO: Call change role endpoint
+      console.log("Change role to", data.role, "for member", member?.id);
+      return Promise.resolve();
+    },
+    onSuccess(_, variables) {
+      onOpenChange?.(false);
+
+      toast(
+        `${member?.email}'s role has been changed to ${variables.role}.`
+      );
+    },
+  });
+
+  const { mutate, isPending } = mode === "invite" ? inviteMutation : changeRoleMutation;
+
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -44,16 +73,27 @@ export function InviteMembers({ open, onOpenChange }: InviteMembersProps) {
     const email = formData.get("email") as string;
     const role = formData.get("role") as string;
 
-    mutate({ email, role });
+    if (mode === "invite") {
+      inviteMutation.mutate({ email, role });
+    } else {
+      changeRoleMutation.mutate({ role });
+    }
   }
+
+  const isInviteMode = mode === "invite";
+  const defaultRole = isInviteMode ? LEAST_PRIVILEGE_ROLE.name : member?.role;
 
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Content className="max-w-sm">
         <Dialog.Header>
-          <Dialog.Title>Invite member to workspace</Dialog.Title>
+          <Dialog.Title>
+            {isInviteMode ? "Invite member to workspace" : "Change member role"}
+          </Dialog.Title>
           <Dialog.Description>
-            Invite a team member to collaborate in your workspace.
+            {isInviteMode
+              ? "Invite a team member to collaborate in your workspace."
+              : `Update the role for ${member?.email}.`}
           </Dialog.Description>
         </Dialog.Header>
 
@@ -71,7 +111,10 @@ export function InviteMembers({ open, onOpenChange }: InviteMembersProps) {
                 name="email"
                 type="email"
                 placeholder="colleague@example.com"
-                required
+                required={isInviteMode}
+                readOnly={!isInviteMode}
+                defaultValue={member?.email}
+                className={!isInviteMode ? "opacity-60" : ""}
               >
                 <TextField.Slot side="left">
                   <Mail />
@@ -86,7 +129,7 @@ export function InviteMembers({ open, onOpenChange }: InviteMembersProps) {
               >
                 Role
               </label>
-              <Select.Root name="role" defaultValue={LEAST_PRIVILEGE_ROLE.name}>
+              <Select.Root name="role" defaultValue={defaultRole}>
                 <Select.Trigger placeholder="Select role" />
                 <Select.Content className="z-50">
                   {ROLES.map((role) => (
@@ -108,7 +151,7 @@ export function InviteMembers({ open, onOpenChange }: InviteMembersProps) {
               </Button>
             </Dialog.Close>
             <Button type="submit" loading={isPending}>
-              Send invitation
+              {isInviteMode ? "Send invitation" : "Update role"}
             </Button>
           </Dialog.Footer>
         </form>

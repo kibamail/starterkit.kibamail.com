@@ -13,10 +13,11 @@
 
 "use server";
 
-import { getLogtoContext } from "@logto/next/server-actions";
-import { logto } from "@/auth/logto";
-import { logtoConfig } from "@/config/logto";
 import { redirect } from "next/navigation";
+
+import { createWorkspaceViaLogto } from "@/app/api/internal/v1/workspaces/handler";
+import { getLogtoContext } from "@logto/next/server-actions";
+import { logtoConfig } from "@/config/logto";
 
 export async function createDefaultWorkspaceAction() {
   const ctx = await getLogtoContext(logtoConfig, {
@@ -32,16 +33,10 @@ export async function createDefaultWorkspaceAction() {
       throw new Error("User information is required to create a workspace");
     }
 
-    const org = await logto.workspaces().create({
-      name: ctx.userInfo.email,
-    });
-
-    await logto
-      .workspaces()
-      .members(org?.id as string)
-      .add(ctx.userInfo.sub, []);
-
-    return org;
+    await createWorkspaceViaLogto(
+      { name: ctx.userInfo?.email },
+      ctx.userInfo?.sub
+    );
   }
 
   return undefined;

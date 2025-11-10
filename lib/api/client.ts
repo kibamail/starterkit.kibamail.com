@@ -43,6 +43,22 @@ import {
   updateInvitationStatusResponseSchema,
   updateInvitationStatusSchema,
 } from "@/app/api/internal/v1/invitations/[id]/status/schema";
+import {
+  type CreateApiKeyInput,
+  type CreateApiKeyResponse,
+  type ListApiKeysResponse,
+  type DeleteApiKeyResponse,
+  createApiKeyResponseSchema,
+  createApiKeySchema,
+  listApiKeysResponseSchema,
+  deleteApiKeyResponseSchema,
+} from "@/app/api/internal/v1/api-keys/schema";
+import {
+  type CreateWebhookDestinationInput,
+  type UpdateWebhookDestinationInput,
+  createWebhookDestinationSchema,
+  updateWebhookDestinationSchema,
+} from "@/app/api/internal/v1/webhooks/schema";
 
 type ApiErrorResponse = {
   error: string;
@@ -140,6 +156,28 @@ class InvitationsApi extends HttpClient {
       updateInvitationStatusResponseSchema,
       data
     );
+  }
+}
+
+/**
+ * Workspace Invitations API namespace
+ */
+class WorkspaceInvitationsApi extends HttpClient {
+  /**
+   * Cancel an organization invitation
+   *
+   * @param invitationId - ID of the invitation to cancel
+   * @returns Empty response on success
+   *
+   * @example
+   * ```ts
+   * await internalApi.workspaces().invitations().cancel('inv_123')
+   * ```
+   */
+  async cancel(invitationId: string): Promise<void> {
+    await fetch(`/api/internal/v1/invitations/${invitationId}`, {
+      method: "DELETE",
+    });
   }
 }
 
@@ -244,6 +282,207 @@ class WorkspacesApi extends HttpClient {
   members(workspaceId: string) {
     return new WorkspaceMembersApi(workspaceId);
   }
+
+  /**
+   * Access workspace invitations API
+   *
+   * @returns WorkspaceInvitationsApi instance
+   *
+   * @example
+   * ```ts
+   * await internalApi.workspaces().invitations().cancel('inv_123')
+   * ```
+   */
+  invitations() {
+    return new WorkspaceInvitationsApi();
+  }
+}
+
+/**
+ * Webhooks API namespace
+ */
+class WebhooksApi extends HttpClient {
+  /**
+   * Create a new webhook destination
+   *
+   * @param data - Webhook destination data with type, credentials, and config
+   * @returns Created webhook destination
+   * @throws ZodError if validation fails
+   *
+   * @example
+   * ```ts
+   * const webhook = await internalApi.webhooks().create({
+   *   type: 'webhook',
+   *   credentials: { url: 'https://example.com/webhook' },
+   *   config: {},
+   *   topics: ['user.created']
+   * })
+   * ```
+   */
+  async create(data: CreateWebhookDestinationInput): Promise<any> {
+    return this.request(
+      "POST",
+      "/api/internal/v1/webhooks",
+      createWebhookDestinationSchema,
+      {} as any,
+      data
+    );
+  }
+
+  /**
+   * Update a webhook destination
+   *
+   * @param webhookId - ID of the webhook to update
+   * @param data - Updated webhook data
+   * @returns Updated webhook destination
+   * @throws ZodError if validation fails
+   *
+   * @example
+   * ```ts
+   * await internalApi.webhooks().update('dest_123', {
+   *   credentials: { url: 'https://newurl.com/webhook' }
+   * })
+   * ```
+   */
+  async update(webhookId: string, data: UpdateWebhookDestinationInput): Promise<any> {
+    return this.request(
+      "PATCH",
+      `/api/internal/v1/webhooks/${webhookId}`,
+      updateWebhookDestinationSchema,
+      {} as any,
+      data
+    );
+  }
+
+  /**
+   * Delete a webhook destination
+   *
+   * @param webhookId - ID of the webhook to delete
+   * @returns Empty response on success
+   *
+   * @example
+   * ```ts
+   * await internalApi.webhooks().delete('dest_123')
+   * ```
+   */
+  async delete(webhookId: string): Promise<void> {
+    await fetch(`/api/internal/v1/webhooks/${webhookId}`, {
+      method: "DELETE",
+    });
+  }
+
+  /**
+   * Enable a webhook destination
+   *
+   * @param webhookId - ID of the webhook to enable
+   * @returns Updated webhook destination
+   *
+   * @example
+   * ```ts
+   * await internalApi.webhooks().enable('dest_123')
+   * ```
+   */
+  async enable(webhookId: string): Promise<any> {
+    return this.request(
+      "PUT",
+      `/api/internal/v1/webhooks/${webhookId}/enable`,
+      null,
+      {} as any
+    );
+  }
+
+  /**
+   * Disable a webhook destination
+   *
+   * @param webhookId - ID of the webhook to disable
+   * @returns Updated webhook destination
+   *
+   * @example
+   * ```ts
+   * await internalApi.webhooks().disable('dest_123')
+   * ```
+   */
+  async disable(webhookId: string): Promise<any> {
+    return this.request(
+      "PUT",
+      `/api/internal/v1/webhooks/${webhookId}/disable`,
+      null,
+      {} as any
+    );
+  }
+}
+
+/**
+ * API Keys API namespace
+ */
+class ApiKeysApi extends HttpClient {
+  /**
+   * Create a new API key
+   *
+   * @param data - API key data with name and scopes
+   * @returns Created API key with full key (only time it's shown)
+   * @throws ZodError if validation fails
+   *
+   * @example
+   * ```ts
+   * const apiKey = await internalApi.apiKeys().create({
+   *   name: 'Production API Key',
+   *   scopes: ['read:contacts', 'write:broadcasts']
+   * })
+   * console.log(apiKey.data.key) // Save this! Won't be shown again
+   * ```
+   */
+  async create(data: CreateApiKeyInput): Promise<CreateApiKeyResponse> {
+    return this.request(
+      "POST",
+      "/api/internal/v1/api-keys",
+      createApiKeySchema,
+      createApiKeyResponseSchema,
+      data
+    );
+  }
+
+  /**
+   * List all API keys for workspace
+   *
+   * @returns List of API keys (without full keys)
+   * @throws ZodError if validation fails
+   *
+   * @example
+   * ```ts
+   * const { data } = await internalApi.apiKeys().list()
+   * console.log(data) // Array of API keys with previews
+   * ```
+   */
+  async list(): Promise<ListApiKeysResponse> {
+    return this.request(
+      "GET",
+      "/api/internal/v1/api-keys",
+      null,
+      listApiKeysResponseSchema
+    );
+  }
+
+  /**
+   * Delete an API key
+   *
+   * @param apiKeyId - ID of the API key to delete
+   * @returns Empty response on success
+   * @throws ZodError if validation fails
+   *
+   * @example
+   * ```ts
+   * await internalApi.apiKeys().delete('key_123')
+   * ```
+   */
+  async delete(apiKeyId: string): Promise<DeleteApiKeyResponse> {
+    return this.request(
+      "DELETE",
+      `/api/internal/v1/api-keys/${apiKeyId}`,
+      null,
+      deleteApiKeyResponseSchema
+    );
+  }
 }
 
 /**
@@ -254,10 +493,14 @@ class WorkspacesApi extends HttpClient {
 export class InternalApi {
   private _workspaces: WorkspacesApi;
   private _invitations: InvitationsApi;
+  private _apiKeys: ApiKeysApi;
+  private _webhooks: WebhooksApi;
 
   constructor() {
     this._workspaces = new WorkspacesApi();
     this._invitations = new InvitationsApi();
+    this._apiKeys = new ApiKeysApi();
+    this._webhooks = new WebhooksApi();
   }
 
   /**
@@ -286,6 +529,41 @@ export class InternalApi {
    */
   invitations() {
     return this._invitations;
+  }
+
+  /**
+   * Access API keys API
+   *
+   * @returns ApiKeysApi instance
+   *
+   * @example
+   * ```ts
+   * const apiKey = await internalApi.apiKeys().create({
+   *   name: 'Production',
+   *   scopes: ['read:contacts']
+   * })
+   * ```
+   */
+  apiKeys() {
+    return this._apiKeys;
+  }
+
+  /**
+   * Access webhooks API
+   *
+   * @returns WebhooksApi instance
+   *
+   * @example
+   * ```ts
+   * const webhook = await internalApi.webhooks().create({
+   *   type: 'webhook',
+   *   credentials: { url: 'https://example.com/webhook' },
+   *   topics: ['user.created']
+   * })
+   * ```
+   */
+  webhooks() {
+    return this._webhooks;
   }
 }
 

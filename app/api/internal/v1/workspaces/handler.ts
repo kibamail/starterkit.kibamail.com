@@ -15,25 +15,14 @@ import { Cookies, CookieKey } from "@/lib/cookies";
 import { createWorkspaceSchema } from "./schema";
 import { OWNER_ROLE } from "@/config/rbac";
 
-/**
- * POST /api/internal/v1/workspaces
- *
- * Create a new workspace
- */
-export async function createWorkspace(
-  session: UserSession,
-  request: NextRequest
+export async function createWorkspaceViaLogto(
+  data: { name: string; description?: string },
+  userId: string
 ) {
-  const data = await validateRequestBody(createWorkspaceSchema, request);
-
   const workspace = await logto.workspaces().create({
     name: data.name,
     description: data.description,
   });
-
-  if (!workspace) {
-    throw new InternalServerError("Failed to create workspace");
-  }
 
   const ownerRoleId = await logto
     .workspaces()
@@ -47,9 +36,31 @@ export async function createWorkspace(
   const response = await logto
     .workspaces()
     .members(workspace.id)
-    .add(session.user.sub, [ownerRoleId]);
+    .add(userId, [ownerRoleId]);
 
-  console.dir(response?.error, { depth: null });
+  if (!ownerRoleId) {
+    throw new InternalServerError("Owner role not found");
+  }
+
+  if (response.error) {
+    throw response.error;
+  }
+
+  return workspace;
+}
+
+/**
+ * POST /api/internal/v1/workspaces
+ *
+ * Create a new workspace
+ */
+export async function createWorkspace(
+  session: UserSession,
+  request: NextRequest
+) {
+  const data = await validateRequestBody(createWorkspaceSchema, request);
+
+  const workspace = await createWorkspaceViaLogto(data, session.user.sub);
 
   await Cookies.set(CookieKey.ACTIVE_WORKSPACE_ID, workspace.id);
 

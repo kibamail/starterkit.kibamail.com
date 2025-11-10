@@ -35,4 +35,13 @@ EOSQL
 
 echo "Created database: test-e2e"
 
+# Create outpost user and database
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+    CREATE USER outpost WITH PASSWORD 'outpost';
+    CREATE DATABASE outpost OWNER outpost;
+    GRANT ALL PRIVILEGES ON DATABASE outpost TO outpost;
+EOSQL
+
+echo "Created user and database: outpost"
+
 echo "All databases created successfully!"

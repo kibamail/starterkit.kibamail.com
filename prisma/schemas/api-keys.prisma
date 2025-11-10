@@ -1,0 +1,44 @@
+/**
+ * API Keys Schema
+ *
+ * Stores API keys for workspace authentication to the public API.
+ * Uses scope-based permissions independent of the internal RBAC system.
+ */
+
+model ApiKey {
+  id String @id @default(cuid())
+
+  /// Workspace ID from Logto (organization ID)
+  workspaceId String
+
+  /// User-provided name for the API key
+  name String
+
+  /// SHA-256 hash of the API key
+  /// The actual key is never stored, only the hash
+  keyHash String @unique
+
+  /// Preview of the key (first 8 chars after prefix)
+  /// Format: "sk_abc12345..."
+  /// Used for identification in the UI
+  keyPreview String
+
+  /// Array of scope names granted to this key
+  /// @example ["read:contacts", "write:broadcasts"]
+  scopes String[]
+
+  /// Last time this key was used to make an API request
+  lastUsedAt DateTime?
+
+  /// When the key was created
+  createdAt DateTime @default(now())
+
+  /// When the key was last updated
+  updatedAt DateTime @updatedAt
+
+  /// Indexes for efficient queries
+  @@index([workspaceId])
+  @@index([keyHash])
+  @@index([createdAt])
+  @@map("api_keys")
+}

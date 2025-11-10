@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   postgres:
     image: postgres:18-alpine
@@ -19,6 +17,24 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - starterkit-network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: starterkit-rabbitmq
+    ports:
+      - "5672:5672" # AMQP
+      - "15672:15672" # Management UI
+    volumes:
+      - ./data/rabbitmq:/var/lib/rabbitmq
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 1s
+      timeout: 1s
+      retries: 30
+    networks:
+      - starterkit-network
 
   logto:
     container_name: starterkit-logto
@@ -28,26 +44,119 @@ services:
     ports:
       - 3001:3001
       - 3002:3002
-
     entrypoint: ["sh", "-c", "npm run cli db seed -- --swe && npm start"]
     image: svhd/logto:latest
-
     environment:
       - TRUST_PROXY_HEADER=1
       - DB_URL=postgresql://postgres:postgres@postgres:5432/logto
       - ENDPOINT
       - ADMIN_ENDPOINT
+    networks:
+      - starterkit-network
 
-  dragonfly:
-    image: "docker.dragonflydb.io/dragonflydb/dragonfly"
-    ulimits:
-      memlock: -1
-    ports:
-      - "16379:6379"
+  outpost-api:
+    image: hookdeck/outpost:v0.7.0
+    container_name: starterkit-outpost-api
+    env_file: .env.local
+    depends_on:
+      redis:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     volumes:
-      - dragonflydata:/data
+      - ./webhooks/config/outpost:/config/outpost
+    environment:
+      SERVICE: api
+      POSTGRES_URL: postgres://outpost:outpost@postgres:5432/outpost?sslmode=disable
+      RABBITMQ_SERVER_URL: amqp://guest:guest@rabbitmq:5672
+      API_KEY: "${OUTPOST_API_KEY}"
+      API_JWT_SECRET: "${OUTPOST_API_JWT_SECRET}"
+      AES_ENCRYPTION_SECRET: "${OUTPOST_AES_ENCRYPTION_SECRET}"
+      REDIS_HOST: "${OUTPOST_REDIS_HOST}"
+      REDIS_PORT: "${OUTPOST_REDIS_PORT}"
+      REDIS_PASSWORD: "${OUTPOST_REDIS_PASSWORD}"
+      REDIS_DATABASE: "${OUTPOST_REDIS_DATABASE}"
+    ports:
+      - "3333:3333"
+    networks:
+      - starterkit-network
+
+  outpost-delivery:
+    image: hookdeck/outpost:v0.7.0
+    container_name: starterkit-outpost-delivery
+    env_file: .env.local
+    depends_on:
+      redis:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    volumes:
+      - ./webhooks/config/outpost:/config/outpost
+    environment:
+      SERVICE: delivery
+      POSTGRES_URL: postgres://outpost:outpost@postgres:5432/outpost?sslmode=disable
+      RABBITMQ_SERVER_URL: amqp://guest:guest@rabbitmq:5672
+      API_KEY: "${OUTPOST_API_KEY}"
+      API_JWT_SECRET: "${OUTPOST_API_JWT_SECRET}"
+      AES_ENCRYPTION_SECRET: "${OUTPOST_AES_ENCRYPTION_SECRET}"
+      REDIS_HOST: "${OUTPOST_REDIS_HOST}"
+      REDIS_PORT: "${OUTPOST_REDIS_PORT}"
+      REDIS_PASSWORD: "${OUTPOST_REDIS_PASSWORD}"
+      REDIS_DATABASE: "${OUTPOST_REDIS_DATABASE}"
+    networks:
+      - starterkit-network
+
+  outpost-log:
+    image: hookdeck/outpost:v0.7.0
+    container_name: starterkit-outpost-log
+    env_file: .env.local
+    depends_on:
+      redis:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    volumes:
+      - ./webhooks/config/outpost:/config/outpost
+    environment:
+      SERVICE: log
+      POSTGRES_URL: postgres://outpost:outpost@postgres:5432/outpost?sslmode=disable
+      RABBITMQ_SERVER_URL: amqp://guest:guest@rabbitmq:5672
+      API_KEY: "${OUTPOST_API_KEY}"
+      API_JWT_SECRET: "${OUTPOST_API_JWT_SECRET}"
+      AES_ENCRYPTION_SECRET: "${OUTPOST_AES_ENCRYPTION_SECRET}"
+      REDIS_HOST: "${OUTPOST_REDIS_HOST}"
+      REDIS_PORT: "${OUTPOST_REDIS_PORT}"
+      REDIS_PASSWORD: "${OUTPOST_REDIS_PASSWORD}"
+      REDIS_DATABASE: "${OUTPOST_REDIS_DATABASE}"
+    networks:
+      - starterkit-network
+
+  redis:
+    image: redis:7.4-alpine
+    container_name: starterkit-redis
+    restart: always
+    env_file: .env.local
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    command: >
+      redis-server
+        --save 20 1
+        --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - ./data/redis:/data
+    networks:
+      - starterkit-network
 
 volumes:
   postgres_data:
     driver: local
-  dragonflydata:
+
+networks:
+  starterkit-network:
+    driver: bridge

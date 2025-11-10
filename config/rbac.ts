@@ -188,6 +188,30 @@ export const PERMISSIONS: PermissionDefinition[] = [
     description:
       "Manage billing, update payment methods, change subscription plans",
   },
+
+  // ============================================================================
+  // API KEYS
+  // ============================================================================
+  {
+    name: "read:api-keys",
+    description: "View API keys and their details",
+  },
+  {
+    name: "manage:api-keys",
+    description: "Create, update, and delete API keys",
+  },
+
+  // ============================================================================
+  // WEBHOOKS
+  // ============================================================================
+  {
+    name: "read:webhooks",
+    description: "View webhook destinations and their details",
+  },
+  {
+    name: "manage:webhooks",
+    description: "Create, update, delete, enable, and disable webhook destinations",
+  },
 ];
 
 /**
@@ -220,6 +244,10 @@ export const ROLES: Role[] = [
       "manage:members",
       "read:billing",
       "manage:billing",
+      "read:api-keys",
+      "manage:api-keys",
+      "read:webhooks",
+      "manage:webhooks",
     ],
   },
 
@@ -239,6 +267,10 @@ export const ROLES: Role[] = [
       "invite:members",
       "manage:members",
       "read:billing",
+      "read:api-keys",
+      "manage:api-keys",
+      "read:webhooks",
+      "manage:webhooks",
     ],
   },
 
@@ -327,7 +359,11 @@ export type Permission =
   | "invite:members"
   | "manage:members"
   | "read:billing"
-  | "manage:billing";
+  | "manage:billing"
+  | "read:api-keys"
+  | "manage:api-keys"
+  | "read:webhooks"
+  | "manage:webhooks";
 
 /**
  * Type: Role name

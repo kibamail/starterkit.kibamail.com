@@ -74,8 +74,6 @@ export async function getSession(): Promise<UserSession> {
       fetchUserInfo: true,
     });
 
-    console.dir(ctx);
-
     if (!ctx.isAuthenticated) {
       throw new UnauthorizedError("User is not authenticated");
     }

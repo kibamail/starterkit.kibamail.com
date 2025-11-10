@@ -404,6 +404,147 @@ export const env = createEnv({
       .string()
       .min(32, "LOGTO_M2M_APP_SECRET must be at least 32 characters")
       .describe("Logto M2M application secret for Management API"),
+
+    // ============================================================================
+    // OUTPOST WEBHOOK DELIVERY CONFIGURATION
+    // ============================================================================
+    // Hookdeck Outpost is an open-source webhook delivery service that provides
+    // reliable webhook delivery, logging, and monitoring capabilities.
+    // @see https://hookdeck.com/docs/outpost
+
+    // ============================================================================
+    // REDIS CONFIGURATION
+    // ============================================================================
+    // Redis is used for caching, session storage, and queue management.
+    // Configure connection details for your Redis instance.
+
+    /**
+     * Redis Host
+     *
+     * The hostname or IP address where Redis is running.
+     *
+     * Common values:
+     * - Development (Docker): redis
+     * - Development (local): localhost
+     * - Production: redis.yourdomain.com or IP address
+     *
+     * @example "redis"
+     * @default "redis"
+     */
+    REDIS_HOST: z
+      .string()
+      .min(1, "REDIS_HOST is required")
+      .default("redis")
+      .describe("Redis server hostname"),
+
+    /**
+     * Redis Port
+     *
+     * The port number where Redis is listening.
+     * Standard Redis port is 6379.
+     *
+     * @example "6379"
+     * @default "6379"
+     */
+    REDIS_PORT: z
+      .string()
+      .transform((val) => parseInt(val, 10))
+      .pipe(z.number().int().min(1).max(65535))
+      .default("6379")
+      .describe("Redis server port"),
+
+    /**
+     * Redis Password
+     *
+     * Password for authenticating with Redis.
+     * Use a strong password in production.
+     *
+     * Generate a secure password using:
+     * ```bash
+     * openssl rand -base64 32
+     * ```
+     *
+     * ⚠️ SECURITY:
+     * - Use a strong password in production
+     * - Never commit to version control
+     * - Rotate periodically
+     *
+     * @example "password"
+     */
+    REDIS_PASSWORD: z
+      .string()
+      .min(1, "REDIS_PASSWORD is required")
+      .describe("Redis authentication password"),
+
+    /**
+     * Redis Database
+     *
+     * Redis database number to use (0-15).
+     * Different databases can be used to isolate data.
+     *
+     * @example "0"
+     * @default "0"
+     */
+    REDIS_DATABASE: z
+      .string()
+      .transform((val) => parseInt(val, 10))
+      .pipe(z.number().int().min(0).max(15))
+      .default("0")
+      .describe("Redis database number"),
+
+    // ============================================================================
+    // OUTPOST WEBHOOK DELIVERY CONFIGURATION
+    // ============================================================================
+    // Hookdeck Outpost is an open-source webhook delivery service that provides
+    // reliable webhook delivery, logging, and monitoring capabilities.
+    // @see https://hookdeck.com/docs/outpost
+
+    /**
+     * Outpost API URL
+     *
+     * The base URL where the Outpost API service is accessible.
+     * This is used by the Next.js application to communicate with Outpost
+     * for webhook delivery operations.
+     *
+     * Common values:
+     * - Development (Docker): http://localhost:3333
+     * - Production: https://outpost.yourdomain.com
+     *
+     * Must be a valid URL pointing to the Outpost API service.
+     *
+     * @example "http://localhost:3333"
+     * @see https://hookdeck.com/docs/outpost
+     */
+    OUTPOST_API_URL: z
+      .string()
+      .url("OUTPOST_API_URL must be a valid URL")
+      .describe("Outpost API service base URL"),
+
+    /**
+     * Outpost API Key
+     *
+     * API key for authenticating requests to the Outpost webhook delivery service.
+     * This key is used by both the Outpost services (running in Docker) and your
+     * Next.js application to securely communicate with the webhook delivery system.
+     *
+     * Generate a secure random key:
+     * ```bash
+     * openssl rand -base64 32
+     * ```
+     *
+     * ⚠️ SECURITY:
+     * - Keep this secret and never commit to version control
+     * - Use different keys for each environment (dev/staging/prod)
+     * - Rotate immediately if compromised
+     * - Used for authenticating webhook delivery requests
+     *
+     * @example "base64-encoded-random-string-here"
+     * @see https://hookdeck.com/docs/outpost
+     */
+    OUTPOST_API_KEY: z
+      .string()
+      .min(1, "OUTPOST_API_KEY is required")
+      .describe("Outpost API key for webhook delivery authentication"),
   },
 
   /**
@@ -453,6 +594,12 @@ export const env = createEnv({
     LOGTO_COOKIE_SECURE: process.env.LOGTO_COOKIE_SECURE,
     LOGTO_M2M_APP_ID: process.env.LOGTO_M2M_APP_ID,
     LOGTO_M2M_APP_SECRET: process.env.LOGTO_M2M_APP_SECRET,
+    REDIS_HOST: process.env.REDIS_HOST,
+    REDIS_PORT: process.env.REDIS_PORT,
+    REDIS_PASSWORD: process.env.REDIS_PASSWORD,
+    REDIS_DATABASE: process.env.REDIS_DATABASE,
+    OUTPOST_API_URL: process.env.OUTPOST_API_URL,
+    OUTPOST_API_KEY: process.env.OUTPOST_API_KEY,
     // Map client environment variables here
     // Example:
     // NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,

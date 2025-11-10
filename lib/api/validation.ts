@@ -69,7 +69,7 @@ type ValidationResult<T> = ValidationSuccess<T> | ValidationFailure;
  */
 export function validateRequest<T>(
   schema: ZodType<T>,
-  data: unknown,
+  data: unknown
 ): ValidationResult<T> {
   const result = schema.safeParse(data);
 
@@ -156,21 +156,22 @@ export function validateOrThrow<T>(schema: ZodType<T>, data: unknown): T {
  */
 export async function validateRequestBody<T>(
   schema: ZodType<T>,
-  request: Request,
+  request: Request
 ): Promise<T>;
 export async function validateRequestBody<T>(
   schema: ZodType<T>,
   request: Request,
-  options: { shouldThrow: false },
+  options: { shouldThrow: false }
 ): Promise<ValidationResult<T>>;
 export async function validateRequestBody<T>(
   schema: ZodType<T>,
   request: Request,
-  options?: { shouldThrow?: boolean },
+  options?: { shouldThrow?: boolean }
 ): Promise<ValidationResult<T> | T> {
   const shouldThrow = options?.shouldThrow ?? true;
   try {
     const body = await request.json();
+
     const result = validateRequest(schema, body);
 
     if (!result.success) {
@@ -182,6 +183,7 @@ export async function validateRequestBody<T>(
 
     return shouldThrow ? result.data : result;
   } catch (_error) {
+    console.error(_error);
     // JSON parsing failed - create a ZodError-like object
     const issues = [
       {

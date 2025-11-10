@@ -1,0 +1,57 @@
+/**
+ * API Keys Settings Page
+ *
+ * Manage API keys for workspace authentication to the public API.
+ * Users can create, view, and delete API keys with granular scopes.
+ */
+
+import { getSession } from "@/lib/auth/get-session";
+import { hasPermission } from "@/lib/auth/permissions";
+import { prisma } from "@/lib/db";
+import { ApiKeysTable } from "./_components/api-keys-table";
+import { SearchInput } from "@/app/(dashboard)/w/_components/search-input";
+
+interface ApiKeysPageProps {
+  searchParams: Promise<{ search?: string }>;
+}
+
+export default async function ApiKeysPage({ searchParams }: ApiKeysPageProps) {
+  const session = await getSession();
+  const params = await searchParams;
+  const search = params.search;
+
+  const workspaceId = session.currentOrganization?.id as string;
+
+  const apiKeys = await prisma.apiKey.findMany({
+    where: {
+      workspaceId,
+      ...(search
+        ? {
+            OR: [
+              { name: { contains: search, mode: "insensitive" } },
+              { keyPreview: { contains: search, mode: "insensitive" } },
+            ],
+          }
+        : {}),
+    },
+    orderBy: { createdAt: "desc" },
+    select: {
+      id: true,
+      name: true,
+      keyPreview: true,
+      scopes: true,
+      lastUsedAt: true,
+      createdAt: true,
+    },
+  });
+
+  const canManageApiKeys = hasPermission(session, "manage:api-keys");
+
+  return (
+    <div className="w-full">
+      <SearchInput />
+
+      <ApiKeysTable apiKeys={apiKeys} canManage={canManageApiKeys} />
+    </div>
+  );
+}

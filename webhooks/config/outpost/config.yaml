@@ -1,0 +1,12 @@
+topics:
+  - user.created
+  - user.updated
+  - user.deleted
+
+mqs:
+  delivery_retry_limit: 10
+  log_retry_limit: 10
+
+destinations:
+  webhook:
+    header_prefix: "x-starterkit-"

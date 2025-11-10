@@ -25,6 +25,7 @@
  */
 
 import { createManagementApi } from "@logto/api/management";
+import type { paths } from "@logto/api/management";
 import { env } from "@/env/schema";
 import { InternalServerError } from "@/lib/api/errors";
 
@@ -34,6 +35,15 @@ const { apiClient } = createManagementApi(env.LOGTO_TENANT_ID, {
   clientSecret: env.LOGTO_M2M_APP_SECRET,
   baseUrl: env.LOGTO_ENDPOINT,
 });
+
+// Export Logto API types
+export type LogtoOrganizationMember = NonNullable<
+  paths["/api/organizations/{id}/users"]["get"]["responses"][200]["content"]["application/json"]
+>[number];
+
+export type LogtoOrganizationInvitation = NonNullable<
+  paths["/api/organization-invitations"]["get"]["responses"][200]["content"]["application/json"]
+>[number];
 
 export type LogtoWorkspace = NonNullable<
   Awaited<ReturnType<WorkspaceManager["get"]>>
@@ -180,6 +190,43 @@ class WorkspaceMemberManager {
 
     const role = response.data?.find((r) => r.name === roleName);
     return role?.id ?? null;
+  }
+
+  /**
+   * Get organization invitations for this workspace
+   */
+  async listInvitations() {
+    const response = await apiClient.GET("/api/organization-invitations", {
+      params: {
+        query: {
+          organizationId: this.workspaceId,
+        },
+      },
+    });
+
+    if (response.error) {
+      throw new Error(`Failed to fetch invitations: ${response.error}`);
+    }
+
+    return response.data;
+  }
+
+  /**
+   * Cancel an organization invitation
+   */
+  async cancelInvitation(invitationId: string) {
+    const response = await apiClient.DELETE(
+      "/api/organization-invitations/{id}",
+      {
+        params: { path: { id: invitationId } },
+      }
+    );
+
+    if (response.error) {
+      throw new Error(`Failed to cancel invitation: ${response.error}`);
+    }
+
+    return true;
   }
 
   /**

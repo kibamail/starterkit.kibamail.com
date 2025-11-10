@@ -11,11 +11,17 @@ import Link from "next/link";
 export function SettingsTabs() {
   return (
     <Tabs.List>
+      <Link href="/w/settings/workspace">
+        <Tabs.Trigger value="workspace">Workspace</Tabs.Trigger>
+      </Link>
       <Link href="/w/settings/usage">
         <Tabs.Trigger value="usage">Usage</Tabs.Trigger>
       </Link>
       <Link href="/w/settings/billing">
         <Tabs.Trigger value="billing">Billing</Tabs.Trigger>
+      </Link>
+      <Link href="/w/settings/api-keys">
+        <Tabs.Trigger value="api-keys">API Keys</Tabs.Trigger>
       </Link>
       <Tabs.Indicator />
     </Tabs.List>

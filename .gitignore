@@ -16,6 +16,9 @@
 # next.js
 /.next/
 /out/
+.source/
+data/rabbitmq/
+data/redis/
 
 # production
 /build

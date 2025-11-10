@@ -15,7 +15,6 @@ import {
   HomeAltSlimHoriz,
   Plus,
   SecureWindow,
-  Settings,
   SwipeLeftGesture,
   User,
 } from "iconoir-react";
