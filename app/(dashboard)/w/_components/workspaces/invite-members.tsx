@@ -41,25 +41,34 @@ export function InviteMembers({
         .invite(data);
     },
     onSuccess(_, variables) {
+      const roleDisplayName = ROLES.find((r) => r.name === variables.role)?.displayName ?? variables.role;
+
       onOpenChange?.(false);
 
       toast(
-        `${variables.email} has been invited to join as ${variables.role}.`
+        `${variables.email} has been invited to join as ${roleDisplayName}.`
       );
     },
   });
 
   const changeRoleMutation = useMutation({
     mutationFn: async (data: { role: string }) => {
-      // TODO: Call change role endpoint
-      console.log("Change role to", data.role, "for member", member?.id);
-      return Promise.resolve();
+      if (!member?.id || !workspace?.id) {
+        throw new Error("Member ID and workspace ID are required");
+      }
+
+      return internalApi
+        .workspaces()
+        .members(workspace.id)
+        .changeRole(member.id, data);
     },
     onSuccess(_, variables) {
+      const roleDisplayName = ROLES.find((r) => r.name === variables.role)?.displayName ?? variables.role;
+
       onOpenChange?.(false);
 
       toast(
-        `${member?.email}'s role has been changed to ${variables.role}.`
+        `${member?.email}'s role has been changed to ${roleDisplayName}.`
       );
     },
   });

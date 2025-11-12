@@ -34,8 +34,12 @@ import {
 import {
   type InviteMembersInput,
   type InviteMembersResponse,
+  type ChangeMemberRoleInput,
+  type ChangeMemberRoleResponse,
   inviteMembersResponseSchema,
   inviteMembersSchema,
+  changeMemberRoleSchema,
+  changeMemberRoleResponseSchema,
 } from "@/app/api/internal/v1/workspaces/[id]/members/schema";
 import {
   type UpdateInvitationStatusInput,
@@ -210,6 +214,34 @@ class WorkspaceMembersApi extends HttpClient {
       `/api/internal/v1/workspaces/${this.workspaceId}/members`,
       inviteMembersSchema,
       inviteMembersResponseSchema,
+      data
+    );
+  }
+
+  /**
+   * Change member role in workspace
+   *
+   * @param memberId - ID of the member to update
+   * @param data - Role change data
+   * @returns Success response
+   * @throws ZodError if validation fails
+   *
+   * @example
+   * ```ts
+   * await internalApi.workspaces().members('org_123').changeRole('user_123', {
+   *   role: 'admin'
+   * })
+   * ```
+   */
+  async changeRole(
+    memberId: string,
+    data: ChangeMemberRoleInput
+  ): Promise<ChangeMemberRoleResponse> {
+    return this.request(
+      "PATCH",
+      `/api/internal/v1/workspaces/${this.workspaceId}/members/${memberId}/role`,
+      changeMemberRoleSchema,
+      changeMemberRoleResponseSchema,
       data
     );
   }

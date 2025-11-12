@@ -22,6 +22,7 @@ interface TeamMembersTableProps {
   invitations: LogtoOrganizationInvitation[];
   inviteMembersState: ToggleState;
   onChangeRole: (member: { id: string; email: string; role: string }) => void;
+  currentUserId: string;
 }
 
 export function TeamMembersTable({
@@ -29,6 +30,7 @@ export function TeamMembersTable({
   invitations,
   inviteMembersState,
   onChangeRole,
+  currentUserId,
 }: TeamMembersTableProps) {
   // Combine invitations and members, with invitations first
   const rows: TableRow[] = [
@@ -126,6 +128,7 @@ export function TeamMembersTable({
                             role: role?.name || "",
                           }}
                           onChangeRole={onChangeRole}
+                          isCurrentUser={member.id === currentUserId}
                         />
                       </Table.Cell>
                     </Table.Row>

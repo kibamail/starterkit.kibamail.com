@@ -77,6 +77,23 @@ class WorkspaceMemberRolesManager {
   }
 
   /**
+   * Update roles for member (replaces all existing roles)
+   */
+  async update(roleIds: string[]) {
+    return apiClient.PUT("/api/organizations/{id}/users/{userId}/roles", {
+      params: {
+        path: {
+          id: this.workspaceId,
+          userId: this.userId,
+        },
+      },
+      body: {
+        organizationRoleIds: roleIds,
+      },
+    });
+  }
+
+  /**
    * Remove roles from member
    */
   async remove(roleId: string) {

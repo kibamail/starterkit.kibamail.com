@@ -13,11 +13,13 @@ interface Member {
 interface MemberActionsDropdownProps {
   member: Member;
   onChangeRole: (member: Member) => void;
+  isCurrentUser: boolean;
 }
 
 export function MemberActionsDropdown({
   member,
   onChangeRole,
+  isCurrentUser,
 }: MemberActionsDropdownProps) {
   const handleChangeRole = () => {
     onChangeRole(member);
@@ -36,7 +38,7 @@ export function MemberActionsDropdown({
         </Button>
       </DropdownMenu.Trigger>
       <DropdownMenu.Content align="end" className="w-48">
-        <DropdownMenu.Item onClick={handleChangeRole}>
+        <DropdownMenu.Item onClick={handleChangeRole} disabled={isCurrentUser}>
           <User className="w-4 h-4" />
           Change role
         </DropdownMenu.Item>
@@ -44,6 +46,7 @@ export function MemberActionsDropdown({
         <DropdownMenu.Item
           className="text-kb-content-negative"
           onClick={handleRemoveMember}
+          disabled={isCurrentUser}
         >
           <Trash className="w-4 h-4" />
           Remove member
