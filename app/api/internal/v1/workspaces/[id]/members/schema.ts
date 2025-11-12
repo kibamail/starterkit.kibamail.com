@@ -57,4 +57,6 @@ export const changeMemberRoleResponseSchema = z.object({
 export type InviteMembersInput = z.infer<typeof inviteMembersSchema>;
 export type InviteMembersResponse = z.infer<typeof inviteMembersResponseSchema>;
 export type ChangeMemberRoleInput = z.infer<typeof changeMemberRoleSchema>;
-export type ChangeMemberRoleResponse = z.infer<typeof changeMemberRoleResponseSchema>;
+export type ChangeMemberRoleResponse = z.infer<
+  typeof changeMemberRoleResponseSchema
+>;

@@ -27,7 +27,7 @@ export function InviteMembers({
   open,
   onOpenChange,
   mode = "invite",
-  member
+  member,
 }: InviteMembersProps) {
   const workspace = useOrganization();
 
@@ -41,12 +41,14 @@ export function InviteMembers({
         .invite(data);
     },
     onSuccess(_, variables) {
-      const roleDisplayName = ROLES.find((r) => r.name === variables.role)?.displayName ?? variables.role;
+      const roleDisplayName =
+        ROLES.find((r) => r.name === variables.role)?.displayName ??
+        variables.role;
 
       onOpenChange?.(false);
 
       toast(
-        `${variables.email} has been invited to join as ${roleDisplayName}.`
+        `${variables.email} has been invited to join as ${roleDisplayName}.`,
       );
     },
   });
@@ -63,17 +65,18 @@ export function InviteMembers({
         .changeRole(member.id, data);
     },
     onSuccess(_, variables) {
-      const roleDisplayName = ROLES.find((r) => r.name === variables.role)?.displayName ?? variables.role;
+      const roleDisplayName =
+        ROLES.find((r) => r.name === variables.role)?.displayName ??
+        variables.role;
 
       onOpenChange?.(false);
 
-      toast(
-        `${member?.email}'s role has been changed to ${roleDisplayName}.`
-      );
+      toast(`${member?.email}'s role has been changed to ${roleDisplayName}.`);
     },
   });
 
-  const { mutate, isPending } = mode === "invite" ? inviteMutation : changeRoleMutation;
+  const { mutate, isPending } =
+    mode === "invite" ? inviteMutation : changeRoleMutation;
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();

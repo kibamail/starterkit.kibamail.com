@@ -19,14 +19,14 @@ import { disableWebhookDestination } from "../../handler";
  */
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const resolvedParams = await params;
   return withErrorHandling(request, () =>
     withSession(
       request,
       (session) => disableWebhookDestination(session, resolvedParams),
-      ["manage:webhooks"]
-    )
+      ["manage:webhooks"],
+    ),
   );
 }

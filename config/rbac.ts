@@ -210,7 +210,8 @@ export const PERMISSIONS: PermissionDefinition[] = [
   },
   {
     name: "manage:webhooks",
-    description: "Create, update, delete, enable, and disable webhook destinations",
+    description:
+      "Create, update, delete, enable, and disable webhook destinations",
   },
 ];
 

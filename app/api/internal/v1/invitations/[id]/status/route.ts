@@ -15,12 +15,12 @@ import { updateInvitationStatus } from "./handler";
  */
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const resolvedParams = await params;
   return withErrorHandling(request, () =>
     withSession(request, (session) =>
-      updateInvitationStatus(session, request, resolvedParams)
-    )
+      updateInvitationStatus(session, request, resolvedParams),
+    ),
   );
 }

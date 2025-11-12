@@ -27,11 +27,11 @@ import { outpost } from "@/webhooks/client/client";
  */
 export async function createWebhookDestination(
   session: UserSession,
-  request: NextRequest
+  request: NextRequest,
 ) {
   const data = await validateRequestBody(
     createWebhookDestinationSchema,
-    request
+    request,
   );
 
   const workspaceId = session.currentOrganization?.id as string;
@@ -61,11 +61,11 @@ export async function createWebhookDestination(
 export async function updateWebhookDestination(
   session: UserSession,
   request: NextRequest,
-  params: { id: string }
+  params: { id: string },
 ) {
   const data = await validateRequestBody(
     updateWebhookDestinationSchema,
-    request
+    request,
   );
 
   const workspaceId = session.currentOrganization?.id as string;
@@ -94,7 +94,7 @@ export async function updateWebhookDestination(
  */
 export async function deleteWebhookDestination(
   session: UserSession,
-  params: { id: string }
+  params: { id: string },
 ) {
   const workspaceId = session.currentOrganization?.id as string;
 
@@ -110,7 +110,7 @@ export async function deleteWebhookDestination(
  */
 export async function enableWebhookDestination(
   session: UserSession,
-  params: { id: string }
+  params: { id: string },
 ) {
   const workspaceId = session.currentOrganization?.id as string;
 
@@ -129,7 +129,7 @@ export async function enableWebhookDestination(
  */
 export async function disableWebhookDestination(
   session: UserSession,
-  params: { id: string }
+  params: { id: string },
 ) {
   const workspaceId = session.currentOrganization?.id as string;
 

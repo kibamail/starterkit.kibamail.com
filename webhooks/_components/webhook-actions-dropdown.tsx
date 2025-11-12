@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "@kibamail/owly/button";
 import { ConfirmDialog } from "@kibamail/owly/dialog";
 import * as DropdownMenu from "@kibamail/owly/dropdown-menu";
 import { useToast } from "@kibamail/owly/toast";
-import { MoreHoriz, Trash, Play, Pause } from "iconoir-react";
+import { MoreHoriz, Pause, Play, Trash } from "iconoir-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useMutation } from "@/hooks/use-mutation";
 import { internalApi } from "@/lib/api/client";
 import type { WebhookDestination } from "../client/types";
@@ -59,7 +59,7 @@ export function WebhookActionsDropdown({
     onSuccess: () => {
       toast.success("Webhook deleted successfully");
       setDeleteDialogOpen(false);
-      router.push("/w/webhooks");
+      router.push("/w/settings/webhooks");
       router.refresh();
     },
   });

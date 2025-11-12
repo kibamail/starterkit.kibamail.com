@@ -129,7 +129,11 @@ export class ConflictError extends ApiError {
  * ```
  */
 export class ValidationError extends ApiError {
-  constructor(message: string, fieldErrors: Record<string, string[]>, cause?: Error) {
+  constructor(
+    message: string,
+    fieldErrors: Record<string, string[]>,
+    cause?: Error,
+  ) {
     super(message, 422, fieldErrors, cause);
   }
 }

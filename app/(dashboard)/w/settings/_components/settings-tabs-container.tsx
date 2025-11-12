@@ -1,15 +1,16 @@
 "use client";
 
 import {
+  DashboardLayoutContentActions,
   DashboardLayoutContentHeader,
   DashboardLayoutStickyContentHeaderContainer,
 } from "@kibamail/owly/dashboard-layout";
 import * as Tabs from "@kibamail/owly/tabs";
 import { usePathname } from "next/navigation";
 import type { PropsWithChildren } from "react";
-import { SettingsTabs } from "./settings-tabs";
-import { DashboardLayoutContentActions } from "@kibamail/owly/dashboard-layout";
 import { CreateApiKeyButton } from "../api-keys/_components/create-api-key-button";
+import { CreateWebhookButtonWrapper } from "../webhooks/_components/create-webhook-button-wrapper";
+import { SettingsTabs } from "./settings-tabs";
 
 /**
  * Settings Tabs Container
@@ -28,7 +29,8 @@ export function SettingsTabsContainer({ children }: PropsWithChildren) {
       <DashboardLayoutStickyContentHeaderContainer>
         <DashboardLayoutContentHeader title="Settings">
           <DashboardLayoutContentActions>
-            <CreateApiKeyButton />
+            {activeTab === "api-keys" && <CreateApiKeyButton />}
+            {activeTab === "webhooks" && <CreateWebhookButtonWrapper />}
           </DashboardLayoutContentActions>
         </DashboardLayoutContentHeader>
 

@@ -11,7 +11,7 @@ import { cancelInvitation } from "./handler";
 
 export async function DELETE(
   request: NextRequest,
-  props: { params: Promise<{ id: string }> }
+  props: { params: Promise<{ id: string }> },
 ) {
   const session = await getSession();
   const params = await props.params;

@@ -11,11 +11,12 @@
     "rbac:sync": "bun run scripts/rbac-sync.ts",
     "rbac:sync:dry": "bun run scripts/rbac-sync.ts --dry-run",
     "rbac:sync:force": "bun run scripts/rbac-sync.ts --force",
-    "webhooks:sdk:sync": "openapi-typescript https://raw.githubusercontent.com/hookdeck/outpost/refs/tags/v0.8.0/docs/apis/openapi.yaml -o ./webhooks/client/schema.ts"
+    "webhooks:sdk:sync": "openapi-typescript https://raw.githubusercontent.com/hookdeck/outpost/refs/tags/v0.8.0/docs/apis/openapi.yaml -o ./webhooks/client/schema.ts",
+    "seed": "bun run scripts/seed.ts"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^8.1.0",
-    "@kibamail/owly": "^1.1.11",
+    "@kibamail/owly": "^1.1.14",
     "@logto/api": "^1.33.0",
     "@logto/next": "^4.2.6",
     "@logto/node": "^3.1.6",

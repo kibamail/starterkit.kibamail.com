@@ -60,7 +60,7 @@ import type { Permission } from "@/config/rbac";
  */
 type SessionHandler = (
   session: UserSession,
-  request: NextRequest
+  request: NextRequest,
 ) => Promise<NextResponse> | NextResponse;
 
 /**
@@ -135,7 +135,7 @@ type SessionHandler = (
 export async function withSession(
   request: NextRequest,
   handler: SessionHandler,
-  requiredPermissions?: Permission[]
+  requiredPermissions?: Permission[],
 ): Promise<NextResponse> {
   const session = await getSession();
 
@@ -199,7 +199,7 @@ type Handler = (request: NextRequest) => Promise<NextResponse> | NextResponse;
  */
 export async function withErrorHandling(
   request: NextRequest,
-  handler: Handler
+  handler: Handler,
 ): Promise<NextResponse> {
   try {
     return await handler(request);
@@ -211,7 +211,7 @@ export async function withErrorHandling(
           error: error.message,
           ...(error.fieldErrors && { fieldErrors: error.fieldErrors }),
         },
-        { status: error.statusCode }
+        { status: error.statusCode },
       );
     }
 
@@ -228,7 +228,7 @@ export async function withErrorHandling(
             ? error.message
             : "An unexpected error occurred",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

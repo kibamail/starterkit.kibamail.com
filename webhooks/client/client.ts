@@ -4,14 +4,6 @@ import type { paths } from "./schema";
 
 import { env } from "@/env/schema";
 
-const middleware: Middleware = {
-  async onRequest({ request }) {
-    request.headers.set("Authorization", `Bearer ${env.OUTPOST_API_KEY}`);
-
-    return request;
-  },
-};
-
 const client = createClient<paths>({
   baseUrl: `${env.OUTPOST_API_URL}/api/v1`,
   headers: {
@@ -20,8 +12,6 @@ const client = createClient<paths>({
   },
 });
 
-client.use(middleware);
-
 function throwIfError(response: { error?: never }) {
   if (response?.error) {
     throw response.error;
@@ -29,10 +19,7 @@ function throwIfError(response: { error?: never }) {
 }
 
 class EventDeliveriesManager {
-  constructor(
-    protected tenant: string,
-    protected eventId: string
-  ) {}
+  constructor(protected tenant: string, protected eventId: string) {}
 
   async list() {
     const response = await client.GET(
@@ -91,12 +78,15 @@ class EventManager {
 }
 
 class DestinationEventManager {
-  constructor(
-    protected tenant: string,
-    protected destinationId: string
-  ) {}
+  constructor(protected tenant: string, protected destinationId: string) {}
 
-  async list() {
+  async list(options?: {
+    next?: string;
+    prev?: string;
+    limit?: number;
+    start?: string;
+    status?: "success" | "failed";
+  }) {
     const response = await client.GET(
       "/{tenant_id}/destinations/{destination_id}/events",
       {
@@ -104,6 +94,13 @@ class DestinationEventManager {
           path: {
             tenant_id: this.tenant,
             destination_id: this.destinationId,
+          },
+          query: {
+            next: options?.next,
+            prev: options?.prev,
+            limit: options?.limit,
+            start: options?.start,
+            status: options?.status,
           },
         },
       }

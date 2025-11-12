@@ -16,7 +16,7 @@ import { prisma } from "@/lib/db";
  */
 export async function cancelInvitation(
   session: UserSession,
-  params: { id: string }
+  params: { id: string },
 ) {
   const invitationId = params.id;
   const workspaceId = session.currentOrganization?.id as string;
@@ -35,7 +35,7 @@ export async function cancelInvitation(
   // Verify the invitation belongs to the current workspace
   if (invitation.workspaceId !== workspaceId) {
     return responseBadRequest(
-      "You don't have permission to cancel this invitation"
+      "You don't have permission to cancel this invitation",
     );
   }
 

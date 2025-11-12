@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     withSession(
       request,
       (session) => createWebhookDestination(session, request),
-      ["manage:webhooks"]
-    )
+      ["manage:webhooks"],
+    ),
   );
 }

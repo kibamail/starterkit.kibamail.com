@@ -46,7 +46,7 @@ import { UnauthorizedError } from "../api/errors";
  */
 export function hasPermission(
   session: UserSession,
-  permission: Permission
+  permission: Permission,
 ): boolean {
   return session.permissions.includes(permission);
 }
@@ -89,11 +89,9 @@ export function hasPermission(
  */
 export function requirePermissions(
   session: UserSession,
-  permission: Permission
+  permission: Permission,
 ): void {
   if (!hasPermission(session, permission)) {
-    throw new UnauthorizedError(
-      `Requires permission: ${permission}`
-    );
+    throw new UnauthorizedError(`Requires permission: ${permission}`);
   }
 }

@@ -16,7 +16,7 @@ export interface ExtendedUseMutationOptions<
   TData = unknown,
   TError = Error,
   TVariables = void,
-  TContext = unknown
+  TContext = unknown,
 > extends UseMutationOptions<TData, TError, TVariables, TContext> {
   /**
    * React Hook Form's setError function for automatic validation error handling
@@ -71,9 +71,9 @@ export function useMutation<
   TData = unknown,
   TError = Error,
   TVariables = void,
-  TContext = unknown
+  TContext = unknown,
 >(
-  options: ExtendedUseMutationOptions<TData, TError, TVariables, TContext>
+  options: ExtendedUseMutationOptions<TData, TError, TVariables, TContext>,
 ): UseMutationResult<TData, TError, TVariables, TContext> {
   const { error: toast } = useToast();
   const { setError: formSetError, ...reactQueryOptions } = options;

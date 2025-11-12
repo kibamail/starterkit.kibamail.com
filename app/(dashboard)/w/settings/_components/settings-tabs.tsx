@@ -21,7 +21,10 @@ export function SettingsTabs() {
         <Tabs.Trigger value="billing">Billing</Tabs.Trigger>
       </Link>
       <Link href="/w/settings/api-keys">
-        <Tabs.Trigger value="api-keys">API Keys</Tabs.Trigger>
+        <Tabs.Trigger value="api-keys">Api keys</Tabs.Trigger>
+      </Link>
+      <Link href="/w/settings/webhooks">
+        <Tabs.Trigger value="webhooks">Webhooks</Tabs.Trigger>
       </Link>
       <Tabs.Indicator />
     </Tabs.List>

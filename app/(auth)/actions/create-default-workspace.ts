@@ -35,7 +35,7 @@ export async function createDefaultWorkspaceAction() {
 
     await createWorkspaceViaLogto(
       { name: ctx.userInfo?.email },
-      ctx.userInfo?.sub
+      ctx.userInfo?.sub,
     );
   }
 

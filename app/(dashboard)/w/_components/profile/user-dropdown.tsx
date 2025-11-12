@@ -49,7 +49,7 @@ export function UserSessionDropdown({ session }: UserDropdownComponentProps) {
     <>
       <UserDropdown.Root>
         <UserDropdown.Trigger>
-          <LetterAvatar size="small" color="info">
+          <LetterAvatar size="xs">
             {session.currentOrganization?.name}
           </LetterAvatar>
           <span>{session.currentOrganization?.name}</span>
@@ -64,9 +64,7 @@ export function UserSessionDropdown({ session }: UserDropdownComponentProps) {
                 selected={selected}
                 onClick={() => activateWorkspace(org.id)}
               >
-                <LetterAvatar size="small" color="info">
-                  {org.name}
-                </LetterAvatar>
+                <LetterAvatar size="xs">{org.name}</LetterAvatar>
                 {org.name}
               </UserDropdown.Item>
             );

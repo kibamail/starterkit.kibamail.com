@@ -12,6 +12,7 @@ import type {
 import type { ToggleState } from "@/hooks/utils/useToggleState";
 import { InvitationActionsDropdown } from "./invitation-actions-dropdown";
 import { MemberActionsDropdown } from "./member-actions-dropdown";
+import { LetterAvatar } from "@kibamail/owly/letter-avatar";
 
 type TableRow =
   | { type: "member"; data: LogtoOrganizationMember }
@@ -99,15 +100,20 @@ export function TeamMembersTable({
                   return (
                     <Table.Row key={`member-${member.id}`}>
                       <Table.Cell>
-                        <div className="flex flex-col">
-                          {member.name && (
-                            <span className="font-medium text-kb-content-primary">
-                              {member.name}
+                        <div className="flex items-center gap-2">
+                          <LetterAvatar className="size-8!" size="sm">
+                            {member.name}
+                          </LetterAvatar>
+                          <div className="flex flex-col">
+                            {member.name && (
+                              <span className="font-medium text-sm text-kb-content-primary">
+                                {member.name}
+                              </span>
+                            )}
+                            <span className="text-xs text-kb-content-secondary">
+                              {member.primaryEmail}
                             </span>
-                          )}
-                          <span className="text-sm text-kb-content-secondary">
-                            {member.primaryEmail}
-                          </span>
+                          </div>
                         </div>
                       </Table.Cell>
                       <Table.Cell>

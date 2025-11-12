@@ -29,7 +29,7 @@ export default async function InvitationsPage() {
   }
 
   const workspaces = await Promise.allSettled(
-    invitations.map((invite) => logto.workspaces().get(invite.workspaceId))
+    invitations.map((invite) => logto.workspaces().get(invite.workspaceId)),
   );
 
   const knownWorkspaces: Record<string, LogtoWorkspace> = {};

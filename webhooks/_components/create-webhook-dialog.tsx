@@ -279,7 +279,7 @@ export function CreateWebhookDialog({
                           />
                         </div>
                       );
-                    }
+                    },
                   )}
                 </div>
               )}
@@ -435,7 +435,7 @@ export function CreateWebhookDialog({
                                 field.onChange([...currentTopics, topic]);
                               } else {
                                 field.onChange(
-                                  currentTopics.filter((t) => t !== topic)
+                                  currentTopics.filter((t) => t !== topic),
                                 );
                               }
                             }}

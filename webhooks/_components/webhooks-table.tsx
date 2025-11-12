@@ -13,7 +13,6 @@ interface WebhooksTableProps {
 }
 
 export function WebhooksTable({ destinations }: WebhooksTableProps) {
-
   if (destinations.length === 0) {
     return (
       <div className="mt-8">
@@ -48,14 +47,14 @@ export function WebhooksTable({ destinations }: WebhooksTableProps) {
                 destination.type === "webhook"
                   ? (destination.config as { url?: string })?.url
                   : destination.type === "aws_sqs"
-                  ? (destination.config as { queue_url?: string })?.queue_url
-                  : null;
+                    ? (destination.config as { queue_url?: string })?.queue_url
+                    : null;
 
               return (
                 <Table.Row key={destination.id}>
                   <Table.Cell>
                     <Link
-                      href={`/w/webhooks/${destination.id}`}
+                      href={`/w/settings/webhooks/${destination.id}`}
                       className="text-sm text-kb-content-secondary underline underline-offset-4 hover:text-kb-content-primary truncate max-w-xs block transition-colors"
                     >
                       {destinationUrl || "—"}
@@ -130,7 +129,7 @@ export function WebhooksTable({ destinations }: WebhooksTableProps) {
                               month: "short",
                               day: "numeric",
                               year: "numeric",
-                            }
+                            },
                           )
                         : "—"}
                     </span>

@@ -4,3069 +4,3137 @@
  */
 
 export interface paths {
-    "/healthz": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Health Check
-         * @description Simple health check endpoint.
-         */
-        get: operations["healthCheck"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+  "/healthz": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/{tenant_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-            };
-            cookie?: never;
-        };
-        /**
-         * Get Tenant
-         * @description Retrieves details for a specific tenant.
-         */
-        get: operations["getTenant"];
-        /**
-         * Create or Update Tenant
-         * @description Idempotently creates or updates a tenant. Required before associating destinations.
-         */
-        put: operations["upsertTenant"];
-        post?: never;
-        /**
-         * Delete Tenant
-         * @description Deletes the tenant and all associated destinations.
-         */
-        delete: operations["deleteTenant"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Health Check
+     * @description Simple health check endpoint.
+     */
+    get: operations["healthCheck"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/{tenant_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+      };
+      cookie?: never;
     };
-    "/{tenant_id}/portal": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-            };
-            cookie?: never;
-        };
-        /**
-         * Get Portal Redirect URL
-         * @description Returns a redirect URL containing a JWT to authenticate the user with the portal.
-         */
-        get: operations["getTenantPortalUrl"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get Tenant
+     * @description Retrieves details for a specific tenant.
+     */
+    get: operations["getTenant"];
+    /**
+     * Create or Update Tenant
+     * @description Idempotently creates or updates a tenant. Required before associating destinations.
+     */
+    put: operations["upsertTenant"];
+    post?: never;
+    /**
+     * Delete Tenant
+     * @description Deletes the tenant and all associated destinations.
+     */
+    delete: operations["deleteTenant"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/{tenant_id}/portal": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+      };
+      cookie?: never;
     };
-    "/{tenant_id}/token": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-            };
-            cookie?: never;
-        };
-        /**
-         * Get Tenant JWT Token
-         * @description Returns a JWT token scoped to the tenant for safe browser API calls.
-         */
-        get: operations["getTenantToken"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get Portal Redirect URL
+     * @description Returns a redirect URL containing a JWT to authenticate the user with the portal.
+     */
+    get: operations["getTenantPortalUrl"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/{tenant_id}/token": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+      };
+      cookie?: never;
     };
-    "/{tenant_id}/destinations": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-            };
-            cookie?: never;
-        };
-        /**
-         * List Destinations
-         * @description Return a list of the destinations for the tenant. The endpoint is not paged.
-         */
-        get: operations["listTenantDestinations"];
-        put?: never;
-        /**
-         * Create Destination
-         * @description Creates a new destination for the tenant. The request body structure depends on the `type`.
-         */
-        post: operations["createTenantDestination"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get Tenant JWT Token
+     * @description Returns a JWT token scoped to the tenant for safe browser API calls.
+     */
+    get: operations["getTenantToken"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/{tenant_id}/destinations": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+      };
+      cookie?: never;
     };
-    "/{tenant_id}/destinations/{destination_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-                /** @description The ID of the destination. */
-                destination_id: string;
-            };
-            cookie?: never;
-        };
-        /**
-         * Get Destination
-         * @description Retrieves details for a specific destination.
-         */
-        get: operations["getTenantDestination"];
-        put?: never;
-        post?: never;
-        /**
-         * Delete Destination
-         * @description Deletes a specific destination.
-         */
-        delete: operations["deleteTenantDestination"];
-        options?: never;
-        head?: never;
-        /**
-         * Update Destination
-         * @description Updates the configuration of an existing destination. The request body structure depends on the destination's `type`. Type itself cannot be updated. May return an OAuth redirect URL for certain types.
-         */
-        patch: operations["updateTenantDestination"];
-        trace?: never;
+    /**
+     * List Destinations
+     * @description Return a list of the destinations for the tenant. The endpoint is not paged.
+     */
+    get: operations["listTenantDestinations"];
+    put?: never;
+    /**
+     * Create Destination
+     * @description Creates a new destination for the tenant. The request body structure depends on the `type`.
+     */
+    post: operations["createTenantDestination"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/{tenant_id}/destinations/{destination_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+        /** @description The ID of the destination. */
+        destination_id: string;
+      };
+      cookie?: never;
     };
-    "/{tenant_id}/destinations/{destination_id}/enable": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-                /** @description The ID of the destination. */
-                destination_id: string;
-            };
-            cookie?: never;
-        };
-        get?: never;
-        /**
-         * Enable Destination
-         * @description Enables a previously disabled destination.
-         */
-        put: operations["enableTenantDestination"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get Destination
+     * @description Retrieves details for a specific destination.
+     */
+    get: operations["getTenantDestination"];
+    put?: never;
+    post?: never;
+    /**
+     * Delete Destination
+     * @description Deletes a specific destination.
+     */
+    delete: operations["deleteTenantDestination"];
+    options?: never;
+    head?: never;
+    /**
+     * Update Destination
+     * @description Updates the configuration of an existing destination. The request body structure depends on the destination's `type`. Type itself cannot be updated. May return an OAuth redirect URL for certain types.
+     */
+    patch: operations["updateTenantDestination"];
+    trace?: never;
+  };
+  "/{tenant_id}/destinations/{destination_id}/enable": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+        /** @description The ID of the destination. */
+        destination_id: string;
+      };
+      cookie?: never;
     };
-    "/{tenant_id}/destinations/{destination_id}/disable": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-                /** @description The ID of the destination. */
-                destination_id: string;
-            };
-            cookie?: never;
-        };
-        get?: never;
-        /**
-         * Disable Destination
-         * @description Disables a previously enabled destination.
-         */
-        put: operations["disableTenantDestination"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    /**
+     * Enable Destination
+     * @description Enables a previously disabled destination.
+     */
+    put: operations["enableTenantDestination"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/{tenant_id}/destinations/{destination_id}/disable": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+        /** @description The ID of the destination. */
+        destination_id: string;
+      };
+      cookie?: never;
     };
-    "/publish": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Publish Event
-         * @description Publishes an event to the specified topic, potentially routed to a specific destination. Requires Admin API Key.
-         */
-        post: operations["publishEvent"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    /**
+     * Disable Destination
+     * @description Disables a previously enabled destination.
+     */
+    put: operations["disableTenantDestination"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/publish": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/{tenant_id}/destination-types": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-            };
-            cookie?: never;
-        };
-        /**
-         * List Destination Type Schemas (for Tenant)
-         * @description Returns a list of JSON-based input schemas for each available destination type. Requires Admin API Key or Tenant JWT.
-         */
-        get: operations["listTenantDestinationTypeSchemas"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * Publish Event
+     * @description Publishes an event to the specified topic, potentially routed to a specific destination. Requires Admin API Key.
+     */
+    post: operations["publishEvent"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/{tenant_id}/destination-types": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+      };
+      cookie?: never;
     };
-    "/{tenant_id}/destination-types/{type}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-                /** @description The type of the destination. */
-                type: "webhook" | "aws_sqs" | "rabbitmq" | "hookdeck" | "aws_kinesis" | "aws_s3";
-            };
-            cookie?: never;
-        };
-        /**
-         * Get Destination Type Schema (for Tenant)
-         * @description Returns the input schema for a specific destination type. Requires Admin API Key or Tenant JWT.
-         */
-        get: operations["getTenantDestinationTypeSchema"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * List Destination Type Schemas (for Tenant)
+     * @description Returns a list of JSON-based input schemas for each available destination type. Requires Admin API Key or Tenant JWT.
+     */
+    get: operations["listTenantDestinationTypeSchemas"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/{tenant_id}/destination-types/{type}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+        /** @description The type of the destination. */
+        type:
+          | "webhook"
+          | "aws_sqs"
+          | "rabbitmq"
+          | "hookdeck"
+          | "aws_kinesis"
+          | "aws_s3";
+      };
+      cookie?: never;
     };
-    "/{tenant_id}/topics": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-            };
-            cookie?: never;
-        };
-        /**
-         * List Available Topics (for Tenant)
-         * @description Returns a list of available event topics configured in the Outpost instance. Requires Admin API Key or Tenant JWT.
-         */
-        get: operations["listTenantTopics"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get Destination Type Schema (for Tenant)
+     * @description Returns the input schema for a specific destination type. Requires Admin API Key or Tenant JWT.
+     */
+    get: operations["getTenantDestinationTypeSchema"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/{tenant_id}/topics": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+      };
+      cookie?: never;
     };
-    "/{tenant_id}/events": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-            };
-            cookie?: never;
-        };
-        /**
-         * List Events
-         * @description Retrieves a list of events for the tenant, supporting cursor navigation (details TBD) and filtering.
-         */
-        get: operations["listTenantEvents"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * List Available Topics (for Tenant)
+     * @description Returns a list of available event topics configured in the Outpost instance. Requires Admin API Key or Tenant JWT.
+     */
+    get: operations["listTenantTopics"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/{tenant_id}/events": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+      };
+      cookie?: never;
     };
-    "/{tenant_id}/events/{event_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-                /** @description The ID of the event. */
-                event_id: string;
-            };
-            cookie?: never;
-        };
-        /**
-         * Get Event
-         * @description Retrieves details for a specific event.
-         */
-        get: operations["getTenantEvent"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * List Events
+     * @description Retrieves a list of events for the tenant, supporting cursor navigation (details TBD) and filtering.
+     */
+    get: operations["listTenantEvents"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/{tenant_id}/events/{event_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+        /** @description The ID of the event. */
+        event_id: string;
+      };
+      cookie?: never;
     };
-    "/{tenant_id}/events/{event_id}/deliveries": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-                /** @description The ID of the event. */
-                event_id: string;
-            };
-            cookie?: never;
-        };
-        /**
-         * List Event Delivery Attempts
-         * @description Retrieves a list of delivery attempts for a specific event, including response details.
-         */
-        get: operations["listTenantEventDeliveries"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get Event
+     * @description Retrieves details for a specific event.
+     */
+    get: operations["getTenantEvent"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/{tenant_id}/events/{event_id}/deliveries": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+        /** @description The ID of the event. */
+        event_id: string;
+      };
+      cookie?: never;
     };
-    "/{tenant_id}/destinations/{destination_id}/events": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-                /** @description The ID of the destination. */
-                destination_id: string;
-            };
-            cookie?: never;
-        };
-        /**
-         * List Events by Destination
-         * @description Retrieves events associated with a specific destination for the tenant.
-         */
-        get: operations["listTenantEventsByDestination"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * List Event Delivery Attempts
+     * @description Retrieves a list of delivery attempts for a specific event, including response details.
+     */
+    get: operations["listTenantEventDeliveries"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/{tenant_id}/destinations/{destination_id}/events": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+        /** @description The ID of the destination. */
+        destination_id: string;
+      };
+      cookie?: never;
     };
-    "/{tenant_id}/destinations/{destination_id}/events/{event_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-                /** @description The ID of the destination. */
-                destination_id: string;
-                /** @description The ID of the event. */
-                event_id: string;
-            };
-            cookie?: never;
-        };
-        /**
-         * Get Event by Destination
-         * @description Retrieves a specific event associated with a specific destination for the tenant.
-         */
-        get: operations["getTenantEventByDestination"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * List Events by Destination
+     * @description Retrieves events associated with a specific destination for the tenant.
+     */
+    get: operations["listTenantEventsByDestination"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/{tenant_id}/destinations/{destination_id}/events/{event_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+        /** @description The ID of the destination. */
+        destination_id: string;
+        /** @description The ID of the event. */
+        event_id: string;
+      };
+      cookie?: never;
     };
-    "/{tenant_id}/destinations/{destination_id}/events/{event_id}/retry": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-                /** @description The ID of the destination. */
-                destination_id: string;
-                /** @description The ID of the event to retry. */
-                event_id: string;
-            };
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Retry Event Delivery
-         * @description Triggers a retry for a failed event delivery.
-         */
-        post: operations["retryTenantEvent"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get Event by Destination
+     * @description Retrieves a specific event associated with a specific destination for the tenant.
+     */
+    get: operations["getTenantEventByDestination"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/{tenant_id}/destinations/{destination_id}/events/{event_id}/retry": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+        /** @description The ID of the destination. */
+        destination_id: string;
+        /** @description The ID of the event to retry. */
+        event_id: string;
+      };
+      cookie?: never;
     };
-    "/destination-types": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * List Destination Type Schemas (JWT Auth)
-         * @description Returns a list of JSON-based input schemas for each available destination type (infers tenant from JWT).
-         */
-        get: operations["listDestinationTypeSchemasJwt"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * Retry Event Delivery
+     * @description Triggers a retry for a failed event delivery.
+     */
+    post: operations["retryTenantEvent"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/destination-types": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/destination-types/{type}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The type of the destination. */
-                type: "webhook" | "aws_sqs" | "rabbitmq" | "hookdeck" | "aws_kinesis" | "aws_s3";
-            };
-            cookie?: never;
-        };
-        /**
-         * Get Destination Type Schema
-         * @description Returns the input schema for a specific destination type.
-         */
-        get: operations["getDestinationTypeSchema"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * List Destination Type Schemas (JWT Auth)
+     * @description Returns a list of JSON-based input schemas for each available destination type (infers tenant from JWT).
+     */
+    get: operations["listDestinationTypeSchemasJwt"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/destination-types/{type}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The type of the destination. */
+        type:
+          | "webhook"
+          | "aws_sqs"
+          | "rabbitmq"
+          | "hookdeck"
+          | "aws_kinesis"
+          | "aws_s3";
+      };
+      cookie?: never;
     };
-    "/topics": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * List Available Topics)
-         * @description Returns a list of available event topics configured in the Outpost instance.
-         */
-        get: operations["listTopics"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get Destination Type Schema
+     * @description Returns the input schema for a specific destination type.
+     */
+    get: operations["getDestinationTypeSchema"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/topics": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
+    /**
+     * List Available Topics)
+     * @description Returns a list of available event topics configured in the Outpost instance.
+     */
+    get: operations["listTopics"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-    schemas: {
-        Tenant: {
-            /**
-             * @description User-defined system ID for the tenant.
-             * @example 123
-             */
-            id?: string;
-            /**
-             * @description Number of destinations associated with the tenant.
-             * @example 5
-             */
-            destinations_count?: number;
-            /**
-             * @description List of subscribed topics across all destinations for this tenant.
-             * @example [
-             *       "user.created",
-             *       "user.deleted"
-             *     ]
-             */
-            topics?: string[];
-            /** @description Arbitrary key-value pairs for storing contextual information about the tenant. */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * Format: date-time
-             * @description ISO Date when the tenant was created.
-             * @example 2024-01-01T00:00:00Z
-             */
-            created_at?: string;
-            /**
-             * Format: date-time
-             * @description ISO Date when the tenant was last updated.
-             * @example 2024-01-01T00:00:00Z
-             */
-            updated_at?: string;
-        };
-        TenantUpsert: {
-            /** @description Optional metadata to store with the tenant. */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-        };
-        PortalRedirect: {
-            /**
-             * Format: url
-             * @description Redirect URL containing a JWT to authenticate the user with the portal.
-             * @example https://webhooks.acme.com/?token=JWT_TOKEN
-             */
-            redirect_url?: string;
-        };
-        TenantToken: {
-            /**
-             * @description JWT token scoped to the tenant for safe browser API calls.
-             * @example SOME_JWT_TOKEN
-             */
-            token?: string;
-        };
-        SuccessResponse: {
-            /** @example true */
-            success?: boolean;
-        };
-        /**
-         * @description "*" or an array of enabled topics.
-         * @example *
-         */
-        Topics: "*" | string[];
-        PaginatedResponse: {
-            /**
-             * @description Total number of items across all pages
-             * @example 42
-             */
-            count: number;
-            /** @description Array of items for current page */
-            data: unknown[];
-            /**
-             * @description Cursor for next page (empty string if no next page)
-             * @example
-             */
-            next: string;
-            /**
-             * @description Cursor for previous page (empty string if no previous page)
-             * @example
-             */
-            prev: string;
-        };
-        WebhookConfig: {
-            /**
-             * Format: url
-             * @description The URL to send the webhook events to.
-             * @example https://example.com/webhooks/user
-             */
-            url: string;
-        };
-        WebhookCredentials: {
-            /**
-             * @description The secret used for signing webhook requests. Auto-generated if omitted on creation by admin. Read-only for tenants unless rotating.
-             * @example whsec_abc123
-             */
-            secret?: string;
-            /**
-             * @description The previous secret used during rotation. Valid for 24 hours by default. Read-only.
-             * @example whsec_xyz789
-             */
-            previous_secret?: string;
-            /**
-             * Format: date-time
-             * @description ISO timestamp when the previous secret becomes invalid. Read-only.
-             * @example 2024-01-02T00:00:00Z
-             */
-            previous_secret_invalid_at?: string;
-        };
-        AWSSQSConfig: {
-            /**
-             * Format: url
-             * @description Optional. Custom AWS endpoint URL (e.g., for LocalStack or specific regions).
-             * @example https://sqs.us-east-1.amazonaws.com
-             */
-            endpoint?: string;
-            /**
-             * Format: url
-             * @description The URL of the SQS queue.
-             * @example https://sqs.us-east-1.amazonaws.com/123456789012/my-queue
-             */
-            queue_url: string;
-        };
-        AWSSQSCredentials: {
-            /**
-             * @description AWS Access Key ID.
-             * @example AKIAIOSFODNN7EXAMPLE
-             */
-            key: string;
-            /**
-             * @description AWS Secret Access Key.
-             * @example wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
-             */
-            secret: string;
-            /**
-             * @description Optional AWS Session Token (for temporary credentials).
-             * @example AQoDYXdzEPT//////////wEXAMPLE...
-             */
-            session?: string;
-        };
-        RabbitMQConfig: {
-            /**
-             * @description RabbitMQ server address (host:port).
-             * @example localhost:5672
-             */
-            server_url: string;
-            /**
-             * @description The exchange to publish messages to.
-             * @example my-exchange
-             */
-            exchange: string;
-            /**
-             * @description Whether to use TLS connection (amqps). Defaults to "false".
-             * @example false
-             * @enum {string}
-             */
-            tls?: "true" | "false";
-        };
-        RabbitMQCredentials: {
-            /**
-             * @description RabbitMQ username.
-             * @example guest
-             */
-            username: string;
-            /**
-             * @description RabbitMQ password.
-             * @example guest
-             */
-            password: string;
-        };
-        HookdeckCredentials: {
-            /**
-             * @description Hookdeck authentication token.
-             * @example hd_token_...
-             */
-            token: string;
-        };
-        AWSKinesisConfig: {
-            /**
-             * @description The name of the AWS Kinesis stream.
-             * @example my-data-stream
-             */
-            stream_name: string;
-            /**
-             * @description The AWS region where the Kinesis stream is located.
-             * @example us-east-1
-             */
-            region: string;
-            /**
-             * Format: url
-             * @description Optional. Custom AWS endpoint URL (e.g., for LocalStack or VPC endpoints).
-             * @example https://kinesis.us-east-1.amazonaws.com
-             */
-            endpoint?: string;
-            /**
-             * @description Optional. JMESPath template to extract the partition key from the event payload (e.g., `metadata."event-id"`). Defaults to event ID.
-             * @example data."user_id"
-             */
-            partition_key_template?: string;
-        };
-        AWSKinesisCredentials: {
-            /**
-             * @description AWS Access Key ID.
-             * @example AKIAIOSFODNN7EXAMPLE
-             */
-            key: string;
-            /**
-             * @description AWS Secret Access Key.
-             * @example wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
-             */
-            secret: string;
-            /**
-             * @description Optional AWS Session Token (for temporary credentials).
-             * @example AQoDYXdzEPT//////////wEXAMPLE...
-             */
-            session?: string;
-        };
-        AzureServiceBusConfig: {
-            /**
-             * @description The name of the Azure Service Bus queue or topic to publish messages to.
-             * @example my-queue-or-topic
-             */
-            name: string;
-        };
-        AzureServiceBusCredentials: {
-            /**
-             * @description The connection string for the Azure Service Bus namespace.
-             * @example Endpoint=sb://namespace.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=abc123
-             */
-            connection_string: string;
-        };
-        AWSS3Config: {
-            /**
-             * @description The name of your AWS S3 bucket.
-             * @example my-bucket
-             */
-            bucket: string;
-            /**
-             * @description The AWS region where your bucket is located.
-             * @example us-east-1
-             */
-            region: string;
-            /**
-             * @description JMESPath expression for generating S3 object keys. Default is join('', [time.rfc3339_nano, '_', metadata."event-id", '.json']).
-             * @example join('/', [time.year, time.month, time.day, metadata."event-id", '.json'])
-             */
-            key_template?: string;
-            /**
-             * @description The storage class for the S3 objects (e.g., STANDARD, INTELLIGENT_TIERING, GLACIER, etc.). Defaults to "STANDARD".
-             * @example STANDARD
-             */
-            storage_class?: string;
-        };
-        AWSS3Credentials: {
-            /**
-             * @description AWS Access Key ID.
-             * @example AKIAIOSFODNN7EXAMPLE
-             */
-            key: string;
-            /**
-             * @description AWS Secret Access Key.
-             * @example wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
-             */
-            secret: string;
-            /**
-             * @description Optional AWS Session Token (for temporary credentials).
-             * @example AQoDYXdzEPT//////////wEXAMPLE...
-             */
-            session?: string;
-        };
-        GCPPubSubConfig: {
-            /**
-             * @description The GCP project ID.
-             * @example my-project-123
-             */
-            project_id: string;
-            /**
-             * @description The Pub/Sub topic name.
-             * @example events-topic
-             */
-            topic: string;
-            /**
-             * @description Optional. Custom endpoint URL (e.g., localhost:8085 for emulator).
-             * @example pubsub.googleapis.com:443
-             */
-            endpoint?: string;
-        };
-        GCPPubSubCredentials: {
-            /**
-             * @description Service account key JSON. The entire JSON key file content as a string.
-             * @example {"type":"service_account","project_id":"my-project","private_key_id":"key123","private_key":"-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n","client_email":"my-service@my-project.iam.gserviceaccount.com"}
-             */
-            service_account_json: string;
-        };
-        /**
-         * @example {
-         *       "id": "des_webhook_123",
-         *       "type": "webhook",
-         *       "topics": [
-         *         "user.created",
-         *         "order.shipped"
-         *       ],
-         *       "disabled_at": null,
-         *       "created_at": "2024-02-15T10:00:00Z",
-         *       "updated_at": "2024-02-15T10:00:00Z",
-         *       "config": {
-         *         "url": "https://my-service.com/webhook/handler"
-         *       },
-         *       "credentials": {
-         *         "secret": "whsec_abc123def456",
-         *         "previous_secret": "whsec_prev789xyz012",
-         *         "previous_secret_invalid_at": "2024-02-16T10:00:00Z"
-         *       }
-         *     }
-         */
-        DestinationWebhook: {
-            /**
-             * @description Control plane generated ID or user provided ID for the destination.
-             * @example des_12345
-             */
-            id: string;
-            /**
-             * @description Type of the destination. (enum property replaced by openapi-typescript)
-             * @enum {string}
-             */
-            type: "webhook";
-            topics: components["schemas"]["Topics"];
-            /**
-             * Format: date-time
-             * @description ISO Date when the destination was disabled, or null if enabled.
-             * @example null
-             */
-            disabled_at: string | null;
-            /**
-             * Format: date-time
-             * @description ISO Date when the destination was created.
-             * @example 2024-01-01T00:00:00Z
-             */
-            created_at: string;
-            /**
-             * Format: date-time
-             * @description ISO Date when the destination was last updated.
-             * @example 2024-01-01T00:00:00Z
-             */
-            updated_at: string;
-            config: components["schemas"]["WebhookConfig"];
-            credentials: components["schemas"]["WebhookCredentials"];
-            /**
-             * @description Static key-value pairs merged into event metadata on every delivery.
-             * @example {
-             *       "app-id": "my-app",
-             *       "region": "us-east-1"
-             *     }
-             */
-            delivery_metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description Arbitrary contextual information stored with the destination.
-             * @example {
-             *       "internal-id": "123",
-             *       "team": "platform"
-             *     }
-             */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description A human-readable representation of the destination target (e.g., URL host). Read-only.
-             * @example my-service.com
-             */
-            readonly target?: string;
-            /**
-             * Format: url
-             * @description A URL link to the destination target (the webhook URL). Read-only.
-             * @example https://my-service.com/webhook/handler
-             */
-            readonly target_url?: string | null;
-        };
-        /**
-         * @example {
-         *       "id": "des_sqs_456",
-         *       "type": "aws_sqs",
-         *       "topics": [
-         *         "*"
-         *       ],
-         *       "disabled_at": "2024-03-01T12:00:00Z",
-         *       "created_at": "2024-02-20T11:30:00Z",
-         *       "updated_at": "2024-02-20T11:30:00Z",
-         *       "config": {
-         *         "queue_url": "https://sqs.us-west-2.amazonaws.com/123456789012/my-app-queue",
-         *         "endpoint": "https://sqs.us-west-2.amazonaws.com"
-         *       },
-         *       "credentials": {
-         *         "key": "AKIAIOSFODNN7EXAMPLE",
-         *         "secret": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
-         *       }
-         *     }
-         */
-        DestinationAWSSQS: {
-            /**
-             * @description Control plane generated ID or user provided ID for the destination.
-             * @example des_12345
-             */
-            id: string;
-            /**
-             * @description Type of the destination. (enum property replaced by openapi-typescript)
-             * @enum {string}
-             */
-            type: "aws_sqs";
-            topics: components["schemas"]["Topics"];
-            /**
-             * Format: date-time
-             * @description ISO Date when the destination was disabled, or null if enabled.
-             * @example null
-             */
-            disabled_at: string | null;
-            /**
-             * Format: date-time
-             * @description ISO Date when the destination was created.
-             * @example 2024-01-01T00:00:00Z
-             */
-            created_at: string;
-            /**
-             * Format: date-time
-             * @description ISO Date when the destination was last updated.
-             * @example 2024-01-01T00:00:00Z
-             */
-            updated_at: string;
-            config: components["schemas"]["AWSSQSConfig"];
-            credentials: components["schemas"]["AWSSQSCredentials"];
-            /**
-             * @description Static key-value pairs merged into event metadata on every delivery.
-             * @example {
-             *       "app-id": "my-app",
-             *       "region": "us-east-1"
-             *     }
-             */
-            delivery_metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description Arbitrary contextual information stored with the destination.
-             * @example {
-             *       "internal-id": "123",
-             *       "team": "platform"
-             *     }
-             */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description A human-readable representation of the destination target (SQS queue name). Read-only.
-             * @example my-app-queue
-             */
-            readonly target?: string;
-            /**
-             * Format: url
-             * @description A URL link to the destination target (AWS Console link to the queue). Read-only.
-             * @example https://us-west-2.console.aws.amazon.com/sqs/v2/home?region=us-west-2#/queues/https%3A%2F%2Fsqs.us-west-2.amazonaws.com%2F123456789012%2Fmy-app-queue
-             */
-            readonly target_url?: string | null;
-        };
-        /**
-         * @example {
-         *       "id": "des_rmq_789",
-         *       "type": "rabbitmq",
-         *       "topics": [
-         *         "inventory.updated"
-         *       ],
-         *       "disabled_at": null,
-         *       "created_at": "2024-01-10T09:00:00Z",
-         *       "updated_at": "2024-01-10T09:00:00Z",
-         *       "config": {
-         *         "server_url": "amqp.cloudamqp.com:5671",
-         *         "exchange": "events-exchange",
-         *         "tls": "true"
-         *       },
-         *       "credentials": {
-         *         "username": "app_user",
-         *         "password": "secure_password_123"
-         *       }
-         *     }
-         */
-        DestinationRabbitMQ: {
-            /**
-             * @description Control plane generated ID or user provided ID for the destination.
-             * @example des_12345
-             */
-            id: string;
-            /**
-             * @description Type of the destination. (enum property replaced by openapi-typescript)
-             * @enum {string}
-             */
-            type: "rabbitmq";
-            topics: components["schemas"]["Topics"];
-            /**
-             * Format: date-time
-             * @description ISO Date when the destination was disabled, or null if enabled.
-             * @example null
-             */
-            disabled_at: string | null;
-            /**
-             * Format: date-time
-             * @description ISO Date when the destination was created.
-             * @example 2024-01-01T00:00:00Z
-             */
-            created_at: string;
-            /**
-             * Format: date-time
-             * @description ISO Date when the destination was last updated.
-             * @example 2024-01-01T00:00:00Z
-             */
-            updated_at: string;
-            config: components["schemas"]["RabbitMQConfig"];
-            credentials: components["schemas"]["RabbitMQCredentials"];
-            /**
-             * @description Static key-value pairs merged into event metadata on every delivery.
-             * @example {
-             *       "app-id": "my-app",
-             *       "region": "us-east-1"
-             *     }
-             */
-            delivery_metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description Arbitrary contextual information stored with the destination.
-             * @example {
-             *       "internal-id": "123",
-             *       "team": "platform"
-             *     }
-             */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description A human-readable representation of the destination target (RabbitMQ exchange). Read-only.
-             * @example events-exchange
-             */
-            readonly target?: string;
-            /**
-             * Format: url
-             * @description A URL link to the destination target (not applicable for RabbitMQ exchange). Read-only.
-             * @example null
-             */
-            readonly target_url?: string | null;
-        };
-        /**
-         * @example {
-         *       "id": "des_hkd_abc",
-         *       "type": "hookdeck",
-         *       "topics": [
-         *         "*"
-         *       ],
-         *       "disabled_at": null,
-         *       "created_at": "2024-04-01T10:00:00Z",
-         *       "updated_at": "2024-04-01T10:00:00Z",
-         *       "config": {},
-         *       "credentials": {
-         *         "token": "hd_token_..."
-         *       }
-         *     }
-         */
-        DestinationHookdeck: {
-            /**
-             * @description Control plane generated ID or user provided ID for the destination.
-             * @example des_12345
-             */
-            id: string;
-            /**
-             * @description Type of the destination. (enum property replaced by openapi-typescript)
-             * @enum {string}
-             */
-            type: "hookdeck";
-            topics: components["schemas"]["Topics"];
-            /**
-             * Format: date-time
-             * @description ISO Date when the destination was disabled, or null if enabled.
-             * @example null
-             */
-            disabled_at: string | null;
-            /**
-             * Format: date-time
-             * @description ISO Date when the destination was created.
-             * @example 2024-01-01T00:00:00Z
-             */
-            created_at: string;
-            /**
-             * Format: date-time
-             * @description ISO Date when the destination was last updated.
-             * @example 2024-01-01T00:00:00Z
-             */
-            updated_at?: string;
-            config?: unknown;
-            credentials: components["schemas"]["HookdeckCredentials"];
-            /**
-             * @description Static key-value pairs merged into event metadata on every delivery.
-             * @example {
-             *       "app-id": "my-app",
-             *       "region": "us-east-1"
-             *     }
-             */
-            delivery_metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description Arbitrary contextual information stored with the destination.
-             * @example {
-             *       "internal-id": "123",
-             *       "team": "platform"
-             *     }
-             */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description A human-readable representation of the destination target (Hookdeck). Read-only.
-             * @example Hookdeck
-             */
-            readonly target?: string;
-            /**
-             * Format: url
-             * @description A URL link to the destination target (e.g., Hookdeck dashboard). Read-only.
-             * @example https://dashboard.hookdeck.com/sources/src_xxxyyyzzz
-             */
-            readonly target_url?: string | null;
-        };
-        /**
-         * @example {
-         *       "id": "des_kns_xyz",
-         *       "type": "aws_kinesis",
-         *       "topics": [
-         *         "user.created",
-         *         "user.updated"
-         *       ],
-         *       "disabled_at": null,
-         *       "created_at": "2024-03-10T15:30:00Z",
-         *       "updated_at": "2024-03-10T15:30:00Z",
-         *       "config": {
-         *         "stream_name": "production-events",
-         *         "region": "eu-west-1"
-         *       },
-         *       "credentials": {
-         *         "key": "AKIAIOSFODNN7EXAMPLE",
-         *         "secret": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
-         *       }
-         *     }
-         */
-        DestinationAWSKinesis: {
-            /**
-             * @description Control plane generated ID or user provided ID for the destination.
-             * @example des_12345
-             */
-            id: string;
-            /**
-             * @description Type of the destination. (enum property replaced by openapi-typescript)
-             * @enum {string}
-             */
-            type: "aws_kinesis";
-            topics: components["schemas"]["Topics"];
-            /**
-             * Format: date-time
-             * @description ISO Date when the destination was disabled, or null if enabled.
-             * @example null
-             */
-            disabled_at: string | null;
-            /**
-             * Format: date-time
-             * @description ISO Date when the destination was created.
-             * @example 2024-01-01T00:00:00Z
-             */
-            created_at: string;
-            /**
-             * Format: date-time
-             * @description ISO Date when the destination was last updated.
-             * @example 2024-01-01T00:00:00Z
-             */
-            updated_at: string;
-            config: components["schemas"]["AWSKinesisConfig"];
-            credentials: components["schemas"]["AWSKinesisCredentials"];
-            /**
-             * @description Static key-value pairs merged into event metadata on every delivery.
-             * @example {
-             *       "app-id": "my-app",
-             *       "region": "us-east-1"
-             *     }
-             */
-            delivery_metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description Arbitrary contextual information stored with the destination.
-             * @example {
-             *       "internal-id": "123",
-             *       "team": "platform"
-             *     }
-             */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description A human-readable representation of the destination target (Kinesis stream name). Read-only.
-             * @example production-events
-             */
-            readonly target?: string;
-            /**
-             * Format: url
-             * @description A URL link to the destination target (AWS Console link to the stream). Read-only.
-             * @example https://eu-west-1.console.aws.amazon.com/kinesis/home?region=eu-west-1#/streams/details/production-events/details
-             */
-            readonly target_url?: string | null;
-        };
-        /**
-         * @example {
-         *       "id": "des_azuresb_123",
-         *       "type": "azure_servicebus",
-         *       "topics": [
-         *         "*"
-         *       ],
-         *       "disabled_at": null,
-         *       "created_at": "2024-05-01T10:00:00Z",
-         *       "updated_at": "2024-05-01T10:00:00Z",
-         *       "config": {
-         *         "name": "my-queue-or-topic"
-         *       },
-         *       "credentials": {
-         *         "connection_string": "Endpoint=sb://namespace.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=abc123"
-         *       }
-         *     }
-         */
-        DestinationAzureServiceBus: {
-            /**
-             * @description Control plane generated ID or user provided ID for the destination.
-             * @example des_12345
-             */
-            id: string;
-            /**
-             * @description Type of the destination. (enum property replaced by openapi-typescript)
-             * @enum {string}
-             */
-            type: "azure_servicebus";
-            topics: components["schemas"]["Topics"];
-            /**
-             * Format: date-time
-             * @description ISO Date when the destination was disabled, or null if enabled.
-             * @example null
-             */
-            disabled_at: string | null;
-            /**
-             * Format: date-time
-             * @description ISO Date when the destination was created.
-             * @example 2024-01-01T00:00:00Z
-             */
-            created_at: string;
-            /**
-             * Format: date-time
-             * @description ISO Date when the destination was last updated.
-             * @example 2024-01-01T00:00:00Z
-             */
-            updated_at?: string;
-            config: components["schemas"]["AzureServiceBusConfig"];
-            credentials: components["schemas"]["AzureServiceBusCredentials"];
-            /**
-             * @description Static key-value pairs merged into event metadata on every delivery.
-             * @example {
-             *       "app-id": "my-app",
-             *       "region": "us-east-1"
-             *     }
-             */
-            delivery_metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description Arbitrary contextual information stored with the destination.
-             * @example {
-             *       "internal-id": "123",
-             *       "team": "platform"
-             *     }
-             */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description A human-readable representation of the destination target (Azure Service Bus queue/topic name). Read-only.
-             * @example my-queue-or-topic
-             */
-            readonly target?: string;
-            /**
-             * Format: url
-             * @description A URL link to the destination target (Azure Portal link to the Service Bus). Read-only.
-             * @example https://portal.azure.com/#@tenant-id/resource/subscriptions/subscription-id/resourceGroups/resource-group/providers/Microsoft.ServiceBus/namespaces/namespace-name/queues/queue-name
-             */
-            readonly target_url?: string | null;
-        };
-        /**
-         * @example {
-         *       "id": "des_s3_789",
-         *       "type": "aws_s3",
-         *       "topics": [
-         *         "*"
-         *       ],
-         *       "disabled_at": null,
-         *       "created_at": "2024-03-20T12:00:00Z",
-         *       "updated_at": "2024-03-20T12:00:00Z",
-         *       "config": {
-         *         "bucket": "my-bucket",
-         *         "region": "us-east-1"
-         *       },
-         *       "credentials": {
-         *         "key": "AKIAIOSFODNN7EXAMPLE",
-         *         "secret": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
-         *       }
-         *     }
-         */
-        DestinationAWSS3: {
-            /**
-             * @description Control plane generated ID or user provided ID for the destination.
-             * @example des_12345
-             */
-            id: string;
-            /**
-             * @description Type of the destination. (enum property replaced by openapi-typescript)
-             * @enum {string}
-             */
-            type: "aws_s3";
-            topics: components["schemas"]["Topics"];
-            /**
-             * Format: date-time
-             * @description ISO Date when the destination was disabled, or null if enabled.
-             * @example null
-             */
-            disabled_at: string | null;
-            /**
-             * Format: date-time
-             * @description ISO Date when the destination was created.
-             * @example 2024-01-01T00:00:00Z
-             */
-            created_at: string;
-            /**
-             * Format: date-time
-             * @description ISO Date when the destination was last updated.
-             * @example 2024-01-01T00:00:00Z
-             */
-            updated_at: string;
-            config: components["schemas"]["AWSS3Config"];
-            credentials: components["schemas"]["AWSS3Credentials"];
-            /**
-             * @description Static key-value pairs merged into event metadata on every delivery.
-             * @example {
-             *       "app-id": "my-app",
-             *       "region": "us-east-1"
-             *     }
-             */
-            delivery_metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description Arbitrary contextual information stored with the destination.
-             * @example {
-             *       "internal-id": "123",
-             *       "team": "platform"
-             *     }
-             */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description A human-readable representation of the destination target (bucket and region). Read-only.
-             * @example my-bucket in us-east-1
-             */
-            readonly target?: string;
-            /**
-             * Format: url
-             * @description A URL link to the destination target (AWS Console link to the bucket). Read-only.
-             * @example null
-             */
-            readonly target_url?: string | null;
-        };
-        /**
-         * @example {
-         *       "id": "des_gcp_pubsub_123",
-         *       "type": "gcp_pubsub",
-         *       "topics": [
-         *         "order.created",
-         *         "order.updated"
-         *       ],
-         *       "disabled_at": null,
-         *       "created_at": "2024-03-10T14:30:00Z",
-         *       "updated_at": "2024-03-10T14:30:00Z",
-         *       "config": {
-         *         "project_id": "my-project-123",
-         *         "topic": "events-topic"
-         *       },
-         *       "credentials": {
-         *         "service_account_json": "{\"type\":\"service_account\",\"project_id\":\"my-project-123\",...}"
-         *       }
-         *     }
-         */
-        DestinationGCPPubSub: {
-            /**
-             * @description Control plane generated ID or user provided ID for the destination.
-             * @example des_12345
-             */
-            id: string;
-            /**
-             * @description Type of the destination. (enum property replaced by openapi-typescript)
-             * @enum {string}
-             */
-            type: "gcp_pubsub";
-            topics: components["schemas"]["Topics"];
-            /**
-             * Format: date-time
-             * @description ISO Date when the destination was disabled, or null if enabled.
-             * @example null
-             */
-            disabled_at: string | null;
-            /**
-             * Format: date-time
-             * @description ISO Date when the destination was created.
-             * @example 2024-01-01T00:00:00Z
-             */
-            created_at: string;
-            /**
-             * Format: date-time
-             * @description ISO Date when the destination was last updated.
-             * @example 2024-01-01T00:00:00Z
-             */
-            updated_at: string;
-            config: components["schemas"]["GCPPubSubConfig"];
-            credentials: components["schemas"]["GCPPubSubCredentials"];
-            /**
-             * @description Static key-value pairs merged into event metadata on every delivery.
-             * @example {
-             *       "app-id": "my-app",
-             *       "region": "us-east-1"
-             *     }
-             */
-            delivery_metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description Arbitrary contextual information stored with the destination.
-             * @example {
-             *       "internal-id": "123",
-             *       "team": "platform"
-             *     }
-             */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description A human-readable representation of the destination target (project/topic). Read-only.
-             * @example my-project-123/events-topic
-             */
-            readonly target?: string;
-            /**
-             * Format: url
-             * @description A URL link to the destination target (GCP Console link to the topic). Read-only.
-             * @example https://console.cloud.google.com/cloudpubsub/topic/detail/events-topic?project=my-project-123
-             */
-            readonly target_url?: string | null;
-        };
-        Destination: components["schemas"]["DestinationWebhook"] | components["schemas"]["DestinationAWSSQS"] | components["schemas"]["DestinationRabbitMQ"] | components["schemas"]["DestinationHookdeck"] | components["schemas"]["DestinationAWSKinesis"] | components["schemas"]["DestinationAzureServiceBus"] | components["schemas"]["DestinationAWSS3"] | components["schemas"]["DestinationGCPPubSub"];
-        DestinationCreateWebhook: {
-            /**
-             * @description Optional user-provided ID. A UUID will be generated if empty.
-             * @example user-provided-id
-             */
-            id?: string;
-            /**
-             * @description Type of the destination. Must be 'webhook'. (enum property replaced by openapi-typescript)
-             * @enum {string}
-             */
-            type: "webhook";
-            topics: components["schemas"]["Topics"];
-            config: components["schemas"]["WebhookConfig"];
-            credentials?: components["schemas"]["WebhookCredentials"];
-            /**
-             * @description Static key-value pairs merged into event metadata on every delivery.
-             * @example {
-             *       "app-id": "my-app",
-             *       "region": "us-east-1"
-             *     }
-             */
-            delivery_metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description Arbitrary contextual information stored with the destination.
-             * @example {
-             *       "internal-id": "123",
-             *       "team": "platform"
-             *     }
-             */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-        };
-        DestinationCreateAWSSQS: {
-            /**
-             * @description Optional user-provided ID. A UUID will be generated if empty.
-             * @example user-provided-id
-             */
-            id?: string;
-            /**
-             * @description Type of the destination. Must be 'aws_sqs'. (enum property replaced by openapi-typescript)
-             * @enum {string}
-             */
-            type: "aws_sqs";
-            topics: components["schemas"]["Topics"];
-            config: components["schemas"]["AWSSQSConfig"];
-            credentials: components["schemas"]["AWSSQSCredentials"];
-            /**
-             * @description Static key-value pairs merged into event metadata on every delivery.
-             * @example {
-             *       "app-id": "my-app",
-             *       "region": "us-east-1"
-             *     }
-             */
-            delivery_metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description Arbitrary contextual information stored with the destination.
-             * @example {
-             *       "internal-id": "123",
-             *       "team": "platform"
-             *     }
-             */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-        };
-        DestinationCreateRabbitMQ: {
-            /**
-             * @description Optional user-provided ID. A UUID will be generated if empty.
-             * @example user-provided-id
-             */
-            id?: string;
-            /**
-             * @description Type of the destination. Must be 'rabbitmq'. (enum property replaced by openapi-typescript)
-             * @enum {string}
-             */
-            type: "rabbitmq";
-            topics: components["schemas"]["Topics"];
-            config: components["schemas"]["RabbitMQConfig"];
-            credentials: components["schemas"]["RabbitMQCredentials"];
-            /**
-             * @description Static key-value pairs merged into event metadata on every delivery.
-             * @example {
-             *       "app-id": "my-app",
-             *       "region": "us-east-1"
-             *     }
-             */
-            delivery_metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description Arbitrary contextual information stored with the destination.
-             * @example {
-             *       "internal-id": "123",
-             *       "team": "platform"
-             *     }
-             */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-        };
-        DestinationCreateHookdeck: {
-            /**
-             * @description Optional user-provided ID. A UUID will be generated if empty.
-             * @example user-provided-id
-             */
-            id?: string;
-            /**
-             * @description Type of the destination. Must be 'hookdeck'. (enum property replaced by openapi-typescript)
-             * @enum {string}
-             */
-            type: "hookdeck";
-            topics: components["schemas"]["Topics"];
-            config?: unknown;
-            credentials: components["schemas"]["HookdeckCredentials"];
-            /**
-             * @description Static key-value pairs merged into event metadata on every delivery.
-             * @example {
-             *       "app-id": "my-app",
-             *       "region": "us-east-1"
-             *     }
-             */
-            delivery_metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description Arbitrary contextual information stored with the destination.
-             * @example {
-             *       "internal-id": "123",
-             *       "team": "platform"
-             *     }
-             */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-        };
-        DestinationCreateAWSKinesis: {
-            /**
-             * @description Optional user-provided ID. A UUID will be generated if empty.
-             * @example user-provided-id
-             */
-            id?: string;
-            /**
-             * @description Type of the destination. Must be 'aws_kinesis'. (enum property replaced by openapi-typescript)
-             * @enum {string}
-             */
-            type: "aws_kinesis";
-            topics: components["schemas"]["Topics"];
-            config: components["schemas"]["AWSKinesisConfig"];
-            credentials: components["schemas"]["AWSKinesisCredentials"];
-            /**
-             * @description Static key-value pairs merged into event metadata on every delivery.
-             * @example {
-             *       "app-id": "my-app",
-             *       "region": "us-east-1"
-             *     }
-             */
-            delivery_metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description Arbitrary contextual information stored with the destination.
-             * @example {
-             *       "internal-id": "123",
-             *       "team": "platform"
-             *     }
-             */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-        };
-        DestinationCreateAzureServiceBus: {
-            /**
-             * @description Optional user-provided ID. A UUID will be generated if empty.
-             * @example user-provided-id
-             */
-            id?: string;
-            /**
-             * @description Type of the destination. Must be 'azure_servicebus'. (enum property replaced by openapi-typescript)
-             * @enum {string}
-             */
-            type: "azure_servicebus";
-            topics: components["schemas"]["Topics"];
-            config: components["schemas"]["AzureServiceBusConfig"];
-            credentials: components["schemas"]["AzureServiceBusCredentials"];
-            /**
-             * @description Static key-value pairs merged into event metadata on every delivery.
-             * @example {
-             *       "app-id": "my-app",
-             *       "region": "us-east-1"
-             *     }
-             */
-            delivery_metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description Arbitrary contextual information stored with the destination.
-             * @example {
-             *       "internal-id": "123",
-             *       "team": "platform"
-             *     }
-             */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-        };
-        DestinationCreateAWSS3: {
-            /**
-             * @description Optional user-provided ID. A UUID will be generated if empty.
-             * @example user-provided-id
-             */
-            id?: string;
-            /**
-             * @description Type of the destination. Must be 'aws_s3'. (enum property replaced by openapi-typescript)
-             * @enum {string}
-             */
-            type: "aws_s3";
-            topics: components["schemas"]["Topics"];
-            config: components["schemas"]["AWSS3Config"];
-            credentials: components["schemas"]["AWSS3Credentials"];
-            /**
-             * @description Static key-value pairs merged into event metadata on every delivery.
-             * @example {
-             *       "app-id": "my-app",
-             *       "region": "us-east-1"
-             *     }
-             */
-            delivery_metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description Arbitrary contextual information stored with the destination.
-             * @example {
-             *       "internal-id": "123",
-             *       "team": "platform"
-             *     }
-             */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-        };
-        DestinationCreateGCPPubSub: {
-            /**
-             * @description Optional user-provided ID. A UUID will be generated if empty.
-             * @example user-provided-id
-             */
-            id?: string;
-            /**
-             * @description Type of the destination. Must be 'gcp_pubsub'. (enum property replaced by openapi-typescript)
-             * @enum {string}
-             */
-            type: "gcp_pubsub";
-            topics: components["schemas"]["Topics"];
-            config: components["schemas"]["GCPPubSubConfig"];
-            credentials: components["schemas"]["GCPPubSubCredentials"];
-            /**
-             * @description Static key-value pairs merged into event metadata on every delivery.
-             * @example {
-             *       "app-id": "my-app",
-             *       "region": "us-east-1"
-             *     }
-             */
-            delivery_metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description Arbitrary contextual information stored with the destination.
-             * @example {
-             *       "internal-id": "123",
-             *       "team": "platform"
-             *     }
-             */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-        };
-        DestinationCreate: components["schemas"]["DestinationCreateWebhook"] | components["schemas"]["DestinationCreateAWSSQS"] | components["schemas"]["DestinationCreateRabbitMQ"] | components["schemas"]["DestinationCreateHookdeck"] | components["schemas"]["DestinationCreateAWSKinesis"] | components["schemas"]["DestinationCreateAzureServiceBus"] | components["schemas"]["DestinationCreateAWSS3"] | components["schemas"]["DestinationCreateGCPPubSub"];
-        WebhookCredentialsUpdate: {
-            /** @description New secret (only allowed for admin). */
-            secret?: string;
-            /** @description Previous secret for rotation (only allowed for admin). */
-            previous_secret?: string;
-            /**
-             * Format: date-time
-             * @description Invalidation time for previous secret (only allowed for admin).
-             */
-            previous_secret_invalid_at?: string;
-            /** @description Set to true to rotate the secret. The current secret becomes the previous_secret, and a new secret is generated. `previous_secret_invalid_at` defaults to 24h if not provided. */
-            rotate_secret?: boolean;
-        };
-        DestinationUpdateWebhook: {
-            topics?: components["schemas"]["Topics"];
-            config?: components["schemas"]["WebhookConfig"];
-            credentials?: components["schemas"]["WebhookCredentialsUpdate"];
-            /**
-             * @description Static key-value pairs merged into event metadata on every delivery.
-             * @example {
-             *       "app-id": "my-app",
-             *       "region": "us-east-1"
-             *     }
-             */
-            delivery_metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description Arbitrary contextual information stored with the destination.
-             * @example {
-             *       "internal-id": "123",
-             *       "team": "platform"
-             *     }
-             */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-        };
-        DestinationUpdateAWSSQS: {
-            topics?: components["schemas"]["Topics"];
-            config?: components["schemas"]["AWSSQSConfig"];
-            credentials?: components["schemas"]["AWSSQSCredentials"];
-            /**
-             * @description Static key-value pairs merged into event metadata on every delivery.
-             * @example {
-             *       "app-id": "my-app",
-             *       "region": "us-east-1"
-             *     }
-             */
-            delivery_metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description Arbitrary contextual information stored with the destination.
-             * @example {
-             *       "internal-id": "123",
-             *       "team": "platform"
-             *     }
-             */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-        };
-        DestinationUpdateRabbitMQ: {
-            topics?: components["schemas"]["Topics"];
-            config?: components["schemas"]["RabbitMQConfig"];
-            credentials?: components["schemas"]["RabbitMQCredentials"];
-            /**
-             * @description Static key-value pairs merged into event metadata on every delivery.
-             * @example {
-             *       "app-id": "my-app",
-             *       "region": "us-east-1"
-             *     }
-             */
-            delivery_metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description Arbitrary contextual information stored with the destination.
-             * @example {
-             *       "internal-id": "123",
-             *       "team": "platform"
-             *     }
-             */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-        };
-        DestinationUpdateHookdeck: {
-            topics?: components["schemas"]["Topics"];
-            config?: unknown;
-            credentials?: components["schemas"]["HookdeckCredentials"];
-            /**
-             * @description Static key-value pairs merged into event metadata on every delivery.
-             * @example {
-             *       "app-id": "my-app",
-             *       "region": "us-east-1"
-             *     }
-             */
-            delivery_metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description Arbitrary contextual information stored with the destination.
-             * @example {
-             *       "internal-id": "123",
-             *       "team": "platform"
-             *     }
-             */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-        };
-        DestinationUpdateAWSKinesis: {
-            topics?: components["schemas"]["Topics"];
-            config?: components["schemas"]["AWSKinesisConfig"];
-            credentials?: components["schemas"]["AWSKinesisCredentials"];
-            /**
-             * @description Static key-value pairs merged into event metadata on every delivery.
-             * @example {
-             *       "app-id": "my-app",
-             *       "region": "us-east-1"
-             *     }
-             */
-            delivery_metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description Arbitrary contextual information stored with the destination.
-             * @example {
-             *       "internal-id": "123",
-             *       "team": "platform"
-             *     }
-             */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-        };
-        DestinationUpdateAzureServiceBus: {
-            topics?: components["schemas"]["Topics"];
-            config?: components["schemas"]["AzureServiceBusConfig"];
-            credentials?: components["schemas"]["AzureServiceBusCredentials"];
-            /**
-             * @description Static key-value pairs merged into event metadata on every delivery.
-             * @example {
-             *       "app-id": "my-app",
-             *       "region": "us-east-1"
-             *     }
-             */
-            delivery_metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description Arbitrary contextual information stored with the destination.
-             * @example {
-             *       "internal-id": "123",
-             *       "team": "platform"
-             *     }
-             */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-        };
-        DestinationUpdateAWSS3: {
-            topics?: components["schemas"]["Topics"];
-            config?: components["schemas"]["AWSS3Config"];
-            credentials?: components["schemas"]["AWSS3Credentials"];
-            /**
-             * @description Static key-value pairs merged into event metadata on every delivery.
-             * @example {
-             *       "app-id": "my-app",
-             *       "region": "us-east-1"
-             *     }
-             */
-            delivery_metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description Arbitrary contextual information stored with the destination.
-             * @example {
-             *       "internal-id": "123",
-             *       "team": "platform"
-             *     }
-             */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-        };
-        DestinationUpdateGCPPubSub: {
-            topics?: components["schemas"]["Topics"];
-            config?: components["schemas"]["GCPPubSubConfig"];
-            credentials?: components["schemas"]["GCPPubSubCredentials"];
-            /**
-             * @description Static key-value pairs merged into event metadata on every delivery.
-             * @example {
-             *       "app-id": "my-app",
-             *       "region": "us-east-1"
-             *     }
-             */
-            delivery_metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @description Arbitrary contextual information stored with the destination.
-             * @example {
-             *       "internal-id": "123",
-             *       "team": "platform"
-             *     }
-             */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-        };
-        DestinationUpdate: components["schemas"]["DestinationUpdateWebhook"] | components["schemas"]["DestinationUpdateAWSSQS"] | components["schemas"]["DestinationUpdateRabbitMQ"] | components["schemas"]["DestinationUpdateHookdeck"] | components["schemas"]["DestinationUpdateAWSKinesis"] | components["schemas"]["DestinationUpdateAzureServiceBus"] | components["schemas"]["DestinationUpdateAWSS3"] | components["schemas"]["DestinationUpdateGCPPubSub"];
-        PublishRequest: {
-            /**
-             * @description Optional. A unique identifier for the event. If not provided, a UUID will be generated.
-             * @example evt_custom_123
-             */
-            id?: string;
-            /**
-             * @description The ID of the tenant to publish for.
-             * @example <TENANT_ID>
-             */
-            tenant_id?: string;
-            /**
-             * @description Optional. Route event to a specific destination.
-             * @example <DESTINATION_ID>
-             */
-            destination_id?: string;
-            /**
-             * @description Topic name for the event. Required if Outpost has been configured with topics.
-             * @example topic.name
-             */
-            topic?: string;
-            /** @description Should event delivery be retried on failure. */
-            eligible_for_retry?: boolean;
-            /**
-             * @description Any key-value string pairs for metadata.
-             * @example {
-             *       "source": "crm"
-             *     }
-             */
-            metadata?: {
-                [key: string]: string;
-            };
-            /**
-             * @description Any JSON payload for the event data.
-             * @example {
-             *       "user_id": "userid",
-             *       "status": "active"
-             *     }
-             */
-            data: {
-                [key: string]: unknown;
-            };
-        };
-        PublishResponse: {
-            /**
-             * @description The ID of the event that was accepted for publishing. This will be the ID provided in the request's `id` field if present, otherwise it's a server-generated UUID.
-             * @example evt_abc123xyz789
-             */
-            id: string;
-        };
-        Event: {
-            /** @example evt_123 */
-            id?: string;
-            /** @example des_456 */
-            destination_id?: string;
-            /** @example user.created */
-            topic?: string;
-            /**
-             * Format: date-time
-             * @description Time the event was received/processed.
-             * @example 2024-01-01T00:00:00Z
-             */
-            time?: string;
-            /**
-             * Format: date-time
-             * @description Time the event was successfully delivered.
-             * @example 2024-01-01T00:00:00Z
-             */
-            successful_at?: string | null;
-            /**
-             * @description Key-value string pairs of metadata associated with the event.
-             * @example {
-             *       "source": "crm"
-             *     }
-             */
-            metadata?: {
-                [key: string]: string;
-            } | null;
-            /**
-             * @example success
-             * @enum {string}
-             */
-            status?: "success" | "failed";
-            /**
-             * @description Freeform JSON data of the event.
-             * @example {
-             *       "user_id": "userid",
-             *       "status": "active"
-             *     }
-             */
-            data?: {
-                [key: string]: unknown;
-            };
-        };
-        DeliveryAttempt: {
-            /**
-             * Format: date-time
-             * @example 2024-01-01T00:00:00Z
-             */
-            delivered_at?: string;
-            /**
-             * @example success
-             * @enum {string}
-             */
-            status?: "success" | "failed";
-            /** @example 200 */
-            response_status_code?: number;
-            /** @example {"status":"ok"} */
-            response_body?: string;
-            /**
-             * @example {
-             *       "content-type": "application/json"
-             *     }
-             */
-            response_headers?: {
-                [key: string]: string;
-            };
-        };
-        DestinationTypeSchema: {
-            /** @example webhook */
-            type?: string;
-            /** @example Webhook */
-            label?: string;
-            /** @example Send event via an HTTP POST request to a URL */
-            description?: string;
-            /**
-             * @description SVG icon string.
-             * @example <svg />
-             */
-            icon?: string;
-            /**
-             * @description Markdown instructions.
-             * @example Some *markdown*
-             */
-            instructions?: string;
-            /**
-             * Format: url
-             * @description Some destinations may have Oauth flow or other managed-setup flow that can be triggered with a link. If a `remote_setup_url` is set then the user should be prompted to follow the link to configure the destination.
-             *     See the [building your own UI guide](https://outpost.hookdeck.com/guides/building-your-own-ui.mdx) for recommended UI patterns and wireframes for implementation in your own app.
-             * @example https://dashboard.hookdeck.com/authorize?provider=acme
-             */
-            remote_setup_url?: string;
-            /** @description Config fields are non-secret values that can be stored and displayed to the user in plain text. */
-            config_fields?: components["schemas"]["DestinationSchemaField"][];
-            /** @description Credential fields are secret values that will be AES encrypted and obfuscated to the user. Some credentials may not be obfuscated; the destination type dictates the obfuscation logic. */
-            credential_fields?: components["schemas"]["DestinationSchemaField"][];
-        };
-        DestinationSchemaField: {
-            /**
-             * @example text
-             * @enum {string}
-             */
-            type: "text" | "checkbox";
-            /** @example URL */
-            label?: string;
-            /** @example The URL to send the event to */
-            description?: string;
-            /** @example true */
-            required: boolean;
-            /**
-             * @description Indicates if the field contains sensitive information.
-             * @example false
-             */
-            sensitive?: boolean;
-            /**
-             * @description Default value for the field.
-             * @example default_value
-             */
-            default?: string;
-            /**
-             * @description Minimum length for a text input.
-             * @example 0
-             */
-            minlength?: number;
-            /**
-             * @description Maximum length for a text input.
-             * @example 255
-             */
-            maxlength?: number;
-            /**
-             * @description Regex pattern for validation (compatible with HTML5 pattern attribute).
-             * @example ^[a-zA-Z0-9_]+$
-             */
-            pattern?: string;
-        };
+  schemas: {
+    Tenant: {
+      /**
+       * @description User-defined system ID for the tenant.
+       * @example 123
+       */
+      id?: string;
+      /**
+       * @description Number of destinations associated with the tenant.
+       * @example 5
+       */
+      destinations_count?: number;
+      /**
+       * @description List of subscribed topics across all destinations for this tenant.
+       * @example [
+       *       "user.created",
+       *       "user.deleted"
+       *     ]
+       */
+      topics?: string[];
+      /** @description Arbitrary key-value pairs for storing contextual information about the tenant. */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * Format: date-time
+       * @description ISO Date when the tenant was created.
+       * @example 2024-01-01T00:00:00Z
+       */
+      created_at?: string;
+      /**
+       * Format: date-time
+       * @description ISO Date when the tenant was last updated.
+       * @example 2024-01-01T00:00:00Z
+       */
+      updated_at?: string;
     };
-    responses: never;
-    parameters: never;
-    requestBodies: never;
-    headers: never;
-    pathItems: never;
+    TenantUpsert: {
+      /** @description Optional metadata to store with the tenant. */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+    };
+    PortalRedirect: {
+      /**
+       * Format: url
+       * @description Redirect URL containing a JWT to authenticate the user with the portal.
+       * @example https://webhooks.acme.com/?token=JWT_TOKEN
+       */
+      redirect_url?: string;
+    };
+    TenantToken: {
+      /**
+       * @description JWT token scoped to the tenant for safe browser API calls.
+       * @example SOME_JWT_TOKEN
+       */
+      token?: string;
+    };
+    SuccessResponse: {
+      /** @example true */
+      success?: boolean;
+    };
+    /**
+     * @description "*" or an array of enabled topics.
+     * @example *
+     */
+    Topics: "*" | string[];
+    PaginatedResponse: {
+      /**
+       * @description Total number of items across all pages
+       * @example 42
+       */
+      count: number;
+      /** @description Array of items for current page */
+      data: unknown[];
+      /**
+       * @description Cursor for next page (empty string if no next page)
+       * @example
+       */
+      next: string;
+      /**
+       * @description Cursor for previous page (empty string if no previous page)
+       * @example
+       */
+      prev: string;
+    };
+    WebhookConfig: {
+      /**
+       * Format: url
+       * @description The URL to send the webhook events to.
+       * @example https://example.com/webhooks/user
+       */
+      url: string;
+    };
+    WebhookCredentials: {
+      /**
+       * @description The secret used for signing webhook requests. Auto-generated if omitted on creation by admin. Read-only for tenants unless rotating.
+       * @example whsec_abc123
+       */
+      secret?: string;
+      /**
+       * @description The previous secret used during rotation. Valid for 24 hours by default. Read-only.
+       * @example whsec_xyz789
+       */
+      previous_secret?: string;
+      /**
+       * Format: date-time
+       * @description ISO timestamp when the previous secret becomes invalid. Read-only.
+       * @example 2024-01-02T00:00:00Z
+       */
+      previous_secret_invalid_at?: string;
+    };
+    AWSSQSConfig: {
+      /**
+       * Format: url
+       * @description Optional. Custom AWS endpoint URL (e.g., for LocalStack or specific regions).
+       * @example https://sqs.us-east-1.amazonaws.com
+       */
+      endpoint?: string;
+      /**
+       * Format: url
+       * @description The URL of the SQS queue.
+       * @example https://sqs.us-east-1.amazonaws.com/123456789012/my-queue
+       */
+      queue_url: string;
+    };
+    AWSSQSCredentials: {
+      /**
+       * @description AWS Access Key ID.
+       * @example AKIAIOSFODNN7EXAMPLE
+       */
+      key: string;
+      /**
+       * @description AWS Secret Access Key.
+       * @example wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+       */
+      secret: string;
+      /**
+       * @description Optional AWS Session Token (for temporary credentials).
+       * @example AQoDYXdzEPT//////////wEXAMPLE...
+       */
+      session?: string;
+    };
+    RabbitMQConfig: {
+      /**
+       * @description RabbitMQ server address (host:port).
+       * @example localhost:5672
+       */
+      server_url: string;
+      /**
+       * @description The exchange to publish messages to.
+       * @example my-exchange
+       */
+      exchange: string;
+      /**
+       * @description Whether to use TLS connection (amqps). Defaults to "false".
+       * @example false
+       * @enum {string}
+       */
+      tls?: "true" | "false";
+    };
+    RabbitMQCredentials: {
+      /**
+       * @description RabbitMQ username.
+       * @example guest
+       */
+      username: string;
+      /**
+       * @description RabbitMQ password.
+       * @example guest
+       */
+      password: string;
+    };
+    HookdeckCredentials: {
+      /**
+       * @description Hookdeck authentication token.
+       * @example hd_token_...
+       */
+      token: string;
+    };
+    AWSKinesisConfig: {
+      /**
+       * @description The name of the AWS Kinesis stream.
+       * @example my-data-stream
+       */
+      stream_name: string;
+      /**
+       * @description The AWS region where the Kinesis stream is located.
+       * @example us-east-1
+       */
+      region: string;
+      /**
+       * Format: url
+       * @description Optional. Custom AWS endpoint URL (e.g., for LocalStack or VPC endpoints).
+       * @example https://kinesis.us-east-1.amazonaws.com
+       */
+      endpoint?: string;
+      /**
+       * @description Optional. JMESPath template to extract the partition key from the event payload (e.g., `metadata."event-id"`). Defaults to event ID.
+       * @example data."user_id"
+       */
+      partition_key_template?: string;
+    };
+    AWSKinesisCredentials: {
+      /**
+       * @description AWS Access Key ID.
+       * @example AKIAIOSFODNN7EXAMPLE
+       */
+      key: string;
+      /**
+       * @description AWS Secret Access Key.
+       * @example wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+       */
+      secret: string;
+      /**
+       * @description Optional AWS Session Token (for temporary credentials).
+       * @example AQoDYXdzEPT//////////wEXAMPLE...
+       */
+      session?: string;
+    };
+    AzureServiceBusConfig: {
+      /**
+       * @description The name of the Azure Service Bus queue or topic to publish messages to.
+       * @example my-queue-or-topic
+       */
+      name: string;
+    };
+    AzureServiceBusCredentials: {
+      /**
+       * @description The connection string for the Azure Service Bus namespace.
+       * @example Endpoint=sb://namespace.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=abc123
+       */
+      connection_string: string;
+    };
+    AWSS3Config: {
+      /**
+       * @description The name of your AWS S3 bucket.
+       * @example my-bucket
+       */
+      bucket: string;
+      /**
+       * @description The AWS region where your bucket is located.
+       * @example us-east-1
+       */
+      region: string;
+      /**
+       * @description JMESPath expression for generating S3 object keys. Default is join('', [time.rfc3339_nano, '_', metadata."event-id", '.json']).
+       * @example join('/', [time.year, time.month, time.day, metadata."event-id", '.json'])
+       */
+      key_template?: string;
+      /**
+       * @description The storage class for the S3 objects (e.g., STANDARD, INTELLIGENT_TIERING, GLACIER, etc.). Defaults to "STANDARD".
+       * @example STANDARD
+       */
+      storage_class?: string;
+    };
+    AWSS3Credentials: {
+      /**
+       * @description AWS Access Key ID.
+       * @example AKIAIOSFODNN7EXAMPLE
+       */
+      key: string;
+      /**
+       * @description AWS Secret Access Key.
+       * @example wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+       */
+      secret: string;
+      /**
+       * @description Optional AWS Session Token (for temporary credentials).
+       * @example AQoDYXdzEPT//////////wEXAMPLE...
+       */
+      session?: string;
+    };
+    GCPPubSubConfig: {
+      /**
+       * @description The GCP project ID.
+       * @example my-project-123
+       */
+      project_id: string;
+      /**
+       * @description The Pub/Sub topic name.
+       * @example events-topic
+       */
+      topic: string;
+      /**
+       * @description Optional. Custom endpoint URL (e.g., localhost:8085 for emulator).
+       * @example pubsub.googleapis.com:443
+       */
+      endpoint?: string;
+    };
+    GCPPubSubCredentials: {
+      /**
+       * @description Service account key JSON. The entire JSON key file content as a string.
+       * @example {"type":"service_account","project_id":"my-project","private_key_id":"key123","private_key":"-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n","client_email":"my-service@my-project.iam.gserviceaccount.com"}
+       */
+      service_account_json: string;
+    };
+    /**
+     * @example {
+     *       "id": "des_webhook_123",
+     *       "type": "webhook",
+     *       "topics": [
+     *         "user.created",
+     *         "order.shipped"
+     *       ],
+     *       "disabled_at": null,
+     *       "created_at": "2024-02-15T10:00:00Z",
+     *       "updated_at": "2024-02-15T10:00:00Z",
+     *       "config": {
+     *         "url": "https://my-service.com/webhook/handler"
+     *       },
+     *       "credentials": {
+     *         "secret": "whsec_abc123def456",
+     *         "previous_secret": "whsec_prev789xyz012",
+     *         "previous_secret_invalid_at": "2024-02-16T10:00:00Z"
+     *       }
+     *     }
+     */
+    DestinationWebhook: {
+      /**
+       * @description Control plane generated ID or user provided ID for the destination.
+       * @example des_12345
+       */
+      id: string;
+      /**
+       * @description Type of the destination. (enum property replaced by openapi-typescript)
+       * @enum {string}
+       */
+      type: "webhook";
+      topics: components["schemas"]["Topics"];
+      /**
+       * Format: date-time
+       * @description ISO Date when the destination was disabled, or null if enabled.
+       * @example null
+       */
+      disabled_at: string | null;
+      /**
+       * Format: date-time
+       * @description ISO Date when the destination was created.
+       * @example 2024-01-01T00:00:00Z
+       */
+      created_at: string;
+      /**
+       * Format: date-time
+       * @description ISO Date when the destination was last updated.
+       * @example 2024-01-01T00:00:00Z
+       */
+      updated_at: string;
+      config: components["schemas"]["WebhookConfig"];
+      credentials: components["schemas"]["WebhookCredentials"];
+      /**
+       * @description Static key-value pairs merged into event metadata on every delivery.
+       * @example {
+       *       "app-id": "my-app",
+       *       "region": "us-east-1"
+       *     }
+       */
+      delivery_metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description Arbitrary contextual information stored with the destination.
+       * @example {
+       *       "internal-id": "123",
+       *       "team": "platform"
+       *     }
+       */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description A human-readable representation of the destination target (e.g., URL host). Read-only.
+       * @example my-service.com
+       */
+      readonly target?: string;
+      /**
+       * Format: url
+       * @description A URL link to the destination target (the webhook URL). Read-only.
+       * @example https://my-service.com/webhook/handler
+       */
+      readonly target_url?: string | null;
+    };
+    /**
+     * @example {
+     *       "id": "des_sqs_456",
+     *       "type": "aws_sqs",
+     *       "topics": [
+     *         "*"
+     *       ],
+     *       "disabled_at": "2024-03-01T12:00:00Z",
+     *       "created_at": "2024-02-20T11:30:00Z",
+     *       "updated_at": "2024-02-20T11:30:00Z",
+     *       "config": {
+     *         "queue_url": "https://sqs.us-west-2.amazonaws.com/123456789012/my-app-queue",
+     *         "endpoint": "https://sqs.us-west-2.amazonaws.com"
+     *       },
+     *       "credentials": {
+     *         "key": "AKIAIOSFODNN7EXAMPLE",
+     *         "secret": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+     *       }
+     *     }
+     */
+    DestinationAWSSQS: {
+      /**
+       * @description Control plane generated ID or user provided ID for the destination.
+       * @example des_12345
+       */
+      id: string;
+      /**
+       * @description Type of the destination. (enum property replaced by openapi-typescript)
+       * @enum {string}
+       */
+      type: "aws_sqs";
+      topics: components["schemas"]["Topics"];
+      /**
+       * Format: date-time
+       * @description ISO Date when the destination was disabled, or null if enabled.
+       * @example null
+       */
+      disabled_at: string | null;
+      /**
+       * Format: date-time
+       * @description ISO Date when the destination was created.
+       * @example 2024-01-01T00:00:00Z
+       */
+      created_at: string;
+      /**
+       * Format: date-time
+       * @description ISO Date when the destination was last updated.
+       * @example 2024-01-01T00:00:00Z
+       */
+      updated_at: string;
+      config: components["schemas"]["AWSSQSConfig"];
+      credentials: components["schemas"]["AWSSQSCredentials"];
+      /**
+       * @description Static key-value pairs merged into event metadata on every delivery.
+       * @example {
+       *       "app-id": "my-app",
+       *       "region": "us-east-1"
+       *     }
+       */
+      delivery_metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description Arbitrary contextual information stored with the destination.
+       * @example {
+       *       "internal-id": "123",
+       *       "team": "platform"
+       *     }
+       */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description A human-readable representation of the destination target (SQS queue name). Read-only.
+       * @example my-app-queue
+       */
+      readonly target?: string;
+      /**
+       * Format: url
+       * @description A URL link to the destination target (AWS Console link to the queue). Read-only.
+       * @example https://us-west-2.console.aws.amazon.com/sqs/v2/home?region=us-west-2#/queues/https%3A%2F%2Fsqs.us-west-2.amazonaws.com%2F123456789012%2Fmy-app-queue
+       */
+      readonly target_url?: string | null;
+    };
+    /**
+     * @example {
+     *       "id": "des_rmq_789",
+     *       "type": "rabbitmq",
+     *       "topics": [
+     *         "inventory.updated"
+     *       ],
+     *       "disabled_at": null,
+     *       "created_at": "2024-01-10T09:00:00Z",
+     *       "updated_at": "2024-01-10T09:00:00Z",
+     *       "config": {
+     *         "server_url": "amqp.cloudamqp.com:5671",
+     *         "exchange": "events-exchange",
+     *         "tls": "true"
+     *       },
+     *       "credentials": {
+     *         "username": "app_user",
+     *         "password": "secure_password_123"
+     *       }
+     *     }
+     */
+    DestinationRabbitMQ: {
+      /**
+       * @description Control plane generated ID or user provided ID for the destination.
+       * @example des_12345
+       */
+      id: string;
+      /**
+       * @description Type of the destination. (enum property replaced by openapi-typescript)
+       * @enum {string}
+       */
+      type: "rabbitmq";
+      topics: components["schemas"]["Topics"];
+      /**
+       * Format: date-time
+       * @description ISO Date when the destination was disabled, or null if enabled.
+       * @example null
+       */
+      disabled_at: string | null;
+      /**
+       * Format: date-time
+       * @description ISO Date when the destination was created.
+       * @example 2024-01-01T00:00:00Z
+       */
+      created_at: string;
+      /**
+       * Format: date-time
+       * @description ISO Date when the destination was last updated.
+       * @example 2024-01-01T00:00:00Z
+       */
+      updated_at: string;
+      config: components["schemas"]["RabbitMQConfig"];
+      credentials: components["schemas"]["RabbitMQCredentials"];
+      /**
+       * @description Static key-value pairs merged into event metadata on every delivery.
+       * @example {
+       *       "app-id": "my-app",
+       *       "region": "us-east-1"
+       *     }
+       */
+      delivery_metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description Arbitrary contextual information stored with the destination.
+       * @example {
+       *       "internal-id": "123",
+       *       "team": "platform"
+       *     }
+       */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description A human-readable representation of the destination target (RabbitMQ exchange). Read-only.
+       * @example events-exchange
+       */
+      readonly target?: string;
+      /**
+       * Format: url
+       * @description A URL link to the destination target (not applicable for RabbitMQ exchange). Read-only.
+       * @example null
+       */
+      readonly target_url?: string | null;
+    };
+    /**
+     * @example {
+     *       "id": "des_hkd_abc",
+     *       "type": "hookdeck",
+     *       "topics": [
+     *         "*"
+     *       ],
+     *       "disabled_at": null,
+     *       "created_at": "2024-04-01T10:00:00Z",
+     *       "updated_at": "2024-04-01T10:00:00Z",
+     *       "config": {},
+     *       "credentials": {
+     *         "token": "hd_token_..."
+     *       }
+     *     }
+     */
+    DestinationHookdeck: {
+      /**
+       * @description Control plane generated ID or user provided ID for the destination.
+       * @example des_12345
+       */
+      id: string;
+      /**
+       * @description Type of the destination. (enum property replaced by openapi-typescript)
+       * @enum {string}
+       */
+      type: "hookdeck";
+      topics: components["schemas"]["Topics"];
+      /**
+       * Format: date-time
+       * @description ISO Date when the destination was disabled, or null if enabled.
+       * @example null
+       */
+      disabled_at: string | null;
+      /**
+       * Format: date-time
+       * @description ISO Date when the destination was created.
+       * @example 2024-01-01T00:00:00Z
+       */
+      created_at: string;
+      /**
+       * Format: date-time
+       * @description ISO Date when the destination was last updated.
+       * @example 2024-01-01T00:00:00Z
+       */
+      updated_at?: string;
+      config?: unknown;
+      credentials: components["schemas"]["HookdeckCredentials"];
+      /**
+       * @description Static key-value pairs merged into event metadata on every delivery.
+       * @example {
+       *       "app-id": "my-app",
+       *       "region": "us-east-1"
+       *     }
+       */
+      delivery_metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description Arbitrary contextual information stored with the destination.
+       * @example {
+       *       "internal-id": "123",
+       *       "team": "platform"
+       *     }
+       */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description A human-readable representation of the destination target (Hookdeck). Read-only.
+       * @example Hookdeck
+       */
+      readonly target?: string;
+      /**
+       * Format: url
+       * @description A URL link to the destination target (e.g., Hookdeck dashboard). Read-only.
+       * @example https://dashboard.hookdeck.com/sources/src_xxxyyyzzz
+       */
+      readonly target_url?: string | null;
+    };
+    /**
+     * @example {
+     *       "id": "des_kns_xyz",
+     *       "type": "aws_kinesis",
+     *       "topics": [
+     *         "user.created",
+     *         "user.updated"
+     *       ],
+     *       "disabled_at": null,
+     *       "created_at": "2024-03-10T15:30:00Z",
+     *       "updated_at": "2024-03-10T15:30:00Z",
+     *       "config": {
+     *         "stream_name": "production-events",
+     *         "region": "eu-west-1"
+     *       },
+     *       "credentials": {
+     *         "key": "AKIAIOSFODNN7EXAMPLE",
+     *         "secret": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+     *       }
+     *     }
+     */
+    DestinationAWSKinesis: {
+      /**
+       * @description Control plane generated ID or user provided ID for the destination.
+       * @example des_12345
+       */
+      id: string;
+      /**
+       * @description Type of the destination. (enum property replaced by openapi-typescript)
+       * @enum {string}
+       */
+      type: "aws_kinesis";
+      topics: components["schemas"]["Topics"];
+      /**
+       * Format: date-time
+       * @description ISO Date when the destination was disabled, or null if enabled.
+       * @example null
+       */
+      disabled_at: string | null;
+      /**
+       * Format: date-time
+       * @description ISO Date when the destination was created.
+       * @example 2024-01-01T00:00:00Z
+       */
+      created_at: string;
+      /**
+       * Format: date-time
+       * @description ISO Date when the destination was last updated.
+       * @example 2024-01-01T00:00:00Z
+       */
+      updated_at: string;
+      config: components["schemas"]["AWSKinesisConfig"];
+      credentials: components["schemas"]["AWSKinesisCredentials"];
+      /**
+       * @description Static key-value pairs merged into event metadata on every delivery.
+       * @example {
+       *       "app-id": "my-app",
+       *       "region": "us-east-1"
+       *     }
+       */
+      delivery_metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description Arbitrary contextual information stored with the destination.
+       * @example {
+       *       "internal-id": "123",
+       *       "team": "platform"
+       *     }
+       */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description A human-readable representation of the destination target (Kinesis stream name). Read-only.
+       * @example production-events
+       */
+      readonly target?: string;
+      /**
+       * Format: url
+       * @description A URL link to the destination target (AWS Console link to the stream). Read-only.
+       * @example https://eu-west-1.console.aws.amazon.com/kinesis/home?region=eu-west-1#/streams/details/production-events/details
+       */
+      readonly target_url?: string | null;
+    };
+    /**
+     * @example {
+     *       "id": "des_azuresb_123",
+     *       "type": "azure_servicebus",
+     *       "topics": [
+     *         "*"
+     *       ],
+     *       "disabled_at": null,
+     *       "created_at": "2024-05-01T10:00:00Z",
+     *       "updated_at": "2024-05-01T10:00:00Z",
+     *       "config": {
+     *         "name": "my-queue-or-topic"
+     *       },
+     *       "credentials": {
+     *         "connection_string": "Endpoint=sb://namespace.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=abc123"
+     *       }
+     *     }
+     */
+    DestinationAzureServiceBus: {
+      /**
+       * @description Control plane generated ID or user provided ID for the destination.
+       * @example des_12345
+       */
+      id: string;
+      /**
+       * @description Type of the destination. (enum property replaced by openapi-typescript)
+       * @enum {string}
+       */
+      type: "azure_servicebus";
+      topics: components["schemas"]["Topics"];
+      /**
+       * Format: date-time
+       * @description ISO Date when the destination was disabled, or null if enabled.
+       * @example null
+       */
+      disabled_at: string | null;
+      /**
+       * Format: date-time
+       * @description ISO Date when the destination was created.
+       * @example 2024-01-01T00:00:00Z
+       */
+      created_at: string;
+      /**
+       * Format: date-time
+       * @description ISO Date when the destination was last updated.
+       * @example 2024-01-01T00:00:00Z
+       */
+      updated_at?: string;
+      config: components["schemas"]["AzureServiceBusConfig"];
+      credentials: components["schemas"]["AzureServiceBusCredentials"];
+      /**
+       * @description Static key-value pairs merged into event metadata on every delivery.
+       * @example {
+       *       "app-id": "my-app",
+       *       "region": "us-east-1"
+       *     }
+       */
+      delivery_metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description Arbitrary contextual information stored with the destination.
+       * @example {
+       *       "internal-id": "123",
+       *       "team": "platform"
+       *     }
+       */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description A human-readable representation of the destination target (Azure Service Bus queue/topic name). Read-only.
+       * @example my-queue-or-topic
+       */
+      readonly target?: string;
+      /**
+       * Format: url
+       * @description A URL link to the destination target (Azure Portal link to the Service Bus). Read-only.
+       * @example https://portal.azure.com/#@tenant-id/resource/subscriptions/subscription-id/resourceGroups/resource-group/providers/Microsoft.ServiceBus/namespaces/namespace-name/queues/queue-name
+       */
+      readonly target_url?: string | null;
+    };
+    /**
+     * @example {
+     *       "id": "des_s3_789",
+     *       "type": "aws_s3",
+     *       "topics": [
+     *         "*"
+     *       ],
+     *       "disabled_at": null,
+     *       "created_at": "2024-03-20T12:00:00Z",
+     *       "updated_at": "2024-03-20T12:00:00Z",
+     *       "config": {
+     *         "bucket": "my-bucket",
+     *         "region": "us-east-1"
+     *       },
+     *       "credentials": {
+     *         "key": "AKIAIOSFODNN7EXAMPLE",
+     *         "secret": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+     *       }
+     *     }
+     */
+    DestinationAWSS3: {
+      /**
+       * @description Control plane generated ID or user provided ID for the destination.
+       * @example des_12345
+       */
+      id: string;
+      /**
+       * @description Type of the destination. (enum property replaced by openapi-typescript)
+       * @enum {string}
+       */
+      type: "aws_s3";
+      topics: components["schemas"]["Topics"];
+      /**
+       * Format: date-time
+       * @description ISO Date when the destination was disabled, or null if enabled.
+       * @example null
+       */
+      disabled_at: string | null;
+      /**
+       * Format: date-time
+       * @description ISO Date when the destination was created.
+       * @example 2024-01-01T00:00:00Z
+       */
+      created_at: string;
+      /**
+       * Format: date-time
+       * @description ISO Date when the destination was last updated.
+       * @example 2024-01-01T00:00:00Z
+       */
+      updated_at: string;
+      config: components["schemas"]["AWSS3Config"];
+      credentials: components["schemas"]["AWSS3Credentials"];
+      /**
+       * @description Static key-value pairs merged into event metadata on every delivery.
+       * @example {
+       *       "app-id": "my-app",
+       *       "region": "us-east-1"
+       *     }
+       */
+      delivery_metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description Arbitrary contextual information stored with the destination.
+       * @example {
+       *       "internal-id": "123",
+       *       "team": "platform"
+       *     }
+       */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description A human-readable representation of the destination target (bucket and region). Read-only.
+       * @example my-bucket in us-east-1
+       */
+      readonly target?: string;
+      /**
+       * Format: url
+       * @description A URL link to the destination target (AWS Console link to the bucket). Read-only.
+       * @example null
+       */
+      readonly target_url?: string | null;
+    };
+    /**
+     * @example {
+     *       "id": "des_gcp_pubsub_123",
+     *       "type": "gcp_pubsub",
+     *       "topics": [
+     *         "order.created",
+     *         "order.updated"
+     *       ],
+     *       "disabled_at": null,
+     *       "created_at": "2024-03-10T14:30:00Z",
+     *       "updated_at": "2024-03-10T14:30:00Z",
+     *       "config": {
+     *         "project_id": "my-project-123",
+     *         "topic": "events-topic"
+     *       },
+     *       "credentials": {
+     *         "service_account_json": "{\"type\":\"service_account\",\"project_id\":\"my-project-123\",...}"
+     *       }
+     *     }
+     */
+    DestinationGCPPubSub: {
+      /**
+       * @description Control plane generated ID or user provided ID for the destination.
+       * @example des_12345
+       */
+      id: string;
+      /**
+       * @description Type of the destination. (enum property replaced by openapi-typescript)
+       * @enum {string}
+       */
+      type: "gcp_pubsub";
+      topics: components["schemas"]["Topics"];
+      /**
+       * Format: date-time
+       * @description ISO Date when the destination was disabled, or null if enabled.
+       * @example null
+       */
+      disabled_at: string | null;
+      /**
+       * Format: date-time
+       * @description ISO Date when the destination was created.
+       * @example 2024-01-01T00:00:00Z
+       */
+      created_at: string;
+      /**
+       * Format: date-time
+       * @description ISO Date when the destination was last updated.
+       * @example 2024-01-01T00:00:00Z
+       */
+      updated_at: string;
+      config: components["schemas"]["GCPPubSubConfig"];
+      credentials: components["schemas"]["GCPPubSubCredentials"];
+      /**
+       * @description Static key-value pairs merged into event metadata on every delivery.
+       * @example {
+       *       "app-id": "my-app",
+       *       "region": "us-east-1"
+       *     }
+       */
+      delivery_metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description Arbitrary contextual information stored with the destination.
+       * @example {
+       *       "internal-id": "123",
+       *       "team": "platform"
+       *     }
+       */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description A human-readable representation of the destination target (project/topic). Read-only.
+       * @example my-project-123/events-topic
+       */
+      readonly target?: string;
+      /**
+       * Format: url
+       * @description A URL link to the destination target (GCP Console link to the topic). Read-only.
+       * @example https://console.cloud.google.com/cloudpubsub/topic/detail/events-topic?project=my-project-123
+       */
+      readonly target_url?: string | null;
+    };
+    Destination:
+      | components["schemas"]["DestinationWebhook"]
+      | components["schemas"]["DestinationAWSSQS"]
+      | components["schemas"]["DestinationRabbitMQ"]
+      | components["schemas"]["DestinationHookdeck"]
+      | components["schemas"]["DestinationAWSKinesis"]
+      | components["schemas"]["DestinationAzureServiceBus"]
+      | components["schemas"]["DestinationAWSS3"]
+      | components["schemas"]["DestinationGCPPubSub"];
+    DestinationCreateWebhook: {
+      /**
+       * @description Optional user-provided ID. A UUID will be generated if empty.
+       * @example user-provided-id
+       */
+      id?: string;
+      /**
+       * @description Type of the destination. Must be 'webhook'. (enum property replaced by openapi-typescript)
+       * @enum {string}
+       */
+      type: "webhook";
+      topics: components["schemas"]["Topics"];
+      config: components["schemas"]["WebhookConfig"];
+      credentials?: components["schemas"]["WebhookCredentials"];
+      /**
+       * @description Static key-value pairs merged into event metadata on every delivery.
+       * @example {
+       *       "app-id": "my-app",
+       *       "region": "us-east-1"
+       *     }
+       */
+      delivery_metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description Arbitrary contextual information stored with the destination.
+       * @example {
+       *       "internal-id": "123",
+       *       "team": "platform"
+       *     }
+       */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+    };
+    DestinationCreateAWSSQS: {
+      /**
+       * @description Optional user-provided ID. A UUID will be generated if empty.
+       * @example user-provided-id
+       */
+      id?: string;
+      /**
+       * @description Type of the destination. Must be 'aws_sqs'. (enum property replaced by openapi-typescript)
+       * @enum {string}
+       */
+      type: "aws_sqs";
+      topics: components["schemas"]["Topics"];
+      config: components["schemas"]["AWSSQSConfig"];
+      credentials: components["schemas"]["AWSSQSCredentials"];
+      /**
+       * @description Static key-value pairs merged into event metadata on every delivery.
+       * @example {
+       *       "app-id": "my-app",
+       *       "region": "us-east-1"
+       *     }
+       */
+      delivery_metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description Arbitrary contextual information stored with the destination.
+       * @example {
+       *       "internal-id": "123",
+       *       "team": "platform"
+       *     }
+       */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+    };
+    DestinationCreateRabbitMQ: {
+      /**
+       * @description Optional user-provided ID. A UUID will be generated if empty.
+       * @example user-provided-id
+       */
+      id?: string;
+      /**
+       * @description Type of the destination. Must be 'rabbitmq'. (enum property replaced by openapi-typescript)
+       * @enum {string}
+       */
+      type: "rabbitmq";
+      topics: components["schemas"]["Topics"];
+      config: components["schemas"]["RabbitMQConfig"];
+      credentials: components["schemas"]["RabbitMQCredentials"];
+      /**
+       * @description Static key-value pairs merged into event metadata on every delivery.
+       * @example {
+       *       "app-id": "my-app",
+       *       "region": "us-east-1"
+       *     }
+       */
+      delivery_metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description Arbitrary contextual information stored with the destination.
+       * @example {
+       *       "internal-id": "123",
+       *       "team": "platform"
+       *     }
+       */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+    };
+    DestinationCreateHookdeck: {
+      /**
+       * @description Optional user-provided ID. A UUID will be generated if empty.
+       * @example user-provided-id
+       */
+      id?: string;
+      /**
+       * @description Type of the destination. Must be 'hookdeck'. (enum property replaced by openapi-typescript)
+       * @enum {string}
+       */
+      type: "hookdeck";
+      topics: components["schemas"]["Topics"];
+      config?: unknown;
+      credentials: components["schemas"]["HookdeckCredentials"];
+      /**
+       * @description Static key-value pairs merged into event metadata on every delivery.
+       * @example {
+       *       "app-id": "my-app",
+       *       "region": "us-east-1"
+       *     }
+       */
+      delivery_metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description Arbitrary contextual information stored with the destination.
+       * @example {
+       *       "internal-id": "123",
+       *       "team": "platform"
+       *     }
+       */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+    };
+    DestinationCreateAWSKinesis: {
+      /**
+       * @description Optional user-provided ID. A UUID will be generated if empty.
+       * @example user-provided-id
+       */
+      id?: string;
+      /**
+       * @description Type of the destination. Must be 'aws_kinesis'. (enum property replaced by openapi-typescript)
+       * @enum {string}
+       */
+      type: "aws_kinesis";
+      topics: components["schemas"]["Topics"];
+      config: components["schemas"]["AWSKinesisConfig"];
+      credentials: components["schemas"]["AWSKinesisCredentials"];
+      /**
+       * @description Static key-value pairs merged into event metadata on every delivery.
+       * @example {
+       *       "app-id": "my-app",
+       *       "region": "us-east-1"
+       *     }
+       */
+      delivery_metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description Arbitrary contextual information stored with the destination.
+       * @example {
+       *       "internal-id": "123",
+       *       "team": "platform"
+       *     }
+       */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+    };
+    DestinationCreateAzureServiceBus: {
+      /**
+       * @description Optional user-provided ID. A UUID will be generated if empty.
+       * @example user-provided-id
+       */
+      id?: string;
+      /**
+       * @description Type of the destination. Must be 'azure_servicebus'. (enum property replaced by openapi-typescript)
+       * @enum {string}
+       */
+      type: "azure_servicebus";
+      topics: components["schemas"]["Topics"];
+      config: components["schemas"]["AzureServiceBusConfig"];
+      credentials: components["schemas"]["AzureServiceBusCredentials"];
+      /**
+       * @description Static key-value pairs merged into event metadata on every delivery.
+       * @example {
+       *       "app-id": "my-app",
+       *       "region": "us-east-1"
+       *     }
+       */
+      delivery_metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description Arbitrary contextual information stored with the destination.
+       * @example {
+       *       "internal-id": "123",
+       *       "team": "platform"
+       *     }
+       */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+    };
+    DestinationCreateAWSS3: {
+      /**
+       * @description Optional user-provided ID. A UUID will be generated if empty.
+       * @example user-provided-id
+       */
+      id?: string;
+      /**
+       * @description Type of the destination. Must be 'aws_s3'. (enum property replaced by openapi-typescript)
+       * @enum {string}
+       */
+      type: "aws_s3";
+      topics: components["schemas"]["Topics"];
+      config: components["schemas"]["AWSS3Config"];
+      credentials: components["schemas"]["AWSS3Credentials"];
+      /**
+       * @description Static key-value pairs merged into event metadata on every delivery.
+       * @example {
+       *       "app-id": "my-app",
+       *       "region": "us-east-1"
+       *     }
+       */
+      delivery_metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description Arbitrary contextual information stored with the destination.
+       * @example {
+       *       "internal-id": "123",
+       *       "team": "platform"
+       *     }
+       */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+    };
+    DestinationCreateGCPPubSub: {
+      /**
+       * @description Optional user-provided ID. A UUID will be generated if empty.
+       * @example user-provided-id
+       */
+      id?: string;
+      /**
+       * @description Type of the destination. Must be 'gcp_pubsub'. (enum property replaced by openapi-typescript)
+       * @enum {string}
+       */
+      type: "gcp_pubsub";
+      topics: components["schemas"]["Topics"];
+      config: components["schemas"]["GCPPubSubConfig"];
+      credentials: components["schemas"]["GCPPubSubCredentials"];
+      /**
+       * @description Static key-value pairs merged into event metadata on every delivery.
+       * @example {
+       *       "app-id": "my-app",
+       *       "region": "us-east-1"
+       *     }
+       */
+      delivery_metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description Arbitrary contextual information stored with the destination.
+       * @example {
+       *       "internal-id": "123",
+       *       "team": "platform"
+       *     }
+       */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+    };
+    DestinationCreate:
+      | components["schemas"]["DestinationCreateWebhook"]
+      | components["schemas"]["DestinationCreateAWSSQS"]
+      | components["schemas"]["DestinationCreateRabbitMQ"]
+      | components["schemas"]["DestinationCreateHookdeck"]
+      | components["schemas"]["DestinationCreateAWSKinesis"]
+      | components["schemas"]["DestinationCreateAzureServiceBus"]
+      | components["schemas"]["DestinationCreateAWSS3"]
+      | components["schemas"]["DestinationCreateGCPPubSub"];
+    WebhookCredentialsUpdate: {
+      /** @description New secret (only allowed for admin). */
+      secret?: string;
+      /** @description Previous secret for rotation (only allowed for admin). */
+      previous_secret?: string;
+      /**
+       * Format: date-time
+       * @description Invalidation time for previous secret (only allowed for admin).
+       */
+      previous_secret_invalid_at?: string;
+      /** @description Set to true to rotate the secret. The current secret becomes the previous_secret, and a new secret is generated. `previous_secret_invalid_at` defaults to 24h if not provided. */
+      rotate_secret?: boolean;
+    };
+    DestinationUpdateWebhook: {
+      topics?: components["schemas"]["Topics"];
+      config?: components["schemas"]["WebhookConfig"];
+      credentials?: components["schemas"]["WebhookCredentialsUpdate"];
+      /**
+       * @description Static key-value pairs merged into event metadata on every delivery.
+       * @example {
+       *       "app-id": "my-app",
+       *       "region": "us-east-1"
+       *     }
+       */
+      delivery_metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description Arbitrary contextual information stored with the destination.
+       * @example {
+       *       "internal-id": "123",
+       *       "team": "platform"
+       *     }
+       */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+    };
+    DestinationUpdateAWSSQS: {
+      topics?: components["schemas"]["Topics"];
+      config?: components["schemas"]["AWSSQSConfig"];
+      credentials?: components["schemas"]["AWSSQSCredentials"];
+      /**
+       * @description Static key-value pairs merged into event metadata on every delivery.
+       * @example {
+       *       "app-id": "my-app",
+       *       "region": "us-east-1"
+       *     }
+       */
+      delivery_metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description Arbitrary contextual information stored with the destination.
+       * @example {
+       *       "internal-id": "123",
+       *       "team": "platform"
+       *     }
+       */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+    };
+    DestinationUpdateRabbitMQ: {
+      topics?: components["schemas"]["Topics"];
+      config?: components["schemas"]["RabbitMQConfig"];
+      credentials?: components["schemas"]["RabbitMQCredentials"];
+      /**
+       * @description Static key-value pairs merged into event metadata on every delivery.
+       * @example {
+       *       "app-id": "my-app",
+       *       "region": "us-east-1"
+       *     }
+       */
+      delivery_metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description Arbitrary contextual information stored with the destination.
+       * @example {
+       *       "internal-id": "123",
+       *       "team": "platform"
+       *     }
+       */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+    };
+    DestinationUpdateHookdeck: {
+      topics?: components["schemas"]["Topics"];
+      config?: unknown;
+      credentials?: components["schemas"]["HookdeckCredentials"];
+      /**
+       * @description Static key-value pairs merged into event metadata on every delivery.
+       * @example {
+       *       "app-id": "my-app",
+       *       "region": "us-east-1"
+       *     }
+       */
+      delivery_metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description Arbitrary contextual information stored with the destination.
+       * @example {
+       *       "internal-id": "123",
+       *       "team": "platform"
+       *     }
+       */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+    };
+    DestinationUpdateAWSKinesis: {
+      topics?: components["schemas"]["Topics"];
+      config?: components["schemas"]["AWSKinesisConfig"];
+      credentials?: components["schemas"]["AWSKinesisCredentials"];
+      /**
+       * @description Static key-value pairs merged into event metadata on every delivery.
+       * @example {
+       *       "app-id": "my-app",
+       *       "region": "us-east-1"
+       *     }
+       */
+      delivery_metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description Arbitrary contextual information stored with the destination.
+       * @example {
+       *       "internal-id": "123",
+       *       "team": "platform"
+       *     }
+       */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+    };
+    DestinationUpdateAzureServiceBus: {
+      topics?: components["schemas"]["Topics"];
+      config?: components["schemas"]["AzureServiceBusConfig"];
+      credentials?: components["schemas"]["AzureServiceBusCredentials"];
+      /**
+       * @description Static key-value pairs merged into event metadata on every delivery.
+       * @example {
+       *       "app-id": "my-app",
+       *       "region": "us-east-1"
+       *     }
+       */
+      delivery_metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description Arbitrary contextual information stored with the destination.
+       * @example {
+       *       "internal-id": "123",
+       *       "team": "platform"
+       *     }
+       */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+    };
+    DestinationUpdateAWSS3: {
+      topics?: components["schemas"]["Topics"];
+      config?: components["schemas"]["AWSS3Config"];
+      credentials?: components["schemas"]["AWSS3Credentials"];
+      /**
+       * @description Static key-value pairs merged into event metadata on every delivery.
+       * @example {
+       *       "app-id": "my-app",
+       *       "region": "us-east-1"
+       *     }
+       */
+      delivery_metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description Arbitrary contextual information stored with the destination.
+       * @example {
+       *       "internal-id": "123",
+       *       "team": "platform"
+       *     }
+       */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+    };
+    DestinationUpdateGCPPubSub: {
+      topics?: components["schemas"]["Topics"];
+      config?: components["schemas"]["GCPPubSubConfig"];
+      credentials?: components["schemas"]["GCPPubSubCredentials"];
+      /**
+       * @description Static key-value pairs merged into event metadata on every delivery.
+       * @example {
+       *       "app-id": "my-app",
+       *       "region": "us-east-1"
+       *     }
+       */
+      delivery_metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @description Arbitrary contextual information stored with the destination.
+       * @example {
+       *       "internal-id": "123",
+       *       "team": "platform"
+       *     }
+       */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+    };
+    DestinationUpdate:
+      | components["schemas"]["DestinationUpdateWebhook"]
+      | components["schemas"]["DestinationUpdateAWSSQS"]
+      | components["schemas"]["DestinationUpdateRabbitMQ"]
+      | components["schemas"]["DestinationUpdateHookdeck"]
+      | components["schemas"]["DestinationUpdateAWSKinesis"]
+      | components["schemas"]["DestinationUpdateAzureServiceBus"]
+      | components["schemas"]["DestinationUpdateAWSS3"]
+      | components["schemas"]["DestinationUpdateGCPPubSub"];
+    PublishRequest: {
+      /**
+       * @description Optional. A unique identifier for the event. If not provided, a UUID will be generated.
+       * @example evt_custom_123
+       */
+      id?: string;
+      /**
+       * @description The ID of the tenant to publish for.
+       * @example <TENANT_ID>
+       */
+      tenant_id?: string;
+      /**
+       * @description Optional. Route event to a specific destination.
+       * @example <DESTINATION_ID>
+       */
+      destination_id?: string;
+      /**
+       * @description Topic name for the event. Required if Outpost has been configured with topics.
+       * @example topic.name
+       */
+      topic?: string;
+      /** @description Should event delivery be retried on failure. */
+      eligible_for_retry?: boolean;
+      /**
+       * @description Any key-value string pairs for metadata.
+       * @example {
+       *       "source": "crm"
+       *     }
+       */
+      metadata?: {
+        [key: string]: string;
+      };
+      /**
+       * @description Any JSON payload for the event data.
+       * @example {
+       *       "user_id": "userid",
+       *       "status": "active"
+       *     }
+       */
+      data: {
+        [key: string]: unknown;
+      };
+    };
+    PublishResponse: {
+      /**
+       * @description The ID of the event that was accepted for publishing. This will be the ID provided in the request's `id` field if present, otherwise it's a server-generated UUID.
+       * @example evt_abc123xyz789
+       */
+      id: string;
+    };
+    Event: {
+      /** @example evt_123 */
+      id?: string;
+      /** @example des_456 */
+      destination_id?: string;
+      /** @example user.created */
+      topic?: string;
+      /**
+       * Format: date-time
+       * @description Time the event was received/processed.
+       * @example 2024-01-01T00:00:00Z
+       */
+      time?: string;
+      /**
+       * Format: date-time
+       * @description Time the event was successfully delivered.
+       * @example 2024-01-01T00:00:00Z
+       */
+      successful_at?: string | null;
+      /**
+       * @description Key-value string pairs of metadata associated with the event.
+       * @example {
+       *       "source": "crm"
+       *     }
+       */
+      metadata?: {
+        [key: string]: string;
+      } | null;
+      /**
+       * @example success
+       * @enum {string}
+       */
+      status?: "success" | "failed";
+      /**
+       * @description Freeform JSON data of the event.
+       * @example {
+       *       "user_id": "userid",
+       *       "status": "active"
+       *     }
+       */
+      data?: {
+        [key: string]: unknown;
+      };
+    };
+    DeliveryAttempt: {
+      /**
+       * Format: date-time
+       * @example 2024-01-01T00:00:00Z
+       */
+      delivered_at?: string;
+      /**
+       * @example success
+       * @enum {string}
+       */
+      status?: "success" | "failed";
+      /** @example 200 */
+      response_status_code?: number;
+      /** @example {"status":"ok"} */
+      response_body?: string;
+      /**
+       * @example {
+       *       "content-type": "application/json"
+       *     }
+       */
+      response_headers?: {
+        [key: string]: string;
+      };
+    };
+    DestinationTypeSchema: {
+      /** @example webhook */
+      type?: string;
+      /** @example Webhook */
+      label?: string;
+      /** @example Send event via an HTTP POST request to a URL */
+      description?: string;
+      /**
+       * @description SVG icon string.
+       * @example <svg />
+       */
+      icon?: string;
+      /**
+       * @description Markdown instructions.
+       * @example Some *markdown*
+       */
+      instructions?: string;
+      /**
+       * Format: url
+       * @description Some destinations may have Oauth flow or other managed-setup flow that can be triggered with a link. If a `remote_setup_url` is set then the user should be prompted to follow the link to configure the destination.
+       *     See the [building your own UI guide](https://outpost.hookdeck.com/guides/building-your-own-ui.mdx) for recommended UI patterns and wireframes for implementation in your own app.
+       * @example https://dashboard.hookdeck.com/authorize?provider=acme
+       */
+      remote_setup_url?: string;
+      /** @description Config fields are non-secret values that can be stored and displayed to the user in plain text. */
+      config_fields?: components["schemas"]["DestinationSchemaField"][];
+      /** @description Credential fields are secret values that will be AES encrypted and obfuscated to the user. Some credentials may not be obfuscated; the destination type dictates the obfuscation logic. */
+      credential_fields?: components["schemas"]["DestinationSchemaField"][];
+    };
+    DestinationSchemaField: {
+      /**
+       * @example text
+       * @enum {string}
+       */
+      type: "text" | "checkbox";
+      /** @example URL */
+      label?: string;
+      /** @example The URL to send the event to */
+      description?: string;
+      /** @example true */
+      required: boolean;
+      /**
+       * @description Indicates if the field contains sensitive information.
+       * @example false
+       */
+      sensitive?: boolean;
+      /**
+       * @description Default value for the field.
+       * @example default_value
+       */
+      default?: string;
+      /**
+       * @description Minimum length for a text input.
+       * @example 0
+       */
+      minlength?: number;
+      /**
+       * @description Maximum length for a text input.
+       * @example 255
+       */
+      maxlength?: number;
+      /**
+       * @description Regex pattern for validation (compatible with HTML5 pattern attribute).
+       * @example ^[a-zA-Z0-9_]+$
+       */
+      pattern?: string;
+    };
+  };
+  responses: never;
+  parameters: never;
+  requestBodies: never;
+  headers: never;
+  pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    healthCheck: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Service is healthy. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "text/plain": string;
-                };
-            };
-        };
+  healthCheck: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    getTenant: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description Service is healthy. */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description Tenant details. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Tenant"];
-                };
-            };
-            /** @description Tenant not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
+        content: {
+          "text/plain": string;
         };
+      };
     };
-    upsertTenant: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-            };
-            cookie?: never;
-        };
-        /** @description Optional tenant metadata */
-        requestBody?: {
-            content: {
-                "application/json": components["schemas"]["TenantUpsert"];
-            };
-        };
-        responses: {
-            /** @description Tenant updated details. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Tenant"];
-                };
-            };
-            /** @description Tenant created details. */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Tenant"];
-                };
-            };
-        };
+  };
+  getTenant: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+      };
+      cookie?: never;
     };
-    deleteTenant: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description Tenant details. */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description Success confirmation. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponse"];
-                };
-            };
-            /** @description Tenant not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
+        content: {
+          "application/json": components["schemas"]["Tenant"];
         };
+      };
+      /** @description Tenant not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
     };
-    getTenantPortalUrl: {
-        parameters: {
-            query?: {
-                /** @description Optional theme preference for the portal. */
-                theme?: "light" | "dark";
-            };
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Portal redirect URL. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PortalRedirect"];
-                };
-            };
-            /** @description Tenant not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
+  };
+  upsertTenant: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+      };
+      cookie?: never;
     };
-    getTenantToken: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Tenant JWT token. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TenantToken"];
-                };
-            };
-            /** @description Tenant not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
+    /** @description Optional tenant metadata */
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["TenantUpsert"];
+      };
     };
-    listTenantDestinations: {
-        parameters: {
-            query?: {
-                /** @description Filter destinations by type(s). */
-                type?: ("webhook" | "aws_sqs" | "rabbitmq" | "hookdeck" | "aws_kinesis" | "azure_servicebus" | "aws_s3" | "gcp_pubsub") | ("webhook" | "aws_sqs" | "rabbitmq" | "hookdeck" | "aws_kinesis" | "azure_servicebus" | "aws_s3" | "gcp_pubsub")[];
-                /** @description Filter destinations by supported topic(s). */
-                topics?: string | string[];
-            };
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-            };
-            cookie?: never;
+    responses: {
+      /** @description Tenant updated details. */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description A list of destinations. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Destination"][];
-                };
-            };
-            /** @description Tenant not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
+        content: {
+          "application/json": components["schemas"]["Tenant"];
         };
+      };
+      /** @description Tenant created details. */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Tenant"];
+        };
+      };
     };
-    createTenantDestination: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["DestinationCreate"];
-            };
-        };
-        responses: {
-            /** @description Destination created successfully. */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Destination"];
-                };
-            };
-            /** @description Invalid request body or configuration. */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Tenant not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
+  };
+  deleteTenant: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+      };
+      cookie?: never;
     };
-    getTenantDestination: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-                /** @description The ID of the destination. */
-                destination_id: string;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description Success confirmation. */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description Destination details. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Destination"];
-                };
-            };
-            /** @description Tenant or Destination not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
+        content: {
+          "application/json": components["schemas"]["SuccessResponse"];
         };
+      };
+      /** @description Tenant not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
     };
-    deleteTenantDestination: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-                /** @description The ID of the destination. */
-                destination_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Success confirmation. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponse"];
-                };
-            };
-            /** @description Tenant or Destination not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
+  };
+  getTenantPortalUrl: {
+    parameters: {
+      query?: {
+        /** @description Optional theme preference for the portal. */
+        theme?: "light" | "dark";
+      };
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+      };
+      cookie?: never;
     };
-    updateTenantDestination: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-                /** @description The ID of the destination. */
-                destination_id: string;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description Portal redirect URL. */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["DestinationUpdate"];
-            };
+        content: {
+          "application/json": components["schemas"]["PortalRedirect"];
         };
-        responses: {
-            /** @description Destination updated successfully or OAuth redirect needed. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Destination"];
-                };
-            };
-            /** @description Invalid request body or configuration. */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Tenant or Destination not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
+      };
+      /** @description Tenant not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
         };
+        content?: never;
+      };
     };
-    enableTenantDestination: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-                /** @description The ID of the destination. */
-                destination_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Destination enabled successfully. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Destination"];
-                };
-            };
-            /** @description Tenant or Destination not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
+  };
+  getTenantToken: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+      };
+      cookie?: never;
     };
-    disableTenantDestination: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-                /** @description The ID of the destination. */
-                destination_id: string;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description Tenant JWT token. */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description Destination disabled successfully. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Destination"];
-                };
-            };
-            /** @description Tenant or Destination not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
+        content: {
+          "application/json": components["schemas"]["TenantToken"];
         };
+      };
+      /** @description Tenant not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
     };
-    publishEvent: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PublishRequest"];
-            };
-        };
-        responses: {
-            /** @description Event accepted for publishing. Returns the event ID. */
-            202: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PublishResponse"];
-                };
-            };
-            /** @description Invalid request body. */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Unauthorized (Admin API Key missing or invalid). */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Conflict. An event with the provided `id` already exists. */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Unprocessable Entity. The event topic was either required or was invalid. */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
+  };
+  listTenantDestinations: {
+    parameters: {
+      query?: {
+        /** @description Filter destinations by type(s). */
+        type?:
+          | (
+              | "webhook"
+              | "aws_sqs"
+              | "rabbitmq"
+              | "hookdeck"
+              | "aws_kinesis"
+              | "azure_servicebus"
+              | "aws_s3"
+              | "gcp_pubsub"
+            )
+          | (
+              | "webhook"
+              | "aws_sqs"
+              | "rabbitmq"
+              | "hookdeck"
+              | "aws_kinesis"
+              | "azure_servicebus"
+              | "aws_s3"
+              | "gcp_pubsub"
+            )[];
+        /** @description Filter destinations by supported topic(s). */
+        topics?: string | string[];
+      };
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+      };
+      cookie?: never;
     };
-    listTenantDestinationTypeSchemas: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description A list of destinations. */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description A list of destination type schemas. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DestinationTypeSchema"][];
-                };
-            };
-            /** @description Tenant not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
+        content: {
+          "application/json": components["schemas"]["Destination"][];
         };
+      };
+      /** @description Tenant not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
     };
-    getTenantDestinationTypeSchema: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-                /** @description The type of the destination. */
-                type: "webhook" | "aws_sqs" | "rabbitmq" | "hookdeck" | "aws_kinesis" | "aws_s3";
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description The schema for the specified destination type. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DestinationTypeSchema"];
-                };
-            };
-            /** @description Tenant or Destination type not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
+  };
+  createTenantDestination: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+      };
+      cookie?: never;
     };
-    listTenantTopics: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description A list of topic names. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string[];
-                };
-            };
-            /** @description Tenant not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DestinationCreate"];
+      };
     };
-    listTenantEvents: {
-        parameters: {
-            query?: {
-                /** @description Filter events by destination ID(s). */
-                destination_id?: string | string[];
-                /** @description Filter events by delivery status. */
-                status?: "success" | "failed";
-                /** @description Cursor for next page of results */
-                next?: string;
-                /** @description Cursor for previous page of results */
-                prev?: string;
-                /** @description Number of items per page (default 100, max 1000) */
-                limit?: number;
-                /** @description Start time filter (RFC3339 format) */
-                start?: string;
-                /** @description End time filter (RFC3339 format) */
-                end?: string;
-            };
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-            };
-            cookie?: never;
+    responses: {
+      /** @description Destination created successfully. */
+      201: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description A paginated list of events. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PaginatedResponse"] & {
-                        data?: components["schemas"]["Event"][];
-                    };
-                };
-            };
-            /** @description Tenant not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
+        content: {
+          "application/json": components["schemas"]["Destination"];
         };
+      };
+      /** @description Invalid request body or configuration. */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Tenant not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
     };
-    getTenantEvent: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-                /** @description The ID of the event. */
-                event_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Event details. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Event"];
-                };
-            };
-            /** @description Tenant or Event not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
+  };
+  getTenantDestination: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+        /** @description The ID of the destination. */
+        destination_id: string;
+      };
+      cookie?: never;
     };
-    listTenantEventDeliveries: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-                /** @description The ID of the event. */
-                event_id: string;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description Destination details. */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description A list of delivery attempts. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DeliveryAttempt"][];
-                };
-            };
-            /** @description Tenant or Event not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
+        content: {
+          "application/json": components["schemas"]["Destination"];
         };
+      };
+      /** @description Tenant or Destination not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
     };
-    listTenantEventsByDestination: {
-        parameters: {
-            query?: {
-                /** @description Filter events by delivery status. */
-                status?: "success" | "failed";
-                /** @description Cursor for next page of results */
-                next?: string;
-                /** @description Cursor for previous page of results */
-                prev?: string;
-                /** @description Number of items per page (default 100, max 1000) */
-                limit?: number;
-                /** @description Start time filter (RFC3339 format) */
-                start?: string;
-                /** @description End time filter (RFC3339 format) */
-                end?: string;
-            };
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-                /** @description The ID of the destination. */
-                destination_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description A paginated list of events for the destination. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PaginatedResponse"] & {
-                        data?: components["schemas"]["Event"][];
-                    };
-                };
-            };
-            /** @description Tenant or Destination not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
+  };
+  deleteTenantDestination: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+        /** @description The ID of the destination. */
+        destination_id: string;
+      };
+      cookie?: never;
     };
-    getTenantEventByDestination: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-                /** @description The ID of the destination. */
-                destination_id: string;
-                /** @description The ID of the event. */
-                event_id: string;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description Success confirmation. */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description Event details. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Event"];
-                };
-            };
-            /** @description Tenant, Destination or Event not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
+        content: {
+          "application/json": components["schemas"]["SuccessResponse"];
         };
+      };
+      /** @description Tenant or Destination not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
     };
-    retryTenantEvent: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
-                tenant_id: string;
-                /** @description The ID of the destination. */
-                destination_id: string;
-                /** @description The ID of the event to retry. */
-                event_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Retry accepted for processing. */
-            202: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Tenant, Destination or Event not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Event not eligible for retry. */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
+  };
+  updateTenantDestination: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+        /** @description The ID of the destination. */
+        destination_id: string;
+      };
+      cookie?: never;
     };
-    listDestinationTypeSchemasJwt: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description A list of destination type schemas. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DestinationTypeSchema"][];
-                };
-            };
-            /** @description Unauthorized (Tenant JWT missing or invalid). */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DestinationUpdate"];
+      };
     };
-    getDestinationTypeSchema: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description The type of the destination. */
-                type: "webhook" | "aws_sqs" | "rabbitmq" | "hookdeck" | "aws_kinesis" | "aws_s3";
-            };
-            cookie?: never;
+    responses: {
+      /** @description Destination updated successfully or OAuth redirect needed. */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description The schema for the specified destination type. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DestinationTypeSchema"];
-                };
-            };
-            /** @description Unauthorized (Tenant JWT missing or invalid). */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Destination type not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
+        content: {
+          "application/json": components["schemas"]["Destination"];
         };
+      };
+      /** @description Invalid request body or configuration. */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Tenant or Destination not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
     };
-    listTopics: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description A list of topic names. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string[];
-                };
-            };
-            /** @description Unauthorized (Tenant JWT missing or invalid). */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
+  };
+  enableTenantDestination: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+        /** @description The ID of the destination. */
+        destination_id: string;
+      };
+      cookie?: never;
     };
+    requestBody?: never;
+    responses: {
+      /** @description Destination enabled successfully. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Destination"];
+        };
+      };
+      /** @description Tenant or Destination not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  disableTenantDestination: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+        /** @description The ID of the destination. */
+        destination_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Destination disabled successfully. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Destination"];
+        };
+      };
+      /** @description Tenant or Destination not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  publishEvent: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PublishRequest"];
+      };
+    };
+    responses: {
+      /** @description Event accepted for publishing. Returns the event ID. */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PublishResponse"];
+        };
+      };
+      /** @description Invalid request body. */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Unauthorized (Admin API Key missing or invalid). */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Conflict. An event with the provided `id` already exists. */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Unprocessable Entity. The event topic was either required or was invalid. */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  listTenantDestinationTypeSchemas: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description A list of destination type schemas. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DestinationTypeSchema"][];
+        };
+      };
+      /** @description Tenant not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  getTenantDestinationTypeSchema: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+        /** @description The type of the destination. */
+        type:
+          | "webhook"
+          | "aws_sqs"
+          | "rabbitmq"
+          | "hookdeck"
+          | "aws_kinesis"
+          | "aws_s3";
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description The schema for the specified destination type. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DestinationTypeSchema"];
+        };
+      };
+      /** @description Tenant or Destination type not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  listTenantTopics: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description A list of topic names. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": string[];
+        };
+      };
+      /** @description Tenant not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  listTenantEvents: {
+    parameters: {
+      query?: {
+        /** @description Filter events by destination ID(s). */
+        destination_id?: string | string[];
+        /** @description Filter events by delivery status. */
+        status?: "success" | "failed";
+        /** @description Cursor for next page of results */
+        next?: string;
+        /** @description Cursor for previous page of results */
+        prev?: string;
+        /** @description Number of items per page (default 100, max 1000) */
+        limit?: number;
+        /** @description Start time filter (RFC3339 format) */
+        start?: string;
+        /** @description End time filter (RFC3339 format) */
+        end?: string;
+      };
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description A paginated list of events. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PaginatedResponse"] & {
+            data?: components["schemas"]["Event"][];
+          };
+        };
+      };
+      /** @description Tenant not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  getTenantEvent: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+        /** @description The ID of the event. */
+        event_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Event details. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Event"];
+        };
+      };
+      /** @description Tenant or Event not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  listTenantEventDeliveries: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+        /** @description The ID of the event. */
+        event_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description A list of delivery attempts. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DeliveryAttempt"][];
+        };
+      };
+      /** @description Tenant or Event not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  listTenantEventsByDestination: {
+    parameters: {
+      query?: {
+        /** @description Filter events by delivery status. */
+        status?: "success" | "failed";
+        /** @description Cursor for next page of results */
+        next?: string;
+        /** @description Cursor for previous page of results */
+        prev?: string;
+        /** @description Number of items per page (default 100, max 1000) */
+        limit?: number;
+        /** @description Start time filter (RFC3339 format) */
+        start?: string;
+        /** @description End time filter (RFC3339 format) */
+        end?: string;
+      };
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+        /** @description The ID of the destination. */
+        destination_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description A paginated list of events for the destination. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PaginatedResponse"] & {
+            data?: components["schemas"]["Event"][];
+          };
+        };
+      };
+      /** @description Tenant or Destination not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  getTenantEventByDestination: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+        /** @description The ID of the destination. */
+        destination_id: string;
+        /** @description The ID of the event. */
+        event_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Event details. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Event"];
+        };
+      };
+      /** @description Tenant, Destination or Event not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  retryTenantEvent: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The ID of the tenant. Required when using AdminApiKey authentication. */
+        tenant_id: string;
+        /** @description The ID of the destination. */
+        destination_id: string;
+        /** @description The ID of the event to retry. */
+        event_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Retry accepted for processing. */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Tenant, Destination or Event not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Event not eligible for retry. */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  listDestinationTypeSchemasJwt: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description A list of destination type schemas. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DestinationTypeSchema"][];
+        };
+      };
+      /** @description Unauthorized (Tenant JWT missing or invalid). */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  getDestinationTypeSchema: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description The type of the destination. */
+        type:
+          | "webhook"
+          | "aws_sqs"
+          | "rabbitmq"
+          | "hookdeck"
+          | "aws_kinesis"
+          | "aws_s3";
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description The schema for the specified destination type. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DestinationTypeSchema"];
+        };
+      };
+      /** @description Unauthorized (Tenant JWT missing or invalid). */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Destination type not found. */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  listTopics: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description A list of topic names. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": string[];
+        };
+      };
+      /** @description Unauthorized (Tenant JWT missing or invalid). */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
 }

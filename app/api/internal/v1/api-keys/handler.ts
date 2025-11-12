@@ -83,7 +83,7 @@ export async function listApiKeys(session: UserSession) {
  */
 export async function deleteApiKey(
   session: UserSession,
-  params: { id: string }
+  params: { id: string },
 ) {
   await prisma.apiKey.deleteMany({
     where: {

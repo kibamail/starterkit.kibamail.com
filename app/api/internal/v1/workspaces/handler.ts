@@ -17,7 +17,7 @@ import { OWNER_ROLE } from "@/config/rbac";
 
 export async function createWorkspaceViaLogto(
   data: { name: string; description?: string },
-  userId: string
+  userId: string,
 ) {
   const workspace = await logto.workspaces().create({
     name: data.name,
@@ -56,7 +56,7 @@ export async function createWorkspaceViaLogto(
  */
 export async function createWorkspace(
   session: UserSession,
-  request: NextRequest
+  request: NextRequest,
 ) {
   const data = await validateRequestBody(createWorkspaceSchema, request);
 

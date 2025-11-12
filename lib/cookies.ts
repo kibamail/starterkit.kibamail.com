@@ -91,7 +91,7 @@ export class Cookies {
   static async set(
     key: CookieKey,
     value: string,
-    options?: CookieOptions
+    options?: CookieOptions,
   ): Promise<void> {
     const cookieStore = await cookies();
     cookieStore.set(key, value, { ...DEFAULT_OPTIONS, ...options });

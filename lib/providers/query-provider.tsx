@@ -49,7 +49,7 @@ export function QueryProvider({ children }: QueryProviderProps) {
             staleTime: 5 * 60 * 1000,
           },
         },
-      })
+      }),
   );
 
   return (

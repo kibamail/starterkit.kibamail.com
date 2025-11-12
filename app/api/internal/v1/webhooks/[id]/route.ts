@@ -10,10 +10,7 @@
 
 import type { NextRequest } from "next/server";
 import { withErrorHandling, withSession } from "@/lib/api/requests";
-import {
-  updateWebhookDestination,
-  deleteWebhookDestination,
-} from "../handler";
+import { updateWebhookDestination, deleteWebhookDestination } from "../handler";
 
 /**
  * PATCH /api/internal/v1/webhooks/[id]
@@ -23,16 +20,15 @@ import {
  */
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const resolvedParams = await params;
   return withErrorHandling(request, () =>
     withSession(
       request,
-      (session) =>
-        updateWebhookDestination(session, request, resolvedParams),
-      ["manage:webhooks"]
-    )
+      (session) => updateWebhookDestination(session, request, resolvedParams),
+      ["manage:webhooks"],
+    ),
   );
 }
 
@@ -44,14 +40,14 @@ export async function PATCH(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const resolvedParams = await params;
   return withErrorHandling(request, () =>
     withSession(
       request,
       (session) => deleteWebhookDestination(session, resolvedParams),
-      ["manage:webhooks"]
-    )
+      ["manage:webhooks"],
+    ),
   );
 }

@@ -32,3 +32,11 @@ export interface WebhookDestinationType
 }
 
 export type WebhookDestination = components["schemas"]["Destination"];
+export type WebhookEvent = components["schemas"]["Event"];
+export type DeliveryAttempt = components["schemas"]["DeliveryAttempt"] & {
+  id: string;
+  response_data?: {
+    body: object | string;
+    status: number;
+  };
+};

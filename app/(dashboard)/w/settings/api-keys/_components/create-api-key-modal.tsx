@@ -79,7 +79,7 @@ export function CreateApiKeyModal({ open, onOpenChange }: ToggleState) {
     if (currentScopes.includes(scope)) {
       setValue(
         "scopes",
-        currentScopes.filter((s) => s !== scope)
+        currentScopes.filter((s) => s !== scope),
       );
     } else {
       setValue("scopes", [...currentScopes, scope]);
@@ -183,7 +183,7 @@ export function CreateApiKeyModal({ open, onOpenChange }: ToggleState) {
                         ))}
                       </div>
                     </div>
-                  )
+                  ),
                 )}
               </div>
               {errors.scopes && (

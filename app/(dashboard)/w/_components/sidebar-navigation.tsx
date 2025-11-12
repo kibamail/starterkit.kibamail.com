@@ -1,8 +1,10 @@
 "use client";
 
-import { DashboardLayoutSidebarGroup } from "@kibamail/owly/dashboard-layout";
-import { DashboardLayoutSidebarItem } from "@kibamail/owly/dashboard-layout";
-import { DataTransferBoth, HomeAltSlimHoriz, Settings } from "iconoir-react";
+import {
+  DashboardLayoutSidebarGroup,
+  DashboardLayoutSidebarItem,
+} from "@kibamail/owly/dashboard-layout";
+import { HomeAltSlimHoriz, Settings } from "iconoir-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -17,7 +19,6 @@ export function SidebarNavigation() {
 
   // Check if settings route is active (matches /w/settings or /w/settings/*)
   const isSettingsActive = pathname.startsWith("/w/settings");
-  const isWebhooksActive = pathname.startsWith("/w/webhooks");
 
   return (
     <DashboardLayoutSidebarGroup>
@@ -31,12 +32,6 @@ export function SidebarNavigation() {
         <Link href="/w/settings">
           <Settings />
           Settings
-        </Link>
-      </DashboardLayoutSidebarItem>
-      <DashboardLayoutSidebarItem asChild active={isWebhooksActive}>
-        <Link href="/w/webhooks">
-          <DataTransferBoth />
-          Webhooks
         </Link>
       </DashboardLayoutSidebarItem>
     </DashboardLayoutSidebarGroup>

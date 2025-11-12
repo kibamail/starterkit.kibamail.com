@@ -56,11 +56,7 @@ export function ApiKeyCreatedModal({
                 securely.
               </Alert.Title>
             </Alert.Root>
-            <TextField.Root
-              readOnly
-              value={apiKey}
-              className="cursor-pointer!"
-            >
+            <TextField.Root readOnly value={apiKey} className="cursor-pointer!">
               <TextField.Slot side="right" className="cursor-pointer">
                 <button type="button" onClick={handleCopy}>
                   {copied ? <Check className="w-4 h-4" /> : <Copy />}

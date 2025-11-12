@@ -176,7 +176,7 @@ export const env = createEnv({
       .refine(
         (url) =>
           url.startsWith("postgresql://") || url.startsWith("postgres://"),
-        "DATABASE_URL must be a PostgreSQL connection string"
+        "DATABASE_URL must be a PostgreSQL connection string",
       ),
 
     // ============================================================================
@@ -352,7 +352,7 @@ export const env = createEnv({
       .preprocess(
         (val) =>
           val ?? (process.env.NODE_ENV === "production" ? "true" : "false"),
-        z.string().transform((val) => val === "true")
+        z.string().transform((val) => val === "true"),
       )
       .describe("Whether to only send cookies over HTTPS"),
 

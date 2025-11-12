@@ -24,7 +24,7 @@ import { toLogtoError } from "@/lib/logto/errors";
 export async function updateInvitationStatus(
   session: UserSession,
   request: NextRequest,
-  params: { id: string }
+  params: { id: string },
 ) {
   const data = await validateRequestBody(updateInvitationStatusSchema, request);
   const invitationId = params.id;
@@ -67,7 +67,7 @@ export async function updateInvitationStatus(
 
     if (parsedError.code === "entity.not_found") {
       return responseBadRequest(
-        "Invitation not found in authentication system"
+        "Invitation not found in authentication system",
       );
     }
 

@@ -10,6 +10,7 @@ import {
 } from "@kibamail/owly/dashboard-layout";
 import { DataTransferBoth } from "iconoir-react";
 import { notFound } from "next/navigation";
+import { WebhookDetailClient } from "../_components/webhook-detail-client";
 
 interface WebhookDetailPageProps {
   params: Promise<{
@@ -48,8 +49,8 @@ export default async function WebhookDetailPage({
               {destination.type === "webhook"
                 ? (destination.config as { url?: string })?.url
                 : destination.type === "aws_sqs"
-                  ? (destination.config as { queue_url?: string })?.queue_url
-                  : `${destination.type} destination`}
+                ? (destination.config as { queue_url?: string })?.queue_url
+                : `${destination.type} destination`}
             </DashboardLayoutStickyDetailHeaderTitle>
           </div>
 
@@ -57,7 +58,7 @@ export default async function WebhookDetailPage({
         </div>
       </DashboardLayoutStickyDetailHeader>
 
-      {/* Content will be added here */}
+      <WebhookDetailClient destination={destination} />
     </DashboardLayoutStickyContentHeaderContainer>
   );
 }

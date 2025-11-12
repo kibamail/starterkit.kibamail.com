@@ -48,7 +48,7 @@ export function WorkspaceProfileCard({
             >
               Workspace avatar
             </label>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 mt-2">
               {workspaceAvatar ? (
                 <div className="w-20 h-20 rounded-lg overflow-hidden">
                   <img
@@ -58,9 +58,7 @@ export function WorkspaceProfileCard({
                   />
                 </div>
               ) : (
-                <LetterAvatar size="medium" color="info">
-                  {workspaceName}
-                </LetterAvatar>
+                <LetterAvatar size="sm">{workspaceName}</LetterAvatar>
               )}
               <Button
                 variant="secondary"
@@ -74,20 +72,16 @@ export function WorkspaceProfileCard({
           </div>
 
           {/* Workspace Name */}
-          <div className="space-y-2">
-            <label
-              htmlFor="workspace-name"
-              className="text-sm font-medium text-kb-content-secondary"
-            >
-              Workspace name
-            </label>
+          <div className="max-w-md">
             <TextField.Root
               id="workspace-name"
               name="workspace-name"
               type="text"
               defaultValue={workspaceName}
               placeholder="Enter workspace name"
-            />
+            >
+              <TextField.Label>Workspace name</TextField.Label>
+            </TextField.Root>
           </div>
         </div>
       </SettingsCard.Content>

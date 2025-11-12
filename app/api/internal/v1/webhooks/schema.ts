@@ -27,7 +27,9 @@ export const createWebhookDestinationSchema = z.object({
  * Request Body Schema
  */
 export const updateWebhookDestinationSchema = z.object({
-  credentials: z.record(z.string(), z.union([z.string(), z.boolean()])).optional(),
+  credentials: z
+    .record(z.string(), z.union([z.string(), z.boolean()]))
+    .optional(),
   config: z.record(z.string(), z.union([z.string(), z.boolean()])).optional(),
   topics: z.array(z.string()).optional(),
   delivery_metadata: z.record(z.string(), z.string()).optional().nullable(),
@@ -48,3 +50,32 @@ export type OutpostDestinationCreate =
 
 export type OutpostDestinationUpdate =
   paths["/{tenant_id}/destinations/{destination_id}"]["patch"]["requestBody"]["content"]["application/json"];
+
+/**
+ * GET /api/internal/v1/webhooks/[id]/events - List Events for Webhook
+ *
+ * Query Parameters Schema
+ */
+export const listEventsQuerySchema = z.object({
+  next: z.string().optional(),
+  prev: z.string().optional(),
+  limit: z.coerce.number().int().positive().max(100).optional().default(10),
+  start: z.string().optional(),
+  status: z.enum(["success", "failed"]).optional(),
+});
+
+/**
+ * Response Schema for List Events
+ */
+export const listEventsResponseSchema = z.object({
+  data: z.object({
+    events: z.array(z.any()), // Using z.any() since the event shape comes from Outpost
+    count: z.number(),
+    next: z.string().nullable(),
+    prev: z.string().nullable(),
+  }),
+});
+
+// Type exports
+export type ListEventsQuery = z.infer<typeof listEventsQuerySchema>;
+export type ListEventsResponse = z.infer<typeof listEventsResponseSchema>;

@@ -20,11 +20,9 @@ import { createApiKey, listApiKeys } from "./handler";
  */
 export async function POST(request: NextRequest) {
   return withErrorHandling(request, () =>
-    withSession(
-      request,
-      (session) => createApiKey(session, request),
-      ["manage:api-keys"]
-    )
+    withSession(request, (session) => createApiKey(session, request), [
+      "manage:api-keys",
+    ]),
   );
 }
 
@@ -36,6 +34,6 @@ export async function POST(request: NextRequest) {
  */
 export async function GET(request: NextRequest) {
   return withErrorHandling(request, () =>
-    withSession(request, (session) => listApiKeys(session), ["read:api-keys"])
+    withSession(request, (session) => listApiKeys(session), ["read:api-keys"]),
   );
 }

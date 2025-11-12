@@ -19,14 +19,12 @@ import { deleteApiKey } from "../handler";
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const resolvedParams = await params;
   return withErrorHandling(request, () =>
-    withSession(
-      request,
-      (session) => deleteApiKey(session, resolvedParams),
-      ["manage:api-keys"]
-    )
+    withSession(request, (session) => deleteApiKey(session, resolvedParams), [
+      "manage:api-keys",
+    ]),
   );
 }

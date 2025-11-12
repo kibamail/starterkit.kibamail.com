@@ -20,14 +20,14 @@ import { inviteMembers } from "./handler";
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const resolvedParams = await params;
   return withErrorHandling(request, () =>
     withSession(
       request,
       (session) => inviteMembers(session, request, resolvedParams),
-      ["invite:members"]
-    )
+      ["invite:members"],
+    ),
   );
 }

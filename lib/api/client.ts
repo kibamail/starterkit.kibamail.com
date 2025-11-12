@@ -60,8 +60,10 @@ import {
 import {
   type CreateWebhookDestinationInput,
   type UpdateWebhookDestinationInput,
+  type ListEventsResponse,
   createWebhookDestinationSchema,
   updateWebhookDestinationSchema,
+  listEventsResponseSchema,
 } from "@/app/api/internal/v1/webhooks/schema";
 
 type ApiErrorResponse = {
@@ -90,7 +92,7 @@ class HttpClient {
     path: string,
     requestSchema: ZodType<TRequest> | null,
     responseSchema: ZodType<TResponse>,
-    data?: TRequest
+    data?: TRequest,
   ): Promise<TResponse> {
     const response = await fetch(path, {
       method,
@@ -111,7 +113,7 @@ class HttpClient {
               code: "custom" as const,
               path: field.split("."),
               message,
-            }))
+            })),
         );
 
         const zodError = new ZodError(issues);
@@ -151,14 +153,14 @@ class InvitationsApi extends HttpClient {
    */
   async update(
     invitationId: string,
-    data: UpdateInvitationStatusInput
+    data: UpdateInvitationStatusInput,
   ): Promise<UpdateInvitationStatusResponse> {
     return this.request(
       "PUT",
       `/api/internal/v1/invitations/${invitationId}/status`,
       updateInvitationStatusSchema,
       updateInvitationStatusResponseSchema,
-      data
+      data,
     );
   }
 }
@@ -214,7 +216,7 @@ class WorkspaceMembersApi extends HttpClient {
       `/api/internal/v1/workspaces/${this.workspaceId}/members`,
       inviteMembersSchema,
       inviteMembersResponseSchema,
-      data
+      data,
     );
   }
 
@@ -235,14 +237,14 @@ class WorkspaceMembersApi extends HttpClient {
    */
   async changeRole(
     memberId: string,
-    data: ChangeMemberRoleInput
+    data: ChangeMemberRoleInput,
   ): Promise<ChangeMemberRoleResponse> {
     return this.request(
       "PATCH",
       `/api/internal/v1/workspaces/${this.workspaceId}/members/${memberId}/role`,
       changeMemberRoleSchema,
       changeMemberRoleResponseSchema,
-      data
+      data,
     );
   }
 }
@@ -272,7 +274,7 @@ class WorkspacesApi extends HttpClient {
       "/api/internal/v1/workspaces",
       createWorkspaceSchema,
       createWorkspaceResponseSchema,
-      data
+      data,
     );
   }
 
@@ -293,7 +295,7 @@ class WorkspacesApi extends HttpClient {
       "POST",
       `/api/internal/v1/workspaces/${id}/activate`,
       null,
-      activateWorkspaceResponseSchema
+      activateWorkspaceResponseSchema,
     );
   }
 
@@ -357,7 +359,7 @@ class WebhooksApi extends HttpClient {
       "/api/internal/v1/webhooks",
       createWebhookDestinationSchema,
       {} as any,
-      data
+      data,
     );
   }
 
@@ -376,13 +378,16 @@ class WebhooksApi extends HttpClient {
    * })
    * ```
    */
-  async update(webhookId: string, data: UpdateWebhookDestinationInput): Promise<any> {
+  async update(
+    webhookId: string,
+    data: UpdateWebhookDestinationInput,
+  ): Promise<any> {
     return this.request(
       "PATCH",
       `/api/internal/v1/webhooks/${webhookId}`,
       updateWebhookDestinationSchema,
       {} as any,
-      data
+      data,
     );
   }
 
@@ -419,7 +424,7 @@ class WebhooksApi extends HttpClient {
       "PUT",
       `/api/internal/v1/webhooks/${webhookId}/enable`,
       null,
-      {} as any
+      {} as any,
     );
   }
 
@@ -439,8 +444,84 @@ class WebhooksApi extends HttpClient {
       "PUT",
       `/api/internal/v1/webhooks/${webhookId}/disable`,
       null,
-      {} as any
+      {} as any,
     );
+  }
+
+  /**
+   * List events for a webhook destination
+   *
+   * @param webhookId - ID of the webhook
+   * @param params - Query parameters (cursor, limit)
+   * @returns Paginated list of events
+   *
+   * @example
+   * ```ts
+   * const response = await internalApi.webhooks().listEvents('dest_123', {
+   *   limit: 50,
+   *   next: 'cursor_abc'
+   * })
+   * console.log(response.events)
+   * console.log(response.next) // cursor for next page
+   * ```
+   */
+  async listEvents(
+    webhookId: string,
+    params?: {
+      next?: string;
+      prev?: string;
+      limit?: number;
+      start?: string;
+      status?: "success" | "failed";
+    },
+  ): Promise<ListEventsResponse["data"]> {
+    const queryParams = new URLSearchParams();
+    if (params?.next) queryParams.set("next", params.next);
+    if (params?.prev) queryParams.set("prev", params.prev);
+    if (params?.limit) queryParams.set("limit", params.limit.toString());
+    if (params?.start) queryParams.set("start", params.start);
+    if (params?.status) queryParams.set("status", params.status);
+
+    const queryString = queryParams.toString();
+    const url = `/api/internal/v1/webhooks/${webhookId}/events${queryString ? `?${queryString}` : ""}`;
+
+    return this.request("GET", url, null, listEventsResponseSchema).then(
+      (response) => response.data,
+    );
+  }
+
+  /**
+   * List delivery attempts for an event
+   *
+   * @param webhookId - Webhook destination ID
+   * @param eventId - Event ID
+   * @returns List of delivery attempts
+   *
+   * @example
+   * ```ts
+   * const response = await internalApi.webhooks().listEventDeliveries('dest_123', 'event_456')
+   * console.log(response.deliveries)
+   * ```
+   */
+  async listEventDeliveries(
+    webhookId: string,
+    eventId: string,
+  ): Promise<{ deliveries: unknown }> {
+    const url = `/api/internal/v1/webhooks/${webhookId}/events/${eventId}/deliveries`;
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch deliveries: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data.data;
   }
 }
 
@@ -470,7 +551,7 @@ class ApiKeysApi extends HttpClient {
       "/api/internal/v1/api-keys",
       createApiKeySchema,
       createApiKeyResponseSchema,
-      data
+      data,
     );
   }
 
@@ -491,7 +572,7 @@ class ApiKeysApi extends HttpClient {
       "GET",
       "/api/internal/v1/api-keys",
       null,
-      listApiKeysResponseSchema
+      listApiKeysResponseSchema,
     );
   }
 
@@ -512,7 +593,7 @@ class ApiKeysApi extends HttpClient {
       "DELETE",
       `/api/internal/v1/api-keys/${apiKeyId}`,
       null,
-      deleteApiKeyResponseSchema
+      deleteApiKeyResponseSchema,
     );
   }
 }
