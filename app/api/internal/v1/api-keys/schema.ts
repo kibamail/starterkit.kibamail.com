@@ -25,14 +25,12 @@ export const createApiKeySchema = z.object({
  * Response Schema
  */
 export const createApiKeyResponseSchema = z.object({
-  data: z.object({
-    id: z.string(),
-    name: z.string(),
-    key: z.string(), // Full key (only returned once)
-    keyPreview: z.string(),
-    scopes: z.array(z.string()),
-    createdAt: z.string(),
-  }),
+  id: z.string(),
+  name: z.string(),
+  key: z.string(), // Full key (only returned once)
+  keyPreview: z.string(),
+  scopes: z.array(z.string()),
+  createdAt: z.string(),
 });
 
 /**
@@ -49,7 +47,7 @@ export const listApiKeysResponseSchema = z.object({
       scopes: z.array(z.string()),
       lastUsedAt: z.string().nullable(),
       createdAt: z.string(),
-    }),
+    })
   ),
 });
 

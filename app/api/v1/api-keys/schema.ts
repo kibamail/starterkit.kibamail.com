@@ -1,0 +1,37 @@
+/**
+ * API Keys Schema Validation (External API)
+ *
+ * Zod schemas for validating API key requests
+ */
+
+import { z } from "zod";
+import { API_SCOPE_NAMES } from "@/config/api";
+
+/**
+ * Create API Key Request Schema
+ */
+export const createApiKeySchema = z.object({
+  name: z
+    .string()
+    .min(1, "Name is required")
+    .max(50, "Name must be 50 characters or less"),
+  scopes: z
+    .array(z.string())
+    .min(1, "At least one scope is required")
+    .max(50, "Maximum 50 scopes allowed")
+    .refine(
+      (scopes) => scopes.every((scope) => API_SCOPE_NAMES.includes(scope)),
+      {
+        message: `Invalid scope(s). Allowed scopes: ${API_SCOPE_NAMES.join(
+          ", ",
+        )}`,
+      },
+    ),
+});
+
+export const createApiKeyResponseSchema = z.object({
+  type: z.literal("api_key"),
+  key: z.string(),
+});
+
+export type CreateApiKeyInput = z.infer<typeof createApiKeySchema>;

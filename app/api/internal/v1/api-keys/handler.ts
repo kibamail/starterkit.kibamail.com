@@ -67,13 +67,16 @@ export async function listApiKeys(session: UserSession) {
     },
   });
 
-  return responseOk({
-    data: apiKeys.map((key) => ({
-      ...key,
-      lastUsedAt: key.lastUsedAt?.toISOString() ?? null,
-      createdAt: key.createdAt.toISOString(),
-    })),
-  });
+  return responseOk(
+    {
+      data: apiKeys.map((key) => ({
+        ...key,
+        lastUsedAt: key.lastUsedAt?.toISOString() ?? null,
+        createdAt: key.createdAt.toISOString(),
+      })),
+    },
+    "api_key"
+  );
 }
 
 /**
@@ -83,7 +86,7 @@ export async function listApiKeys(session: UserSession) {
  */
 export async function deleteApiKey(
   session: UserSession,
-  params: { id: string },
+  params: { id: string }
 ) {
   await prisma.apiKey.deleteMany({
     where: {
@@ -92,5 +95,5 @@ export async function deleteApiKey(
     },
   });
 
-  return responseOk({});
+  return responseOk({}, "api_key");
 }

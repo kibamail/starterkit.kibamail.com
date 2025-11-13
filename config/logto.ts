@@ -48,9 +48,11 @@
  * ============================================================================
  */
 
-import { ReservedResource, UserScope, type LogtoNextConfig } from "@logto/next";
+import type { LogtoNextConfig } from "@logto/next";
+import { ReservedResource, UserScope } from "@logto/next";
 
 import { env } from "@/env/schema";
+import { RedisSessionWrapper } from "@/lib/auth/redis-session-wrapper";
 /**
  * Logto Authentication Configuration
  *
@@ -150,6 +152,22 @@ export const logtoConfig = {
   ],
 
   resources: [ReservedResource.Organization],
+
+  /**
+   * Session Wrapper
+   *
+   * External session storage using Redis instead of encrypted cookies.
+   * This is useful when session data grows too large for cookies, especially
+   * when maintaining multiple active organization sessions simultaneously.
+   *
+   * The RedisSessionWrapper stores session data in Redis with:
+   * - Automatic expiration (90 days)
+   * - UUID-based session identification
+   * - TTL refresh on each access (extends session lifetime for active users)
+   *
+   * @see lib/auth/redis-session-wrapper.ts
+   */
+  sessionWrapper: new RedisSessionWrapper(),
 } satisfies LogtoNextConfig;
 
 /**

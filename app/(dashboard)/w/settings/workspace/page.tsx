@@ -14,10 +14,8 @@ export default async function WorkspaceSettingsPage() {
   const session = await getSession();
   const workspaceId = session.currentOrganization?.id as string;
 
-  // Check if user has permission to manage members
   const canManageMembers = hasPermission(session, "manage:members");
 
-  // Only fetch members if user has permission
   const [members, invitations] = canManageMembers
     ? await Promise.all([
         logto.workspaces().members(workspaceId).list(),

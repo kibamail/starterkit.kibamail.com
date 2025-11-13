@@ -14,8 +14,6 @@ export default async function WebhooksPage() {
 
   const destinations = await outpost.tenants(tenantId).destinations().list();
 
-  console.log({ destinations });
-
   const destinationsWithoutSecrets =
     destinations?.map(({ credentials, ...destination }) => destination) || [];
 

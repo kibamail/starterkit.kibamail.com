@@ -1,6 +1,6 @@
 "use client";
 
-import { CreateWebhookButton } from "@/webhooks/_components/create-webhook-button";
+import { CreateWebhookButton } from "./create-webhook-button";
 import { useWebhooksContext } from "./webhooks-layout-client";
 
 /**

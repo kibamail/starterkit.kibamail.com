@@ -8,5 +8,5 @@ import { redirect } from "next/navigation";
  * users always land on a specific settings page.
  */
 export default function SettingsPage() {
-  redirect("/w/settings/usage");
+  redirect("/w/settings/workspace");
 }

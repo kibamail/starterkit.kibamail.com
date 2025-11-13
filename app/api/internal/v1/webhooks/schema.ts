@@ -68,12 +68,10 @@ export const listEventsQuerySchema = z.object({
  * Response Schema for List Events
  */
 export const listEventsResponseSchema = z.object({
-  data: z.object({
-    events: z.array(z.any()), // Using z.any() since the event shape comes from Outpost
-    count: z.number(),
-    next: z.string().nullable(),
-    prev: z.string().nullable(),
-  }),
+  events: z.array(z.any()), // Using z.any() since the event shape comes from Outpost
+  count: z.number(),
+  next: z.string().nullable(),
+  prev: z.string().nullable(),
 });
 
 // Type exports

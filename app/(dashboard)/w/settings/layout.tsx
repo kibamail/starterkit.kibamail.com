@@ -14,7 +14,6 @@ export default async function SettingsLayout({ children }: PropsWithChildren) {
   let destinationTypes: WebhookDestinationType[] = [];
   let topics: string[] = [];
 
-  // Only fetch webhook data when on the webhooks page
   if (isWebhooksPage) {
     const ctx = await getSession();
     const tenant = await outpost

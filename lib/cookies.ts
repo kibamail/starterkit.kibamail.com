@@ -54,7 +54,7 @@ const DEFAULT_OPTIONS: CookieOptions = {
 /**
  * Server-side cookie management utility
  */
-export class Cookies {
+export const Cookies = new (class {
   /**
    * Get a cookie value
    *
@@ -66,7 +66,7 @@ export class Cookies {
    * const workspaceId = await Cookies.get(CookieKey.ACTIVE_WORKSPACE_ID)
    * ```
    */
-  static async get(key: CookieKey): Promise<string | undefined> {
+  async get(key: CookieKey): Promise<string | undefined> {
     const cookieStore = await cookies();
     return cookieStore.get(key)?.value;
   }
@@ -88,7 +88,7 @@ export class Cookies {
    * })
    * ```
    */
-  static async set(
+  async set(
     key: CookieKey,
     value: string,
     options?: CookieOptions,
@@ -107,7 +107,7 @@ export class Cookies {
    * await Cookies.delete(CookieKey.ACTIVE_WORKSPACE_ID)
    * ```
    */
-  static async delete(key: CookieKey): Promise<void> {
+  async delete(key: CookieKey): Promise<void> {
     const cookieStore = await cookies();
     cookieStore.delete(key);
   }
@@ -123,8 +123,8 @@ export class Cookies {
    * const hasWorkspace = await Cookies.has(CookieKey.ACTIVE_WORKSPACE_ID)
    * ```
    */
-  static async has(key: CookieKey): Promise<boolean> {
+  async has(key: CookieKey): Promise<boolean> {
     const cookieStore = await cookies();
     return cookieStore.has(key);
   }
-}
+})();

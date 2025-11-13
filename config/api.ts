@@ -49,20 +49,6 @@ export interface ApiScopeDefinition {
  */
 export const API_SCOPES: ApiScopeDefinition[] = [
   // ============================================================================
-  // PROJECTS
-  // ============================================================================
-  {
-    name: "read:projects",
-    description: "View projects and their details",
-    category: "Projects",
-  },
-  {
-    name: "write:projects",
-    description: "Create, update, and delete projects",
-    category: "Projects",
-  },
-
-  // ============================================================================
   // API KEYS
   // ============================================================================
   {
@@ -99,16 +85,13 @@ export type ApiScope = (typeof API_SCOPE_NAMES)[number];
 /**
  * Helper: Get scopes grouped by category
  */
-export const API_SCOPES_BY_CATEGORY = API_SCOPES.reduce(
-  (acc, scope) => {
-    if (!acc[scope.category]) {
-      acc[scope.category] = [];
-    }
-    acc[scope.category].push(scope);
-    return acc;
-  },
-  {} as Record<string, ApiScopeDefinition[]>,
-);
+export const API_SCOPES_BY_CATEGORY = API_SCOPES.reduce((acc, scope) => {
+  if (!acc[scope.category]) {
+    acc[scope.category] = [];
+  }
+  acc[scope.category].push(scope);
+  return acc;
+}, {} as Record<string, ApiScopeDefinition[]>);
 
 /**
  * API Key Preset Definition
@@ -146,12 +129,12 @@ export const API_KEY_PRESETS: ApiKeyPreset[] = [
   {
     name: "read",
     displayName: "Read only",
-    scopes: ["read:projects"],
+    scopes: ["read:api-keys"],
   },
   {
     name: "write",
     displayName: "Write only",
-    scopes: ["write:projects"],
+    scopes: ["write:api-keys"],
   },
   {
     name: "all",

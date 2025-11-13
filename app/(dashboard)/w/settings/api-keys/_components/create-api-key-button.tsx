@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, ButtonProps } from "@kibamail/owly/button";
+import { Button, type ButtonProps } from "@kibamail/owly/button";
 import { Plus } from "iconoir-react";
 import { useToggleState } from "@/hooks/utils/useToggleState";
 import { CreateApiKeyModal } from "./create-api-key-modal";

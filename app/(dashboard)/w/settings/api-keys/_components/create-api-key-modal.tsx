@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert } from "@kibamail/owly";
+import * as Alert from "@kibamail/owly/alert";
 import { Button } from "@kibamail/owly/button";
 import { Checkbox } from "@kibamail/owly/checkbox";
 import * as Dialog from "@kibamail/owly/dialog";
@@ -52,20 +52,20 @@ export function CreateApiKeyModal({ open, onOpenChange }: ToggleState) {
   const hasAllScopes =
     selectedScopes?.length === API_SCOPES.length && selectedScopes.length > 0;
 
-  const handlePresetChange = (presetName: string) => {
+  function onPresetChange(presetName: string) {
     setSelectedPreset(presetName);
     const preset = API_KEY_PRESETS.find((p) => p.name === presetName);
     if (preset) {
       setValue("scopes", preset.scopes);
     }
-  };
+  }
 
   const createMutation = useMutation({
     mutationFn(data: CreateApiKeyFormData) {
       return internalApi.apiKeys().create(data);
     },
     onSuccess(data) {
-      setCreatedKey(data.data.key);
+      setCreatedKey(data.key);
       setShowSuccessModal(true);
       onOpenChange?.(false);
       router.refresh();
@@ -74,17 +74,17 @@ export function CreateApiKeyModal({ open, onOpenChange }: ToggleState) {
     },
   });
 
-  const handleToggleScope = (scope: string) => {
+  function onToggleScope(scope: string) {
     const currentScopes = selectedScopes || [];
     if (currentScopes.includes(scope)) {
       setValue(
         "scopes",
-        currentScopes.filter((s) => s !== scope),
+        currentScopes.filter((s) => s !== scope)
       );
     } else {
       setValue("scopes", [...currentScopes, scope]);
     }
-  };
+  }
 
   function handleClose() {
     reset();
@@ -92,7 +92,7 @@ export function CreateApiKeyModal({ open, onOpenChange }: ToggleState) {
     onOpenChange?.(false);
   }
 
-  function handleSuccessModalClose() {
+  function onSuccessModalClose() {
     setShowSuccessModal(false);
     setCreatedKey(null);
   }
@@ -139,7 +139,7 @@ export function CreateApiKeyModal({ open, onOpenChange }: ToggleState) {
               <div className="space-y-2">
                 <Select.Root
                   value={selectedPreset}
-                  onValueChange={handlePresetChange}
+                  onValueChange={onPresetChange}
                 >
                   <Select.Label>Preset</Select.Label>
                   <Select.Trigger placeholder="Select a preset" />
@@ -169,9 +169,7 @@ export function CreateApiKeyModal({ open, onOpenChange }: ToggleState) {
                               checked={
                                 selectedScopes?.includes(scope.name) || false
                               }
-                              onCheckedChange={() =>
-                                handleToggleScope(scope.name)
-                              }
+                              onCheckedChange={() => onToggleScope(scope.name)}
                             />
                             <label
                               htmlFor={`scope-${scope.name}`}
@@ -183,7 +181,7 @@ export function CreateApiKeyModal({ open, onOpenChange }: ToggleState) {
                         ))}
                       </div>
                     </div>
-                  ),
+                  )
                 )}
               </div>
               {errors.scopes && (
@@ -229,7 +227,7 @@ export function CreateApiKeyModal({ open, onOpenChange }: ToggleState) {
       {createdKey && (
         <ApiKeyCreatedModal
           open={showSuccessModal}
-          onOpenChange={handleSuccessModalClose}
+          onOpenChange={onSuccessModalClose}
           apiKey={createdKey}
         />
       )}

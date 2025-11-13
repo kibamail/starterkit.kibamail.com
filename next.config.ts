@@ -1,5 +1,4 @@
 import type { NextConfig } from "next";
-import { createMDX } from "fumadocs-mdx/next";
 
 import "./env/schema";
 
@@ -7,10 +6,16 @@ import "./env/schema";
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "public-files.web.garage.localhost",
+        port: "3902",
+        pathname: "/organizations/**",
+      },
+    ],
+  },
 };
 
-const withMDX = createMDX({
-  configPath: "source.config.ts",
-});
-
-export default withMDX(nextConfig);
+export default nextConfig;

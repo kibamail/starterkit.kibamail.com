@@ -21,22 +21,22 @@ export function ApiKeyCreatedModal({
   const { success } = useToast();
   const [copied, setCopied] = useState(false);
 
-  const handleCopy = async () => {
-    if (apiKey) {
-      await navigator.clipboard.writeText(apiKey);
-      setCopied(true);
-      success("API key copied to clipboard");
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
+  async function onCopy() {
+    if (!apiKey) return;
 
-  const handleClose = () => {
+    await navigator.clipboard.writeText(apiKey);
+    setCopied(true);
+    success("API key copied to clipboard");
+    setTimeout(() => setCopied(false), 2000);
+  }
+
+  function onClose() {
     setCopied(false);
     onOpenChange?.(false);
-  };
+  }
 
   return (
-    <Dialog.Root open={open} onOpenChange={handleClose}>
+    <Dialog.Root open={open} onOpenChange={onClose}>
       <Dialog.Content className="max-w-2xl max-h-[80vh] overflow-y-auto">
         <div className="space-y-4">
           <Dialog.Header>
@@ -58,7 +58,7 @@ export function ApiKeyCreatedModal({
             </Alert.Root>
             <TextField.Root readOnly value={apiKey} className="cursor-pointer!">
               <TextField.Slot side="right" className="cursor-pointer">
-                <button type="button" onClick={handleCopy}>
+                <button type="button" onClick={onCopy}>
                   {copied ? <Check className="w-4 h-4" /> : <Copy />}
                 </button>
               </TextField.Slot>
@@ -66,7 +66,7 @@ export function ApiKeyCreatedModal({
           </div>
 
           <Dialog.Footer className="flex justify-end">
-            <Button onClick={handleClose} className="w-full">
+            <Button onClick={onClose} className="w-full">
               Done
             </Button>
           </Dialog.Footer>

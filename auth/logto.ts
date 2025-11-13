@@ -428,6 +428,42 @@ class UserManager {
   }
 
   /**
+   * Get user by ID
+   *
+   * @param userId - The user ID
+   * @returns User profile data
+   */
+  async get(userId: string) {
+    const response = await apiClient.GET("/api/users/{userId}", {
+      params: { path: { userId } },
+    });
+
+    if (response.error) {
+      throw new Error(`Failed to get user: ${response.error}`);
+    }
+
+    return response.data;
+  }
+
+  /**
+   * Get user's organizations
+   *
+   * @param userId - The user ID
+   * @returns List of organizations with user's roles
+   */
+  async organizations(userId: string) {
+    const response = await apiClient.GET("/api/users/{userId}/organizations", {
+      params: { path: { userId } },
+    });
+
+    if (response.error) {
+      throw new Error(`Failed to get user organizations: ${response.error}`);
+    }
+
+    return response.data;
+  }
+
+  /**
    * Get current user's access token
    */
   async accessToken() {
@@ -463,14 +499,6 @@ class UserManager {
    * Check if user is authenticated
    */
   async isAuthenticated() {
-    // TODO: Implementation
-    throw new Error("Not implemented");
-  }
-
-  /**
-   * Get user's organizations
-   */
-  async organizations() {
     // TODO: Implementation
     throw new Error("Not implemented");
   }

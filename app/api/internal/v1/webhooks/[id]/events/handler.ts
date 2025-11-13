@@ -18,7 +18,7 @@ import { listEventsQuerySchema } from "../../schema";
 export async function listWebhookEvents(
   session: UserSession,
   request: NextRequest,
-  params: { id: string }
+  params: { id: string },
 ) {
   const workspaceId = session.currentOrganization?.id as string;
   const destinationId = params.id;

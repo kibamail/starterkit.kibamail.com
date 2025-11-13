@@ -24,7 +24,7 @@ export const createWorkspaceSchema = z.object({
   name: z
     .string()
     .min(3, "Name must be at least 3 characters")
-    .max(100, "Name must not exceed 100 characters"),
+    .max(50, "Name must not exceed 50 characters"),
   description: z.string().max(500, "Description is too long").optional(),
 });
 

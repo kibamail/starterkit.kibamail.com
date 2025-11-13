@@ -26,22 +26,14 @@ export function EventDetailsModal({
     queryFn: async () => {
       if (!eventId) return null;
 
-      // Fetch deliveries via internal API
       const result = await internalApi
         .webhooks()
         .listEventDeliveries(destinationId, eventId);
 
-      console.log("Event deliveries:", result);
       return result;
     },
     enabled: !!eventId,
   });
-
-  useEffect(() => {
-    if (data) {
-      console.log("Deliveries fetched:", data);
-    }
-  }, [data]);
 
   const deliveries = (data?.deliveries || []) as DeliveryAttempt[];
 

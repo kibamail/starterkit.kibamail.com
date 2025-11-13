@@ -38,26 +38,23 @@ export function WorkspaceSettings({
     role: string;
   } | null>(null);
 
-  // Override onOpenChange to handle router refresh after invitation
-  const handleInviteOpenChange = (
-    value: boolean | ((prev: boolean) => boolean),
+  const onInviteOpenChange = (
+    value: boolean | ((prev: boolean) => boolean)
   ) => {
     const open =
       typeof value === "function" ? value(inviteMembersState.open) : value;
     if (!open && inviteMembersState.open) {
-      // Dialog is closing, refresh the page to show new member
       router.refresh();
     }
     inviteMembersState.onOpenChange?.(value);
   };
 
   const handleChangeRoleOpenChange = (
-    value: boolean | ((prev: boolean) => boolean),
+    value: boolean | ((prev: boolean) => boolean)
   ) => {
     const open =
       typeof value === "function" ? value(changeRoleState.open) : value;
     if (!open && changeRoleState.open) {
-      // Dialog is closing, refresh the page
       router.refresh();
     }
     changeRoleState.onOpenChange?.(value);
@@ -72,7 +69,6 @@ export function WorkspaceSettings({
     changeRoleState.onOpenChange?.(true);
   };
 
-  // Show empty state if user doesn't have permission
   if (!canManageMembers) {
     return (
       <div className="w-full">
@@ -104,28 +100,24 @@ export function WorkspaceSettings({
 
   return (
     <div className="w-full space-y-6">
-      {/* Workspace Profile Card */}
-      <WorkspaceProfileCard workspaceName={workspaceName} />
+      <WorkspaceProfileCard />
 
-      {/* Team Members Card */}
       <TeamMembersTable
         members={members}
         invitations={invitations}
         inviteMembersState={{
           ...inviteMembersState,
-          onOpenChange: handleInviteOpenChange,
+          onOpenChange: onInviteOpenChange,
         }}
         onChangeRole={handleChangeRole}
         currentUserId={currentUserId}
       />
 
-      {/* Delete Workspace Card */}
       <DeleteWorkspaceCard workspaceName={workspaceName} />
 
-      {/* Dialogs */}
       <InviteMembers
         {...inviteMembersState}
-        onOpenChange={handleInviteOpenChange}
+        onOpenChange={onInviteOpenChange}
       />
       <InviteMembers
         {...changeRoleState}

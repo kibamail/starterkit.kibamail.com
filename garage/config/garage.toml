@@ -1,0 +1,38 @@
+# Garage S3 Configuration
+# Core Storage Configuration
+metadata_dir = "/var/lib/garage/meta"
+data_dir = "/var/lib/garage/data"
+
+# Database engine: lmdb (recommended), sqlite, or fjall
+db_engine = "lmdb"
+
+# Replication mode for single node development
+replication_factor = 1
+
+# Performance & Data Integrity
+compression_level = 2
+metadata_auto_snapshot_interval = "6h"
+block_size = "1048576"  # 1MB default
+
+# RPC Configuration (inter-node communication)
+rpc_bind_addr = "[::]:3901"
+rpc_public_addr = "127.0.0.1:3901"
+rpc_secret = "954a506247baca6f3d3922fd2f0a4e04f9d9a793d702e7943f403ef4d56c985c"
+
+# S3 API Configuration
+[s3_api]
+s3_region = "garage"
+api_bind_addr = "[::]:3900"
+root_domain = ".s3.garage.localhost"
+
+# S3 Web Hosting (static websites)
+[s3_web]
+bind_addr = "[::]:3902"
+root_domain = ".web.garage.localhost"
+index = "index.html"
+
+# Admin API
+[admin]
+api_bind_addr = "[::]:3903"
+admin_token = "6f9xPaiSQQ9TqtsgCko62TGsfrVXOBnLZTPj8Y/3ebo="
+metrics_token = "6f9xPaiSQQ9TqtsgCko62TGsfrVXOBnLZTPj8Y/3ebo="

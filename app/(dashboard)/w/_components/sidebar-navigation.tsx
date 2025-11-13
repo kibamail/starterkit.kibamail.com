@@ -17,12 +17,11 @@ import { usePathname } from "next/navigation";
 export function SidebarNavigation() {
   const pathname = usePathname();
 
-  // Check if settings route is active (matches /w/settings or /w/settings/*)
   const isSettingsActive = pathname.startsWith("/w/settings");
 
   return (
     <DashboardLayoutSidebarGroup>
-      <DashboardLayoutSidebarItem asChild>
+      <DashboardLayoutSidebarItem asChild active={!isSettingsActive}>
         <Link href="/w/">
           <HomeAltSlimHoriz />
           Dashboard

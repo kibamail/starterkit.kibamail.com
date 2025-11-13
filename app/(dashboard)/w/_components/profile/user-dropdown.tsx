@@ -2,6 +2,7 @@
 
 import * as UserDropdown from "@kibamail/owly/user-dropdown";
 import { LetterAvatar } from "@kibamail/owly/letter-avatar";
+import { Image } from "@/lib/components/image";
 
 import type { UserSession } from "@/lib/auth/get-session";
 import { CreateWorkspace } from "../workspaces/create-workspace";
@@ -49,9 +50,19 @@ export function UserSessionDropdown({ session }: UserDropdownComponentProps) {
     <>
       <UserDropdown.Root>
         <UserDropdown.Trigger>
-          <LetterAvatar size="xs">
-            {session.currentOrganization?.name}
-          </LetterAvatar>
+          {session.currentOrganization?.branding?.logoUrl ? (
+            <Image
+              src={session.currentOrganization.branding.logoUrl}
+              alt={session.currentOrganization.name}
+              width={20}
+              height={20}
+              className="h-5 w-5 rounded-md object-cover"
+            />
+          ) : (
+            <LetterAvatar size="xs">
+              {session.currentOrganization?.name}
+            </LetterAvatar>
+          )}
           <span>{session.currentOrganization?.name}</span>
         </UserDropdown.Trigger>
 
@@ -64,7 +75,17 @@ export function UserSessionDropdown({ session }: UserDropdownComponentProps) {
                 selected={selected}
                 onClick={() => activateWorkspace(org.id)}
               >
-                <LetterAvatar size="xs">{org.name}</LetterAvatar>
+                {org.branding?.logoUrl ? (
+                  <Image
+                    src={org.branding.logoUrl}
+                    alt={org.name}
+                    width={20}
+                    height={20}
+                    className="h-5 w-5 rounded-md object-cover"
+                  />
+                ) : (
+                  <LetterAvatar size="xs">{org.name}</LetterAvatar>
+                )}
                 {org.name}
               </UserDropdown.Item>
             );
@@ -76,14 +97,13 @@ export function UserSessionDropdown({ session }: UserDropdownComponentProps) {
             <Plus />
             New workspace
           </UserDropdown.Item>
-          {canInviteMembers && (
-            <UserDropdown.Item
-              onClick={() => inviteMembersState.onOpenChange?.(true)}
-            >
-              <Mail />
-              Invite members
-            </UserDropdown.Item>
-          )}
+          <UserDropdown.Item
+            onClick={() => inviteMembersState.onOpenChange?.(true)}
+            disabled={!canInviteMembers}
+          >
+            <Mail />
+            Invite members
+          </UserDropdown.Item>
 
           <UserDropdown.Divider />
 

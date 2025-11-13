@@ -19,7 +19,10 @@ function throwIfError(response: { error?: never }) {
 }
 
 class EventDeliveriesManager {
-  constructor(protected tenant: string, protected eventId: string) {}
+  constructor(
+    protected tenant: string,
+    protected eventId: string,
+  ) {}
 
   async list() {
     const response = await client.GET(
@@ -31,7 +34,7 @@ class EventDeliveriesManager {
             event_id: this.eventId,
           },
         },
-      }
+      },
     );
 
     throwIfError(response);
@@ -78,7 +81,10 @@ class EventManager {
 }
 
 class DestinationEventManager {
-  constructor(protected tenant: string, protected destinationId: string) {}
+  constructor(
+    protected tenant: string,
+    protected destinationId: string,
+  ) {}
 
   async list(options?: {
     next?: string;
@@ -103,7 +109,7 @@ class DestinationEventManager {
             status: options?.status,
           },
         },
-      }
+      },
     );
 
     throwIfError(response);
@@ -122,7 +128,7 @@ class DestinationEventManager {
             event_id: eventId,
           },
         },
-      }
+      },
     );
 
     throwIfError(response);
@@ -141,7 +147,7 @@ class DestinationEventManager {
             event_id: eventId,
           },
         },
-      }
+      },
     );
 
     throwIfError(response);
@@ -177,7 +183,7 @@ class DestinationManager {
             destination_id: destinationId,
           },
         },
-      }
+      },
     );
 
     throwIfError(response);
@@ -186,7 +192,7 @@ class DestinationManager {
   }
 
   async create(
-    data: paths["/{tenant_id}/destinations"]["post"]["requestBody"]["content"]["application/json"]
+    data: paths["/{tenant_id}/destinations"]["post"]["requestBody"]["content"]["application/json"],
   ) {
     const response = await client.POST("/{tenant_id}/destinations", {
       params: {
@@ -204,7 +210,7 @@ class DestinationManager {
 
   async update(
     destinationId: string,
-    data: paths["/{tenant_id}/destinations/{destination_id}"]["patch"]["requestBody"]["content"]["application/json"]
+    data: paths["/{tenant_id}/destinations/{destination_id}"]["patch"]["requestBody"]["content"]["application/json"],
   ) {
     const response = await client.PATCH(
       "/{tenant_id}/destinations/{destination_id}",
@@ -216,7 +222,7 @@ class DestinationManager {
           },
         },
         body: data,
-      }
+      },
     );
 
     throwIfError(response);
@@ -234,7 +240,7 @@ class DestinationManager {
             destination_id: destinationId,
           },
         },
-      }
+      },
     );
 
     throwIfError(response);
@@ -252,7 +258,7 @@ class DestinationManager {
             destination_id: destinationId,
           },
         },
-      }
+      },
     );
 
     throwIfError(response);
@@ -270,7 +276,7 @@ class DestinationManager {
             destination_id: destinationId,
           },
         },
-      }
+      },
     );
 
     throwIfError(response);
@@ -287,7 +293,7 @@ class DestinationManager {
   }
 
   async getType(
-    type: paths["/destination-types/{type}"]["get"]["parameters"]["path"]["type"]
+    type: paths["/destination-types/{type}"]["get"]["parameters"]["path"]["type"],
   ) {
     const response = await client.GET("/destination-types/{type}", {
       params: {
@@ -439,7 +445,7 @@ class WebhooksClient {
   }
 
   async publish(
-    data: paths["/publish"]["post"]["requestBody"]["content"]["application/json"]
+    data: paths["/publish"]["post"]["requestBody"]["content"]["application/json"],
   ) {
     const response = await client.POST("/publish", {
       body: data,

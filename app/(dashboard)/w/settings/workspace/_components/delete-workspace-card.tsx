@@ -10,7 +10,7 @@ interface DeleteWorkspaceCardProps {
 export function DeleteWorkspaceCard({
   workspaceName,
 }: DeleteWorkspaceCardProps) {
-  const handleDeleteWorkspace = () => {
+  const onDeleteWorkspace = () => {
     // TODO: Implement delete workspace functionality
     console.log("Delete workspace");
   };
@@ -29,7 +29,7 @@ export function DeleteWorkspaceCard({
       </SettingsCard.Header>
 
       <SettingsCard.Content>
-        <p className="text-sm text-kb-content-secondary">
+        <p className="text-sm text-kb-content-secondary max-w-3xl py-6">
           Once you delete a workspace, there is no going back. This action will
           permanently delete the{" "}
           <span className="font-semibold">{workspaceName}</span> workspace, all
@@ -41,11 +41,7 @@ export function DeleteWorkspaceCard({
 
       <SettingsCard.Footer>
         <div className="w-full flex items-center justify-end">
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={handleDeleteWorkspace}
-          >
+          <Button variant="destructive" size="sm" onClick={onDeleteWorkspace}>
             Delete workspace
           </Button>
         </div>

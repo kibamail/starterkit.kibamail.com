@@ -22,11 +22,15 @@
 import { NextResponse } from "next/server";
 import type { ZodError } from "zod";
 
+type ApiObjectType = "api_key" | "api_key_list";
+
 /**
- * Standard API response structure
+ * Standard API response structure (for external API v1)
  */
 type ApiResponse<T = unknown> = {
+  type?: ApiObjectType;
   data?: T;
+  meta?: unknown;
   error?: string;
   fieldErrors?: Record<string, string[]>;
 };
@@ -34,31 +38,45 @@ type ApiResponse<T = unknown> = {
 /**
  * 200 OK - Successful request
  *
+ * @param type - Resource type identifier
  * @param data - Response data
+ * @param meta - Optional metadata (e.g., pagination)
  * @returns NextResponse with status 200
  *
  * @example
  * ```ts
- * return responseOk({ users: [...] })
+ * return responseOk('user_list', users, { page: 1, total: 100 })
  * ```
  */
-export function responseOk<T>(data: T): NextResponse<ApiResponse<T>> {
-  return NextResponse.json({ data }, { status: 200 });
+export function responseOk<T>(
+  data?: T,
+  type?: ApiObjectType,
+  meta?: unknown
+): NextResponse<ApiResponse<T>> {
+  const response: ApiResponse<T> = { type, ...data };
+  if (meta) {
+    response.meta = meta;
+  }
+  return NextResponse.json(response, { status: 200 });
 }
 
 /**
  * 201 Created - Resource successfully created
  *
+ * @param type - Resource type identifier
  * @param data - Created resource data
  * @returns NextResponse with status 201
  *
  * @example
  * ```ts
- * return responseCreated({ workspace: { id: 'ws_1', name: 'Acme' } })
+ * return responseCreated('api_key', { id: '123', name: 'My Key' })
  * ```
  */
-export function responseCreated<T>(data: T): NextResponse<ApiResponse<T>> {
-  return NextResponse.json({ data }, { status: 201 });
+export function responseCreated<T>(
+  data: T,
+  type?: ApiObjectType
+): NextResponse<ApiResponse<T>> {
+  return NextResponse.json({ type, ...data }, { status: 201 });
 }
 
 /**
@@ -88,7 +106,7 @@ export function responseNoContent(): NextResponse {
  * ```
  */
 export function responseBadRequest(
-  error: string,
+  error: string
 ): NextResponse<ApiResponse<never>> {
   return NextResponse.json({ error }, { status: 400 });
 }
@@ -106,7 +124,7 @@ export function responseBadRequest(
  * ```
  */
 export function responseUnauthorized(
-  error = "Authentication required",
+  error = "Authentication required"
 ): NextResponse<ApiResponse<never>> {
   return NextResponse.json({ error }, { status: 401 });
 }
@@ -124,7 +142,7 @@ export function responseUnauthorized(
  * ```
  */
 export function responseForbidden(
-  error = "Access denied",
+  error = "Access denied"
 ): NextResponse<ApiResponse<never>> {
   return NextResponse.json({ error }, { status: 403 });
 }
@@ -142,7 +160,7 @@ export function responseForbidden(
  * ```
  */
 export function responseNotFound(
-  error = "Resource not found",
+  error = "Resource not found"
 ): NextResponse<ApiResponse<never>> {
   return NextResponse.json({ error }, { status: 404 });
 }
@@ -159,7 +177,7 @@ export function responseNotFound(
  * ```
  */
 export function responseConflict(
-  error: string,
+  error: string
 ): NextResponse<ApiResponse<never>> {
   return NextResponse.json({ error }, { status: 409 });
 }
@@ -195,7 +213,7 @@ export function responseConflict(
  * ```
  */
 export function responseValidationFailed(
-  zodError: ZodError,
+  zodError: ZodError
 ): NextResponse<ApiResponse<never>> {
   const fieldErrors: Record<string, string[]> = {};
 
@@ -212,7 +230,7 @@ export function responseValidationFailed(
       error: "Validation failed",
       fieldErrors,
     },
-    { status: 422 },
+    { status: 422 }
   );
 }
 
@@ -229,7 +247,7 @@ export function responseValidationFailed(
  * ```
  */
 export function responseRateLimitExceeded(
-  error = "Rate limit exceeded",
+  error = "Rate limit exceeded"
 ): NextResponse<ApiResponse<never>> {
   return NextResponse.json({ error }, { status: 429 });
 }
@@ -247,7 +265,7 @@ export function responseRateLimitExceeded(
  * ```
  */
 export function responseServerError(
-  error = "Internal server error",
+  error = "Internal server error"
 ): NextResponse<ApiResponse<never>> {
   return NextResponse.json({ error }, { status: 500 });
 }
@@ -265,7 +283,7 @@ export function responseServerError(
  * ```
  */
 export function responseServiceUnavailable(
-  error = "Service temporarily unavailable",
+  error = "Service temporarily unavailable"
 ): NextResponse<ApiResponse<never>> {
   return NextResponse.json({ error }, { status: 503 });
 }

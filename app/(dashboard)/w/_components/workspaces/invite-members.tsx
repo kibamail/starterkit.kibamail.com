@@ -34,7 +34,7 @@ export function InviteMembers({
   const { success: toast } = useToast();
 
   const inviteMutation = useMutation({
-    mutationFn: async (data: { email: string; role: string }) => {
+    async mutationFn(data: { email: string; role: string }) {
       return internalApi
         .workspaces()
         .members(workspace?.id as string)
@@ -48,7 +48,7 @@ export function InviteMembers({
       onOpenChange?.(false);
 
       toast(
-        `${variables.email} has been invited to join as ${roleDisplayName}.`,
+        `${variables.email} has been invited to join as ${roleDisplayName}.`
       );
     },
   });

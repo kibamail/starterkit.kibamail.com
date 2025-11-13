@@ -46,7 +46,7 @@ import { revalidatePath } from "next/cache";
 import type { NextRequest, NextResponse } from "next/server";
 import { NextResponse as NextResp } from "next/server";
 import { ZodError } from "zod";
-import { ApiError } from "@/lib/api/errors";
+import { ApiError, UnauthorizedError } from "@/lib/api/errors";
 import {
   responseUnauthorized,
   responseValidationFailed,
@@ -54,6 +54,8 @@ import {
 import { getSession, type UserSession } from "@/lib/auth/get-session";
 import { requirePermissions } from "@/lib/auth/permissions";
 import type { Permission } from "@/config/rbac";
+import { prisma } from "@/lib/db";
+import type { ApiKey } from "@prisma/client";
 
 /**
  * Handler that receives session and request
@@ -215,11 +217,12 @@ export async function withErrorHandling(
       );
     }
 
-    if (error instanceof ZodError) {
-      return responseValidationFailed(error);
+    if (
+      error instanceof ZodError ||
+      (error && typeof error === "object" && "issues" in error)
+    ) {
+      return responseValidationFailed(error as ZodError);
     }
-
-    console.error(error);
 
     return NextResp.json(
       {
@@ -231,4 +234,125 @@ export async function withErrorHandling(
       { status: 500 },
     );
   }
+}
+
+/**
+ * Handler that receives API key and request
+ */
+type ApiKeyHandler = (
+  apiKey: ApiKey,
+  request: NextRequest,
+) => Promise<NextResponse> | NextResponse;
+
+/**
+ * Hash API key using SHA-256
+ *
+ * @param key - Plain text API key
+ * @returns SHA-256 hash of the key
+ */
+async function hashApiKey(key: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(key);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+/**
+ * Require API key authentication
+ *
+ * Authenticates requests using API key from Authorization Bearer header.
+ * Extracts the key, hashes it, queries the database, and injects the API key data into the handler.
+ * Returns 401 if the key is invalid or missing.
+ * Automatically updates lastUsedAt timestamp on successful authentication.
+ *
+ * @param request - Next.js request object
+ * @param handler - Handler function that receives API key and request
+ * @param requiredScopes - Optional array of scopes to check before executing handler
+ * @returns Response from handler or 401 Unauthorized
+ *
+ * @example Basic usage
+ * ```ts
+ * export async function GET(request: NextRequest) {
+ *   return withApiSession(request, async (apiKey, request) => {
+ *     const contacts = await prisma.contact.findMany({
+ *       where: { workspaceId: apiKey.workspaceId }
+ *     });
+ *     return responseOk({ contacts });
+ *   });
+ * }
+ * ```
+ *
+ * @example With scope checks
+ * ```ts
+ * export async function POST(request: NextRequest) {
+ *   return withApiSession(
+ *     request,
+ *     async (apiKey, request) => {
+ *       // Only executes if API key has write:broadcasts scope
+ *       const broadcast = await createBroadcast(apiKey.workspaceId, data);
+ *       return responseCreated({ broadcast });
+ *     },
+ *     ["write:broadcasts"]
+ *   );
+ * }
+ * ```
+ */
+export async function withApiSession(
+  request: NextRequest,
+  handler: ApiKeyHandler,
+  requiredScopes?: string[],
+): Promise<NextResponse> {
+  // Extract API key from Authorization header
+  const authHeader = request.headers.get("Authorization");
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    throw new UnauthorizedError(
+      "Missing or invalid Authorization header. Expected format: Bearer <api_key>",
+    );
+  }
+
+  const apiKeyValue = authHeader.slice(7); // Remove "Bearer " prefix
+
+  if (!apiKeyValue) {
+    throw new UnauthorizedError("API key is required");
+  }
+
+  // Hash the API key
+  const keyHash = await hashApiKey(apiKeyValue);
+
+  // Query database for the API key
+  const apiKey = await prisma.apiKey.findUnique({
+    where: { keyHash },
+  });
+
+  if (!apiKey) {
+    throw new UnauthorizedError("Invalid API key");
+  }
+
+  // Check required scopes if specified
+  if (requiredScopes && requiredScopes.length > 0) {
+    const missingScopes = requiredScopes.filter(
+      (scope) => !apiKey.scopes.includes(scope),
+    );
+
+    if (missingScopes.length > 0) {
+      throw new UnauthorizedError(
+        `Missing required scopes: ${missingScopes.join(", ")}`,
+      );
+    }
+  }
+
+  // Update lastUsedAt timestamp (fire and forget)
+  prisma.apiKey
+    .update({
+      where: { id: apiKey.id },
+      data: { lastUsedAt: new Date() },
+    })
+    .catch((error) => {
+      console.error("Failed to update API key lastUsedAt:", error);
+    });
+
+  // Execute handler with API key data
+  return await handler(apiKey, request);
 }

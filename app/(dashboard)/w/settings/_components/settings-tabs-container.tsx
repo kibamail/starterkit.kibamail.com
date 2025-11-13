@@ -22,7 +22,7 @@ export function SettingsTabsContainer({ children }: PropsWithChildren) {
   const pathname = usePathname();
 
   const segments = pathname.split("/");
-  const activeTab = segments[segments.length - 1] || "usage";
+  const activeTab = segments[segments.length - 1] || "workspace";
 
   return (
     <Tabs.Root variant="secondary" className="w-full!" value={activeTab}>

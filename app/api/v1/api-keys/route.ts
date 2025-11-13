@@ -1,28 +1,42 @@
 /**
- * API Keys Endpoint
+ * API Keys Management Route (External API)
  *
- * RESTful API endpoint for managing API keys.
+ * POST   /api/v1/api-keys - Create new API key
+ * GET    /api/v1/api-keys - List API keys (paginated)
  *
- * Base URL: /api/v1/api-keys
- *
- * Supported Methods:
- * - GET    /api/v1/api-keys          List all API keys
- * - POST   /api/v1/api-keys          Create a new API key
- * - DELETE /api/v1/api-keys/:id      Delete an API key (see [id]/route.ts)
- *
- * Authentication: Required (Bearer token or session)
- *
- * @see ./handlers/ - Handler implementations
+ * Authentication: API Key (Bearer token)
+ * Workspace is deduced from the API key
  */
 
 import type { NextRequest } from "next/server";
-import { LIST_API_KEYS } from "./handlers/list/list-api-keys";
-import { CREATE_API_KEY } from "./handlers/post/create-api-key";
+import { withErrorHandling, withApiSession } from "@/lib/api/requests";
+import { createApiKeyHandler } from "./handlers/create-api-key";
+import { listApiKeysHandler } from "./handlers/list-api-keys";
 
-export async function GET(request: NextRequest) {
-  return LIST_API_KEYS(request);
+/**
+ * POST /api/v1/api-keys
+ *
+ * Create a new API key
+ * Requires API key authentication
+ */
+export async function POST(request: NextRequest) {
+  return withErrorHandling(request, () =>
+    withApiSession(request, (apiKey, request) =>
+      createApiKeyHandler(apiKey, request),
+    ),
+  );
 }
 
-export async function POST(request: NextRequest) {
-  return CREATE_API_KEY(request);
+/**
+ * GET /api/v1/api-keys
+ *
+ * Get all API keys for the workspace
+ * Requires API key authentication
+ */
+export async function GET(request: NextRequest) {
+  return withErrorHandling(request, () =>
+    withApiSession(request, (apiKey, request) =>
+      listApiKeysHandler(apiKey, request),
+    ),
+  );
 }

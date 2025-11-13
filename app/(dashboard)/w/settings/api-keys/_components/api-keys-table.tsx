@@ -45,20 +45,22 @@ export function ApiKeysTable({ apiKeys, canManage }: ApiKeysTableProps) {
     },
   });
 
-  const handleDeleteClick = (apiKey: ApiKey) => {
+  function onDelete(apiKey: ApiKey) {
     setSelectedApiKey(apiKey);
     setDeleteDialogOpen(true);
-  };
+  }
 
-  const handleConfirmDelete = () => {
-    if (selectedApiKey) {
-      deleteMutation.mutate(selectedApiKey.id);
+  function onConfirmDelete() {
+    if (!selectedApiKey) {
+      return;
     }
-  };
 
-  const isDeleting = (apiKeyId: string) => {
+    deleteMutation.mutate(selectedApiKey.id);
+  }
+
+  function isDeleting(apiKeyId: string) {
     return deleteMutation.isPending && deleteMutation.variables === apiKeyId;
-  };
+  }
 
   if (apiKeys.length === 0) {
     return (
@@ -155,7 +157,7 @@ export function ApiKeysTable({ apiKeys, canManage }: ApiKeysTableProps) {
                     <Button
                       variant="secondary"
                       size="sm"
-                      onClick={() => handleDeleteClick(apiKey)}
+                      onClick={() => onDelete(apiKey)}
                       disabled={deleteMutation.isPending}
                       loading={isDeleting(apiKey.id)}
                     >
@@ -182,7 +184,7 @@ export function ApiKeysTable({ apiKeys, canManage }: ApiKeysTableProps) {
         confirm={{
           variant: "destructive",
           children: "Delete",
-          onClick: handleConfirmDelete,
+          onClick: onConfirmDelete,
           loading: deleteMutation.isPending,
           disabled: deleteMutation.isPending,
         }}

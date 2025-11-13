@@ -545,6 +545,93 @@ export const env = createEnv({
       .string()
       .min(1, "OUTPOST_API_KEY is required")
       .describe("Outpost API key for webhook delivery authentication"),
+
+    /**
+     * Garage S3 Endpoint
+     *
+     * The URL endpoint for the Garage S3-compatible object storage service.
+     * Used for file uploads and object storage operations.
+     *
+     * Common values:
+     * - Development (Docker): http://localhost:3900
+     * - Production: https://s3.yourdomain.com
+     *
+     * @example "http://localhost:3900"
+     * @see https://garagehq.deuxfleurs.fr/
+     */
+    GARAGE_S3_ENDPOINT: z
+      .string()
+      .url("GARAGE_S3_ENDPOINT must be a valid URL")
+      .describe("Garage S3 endpoint URL"),
+
+    /**
+     * Garage S3 Region
+     *
+     * The region identifier for Garage S3 storage.
+     * This is configured in the garage.toml file's s3_region setting.
+     *
+     * @example "garage"
+     * @see https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/
+     */
+    GARAGE_S3_REGION: z
+      .string()
+      .min(1, "GARAGE_S3_REGION is required")
+      .default("garage")
+      .describe("Garage S3 region identifier"),
+
+    /**
+     * Garage S3 Access Key ID
+     *
+     * The access key ID for authenticating with Garage S3.
+     * Generated using: docker exec starterkit-garage /garage key create <key-name>
+     *
+     * ⚠️ SECURITY:
+     * - Keep this secret and never commit to version control
+     * - Use different keys for each environment
+     * - Rotate if compromised
+     *
+     * @example "GK4dd17fb7892fda233347522a"
+     * @see https://garagehq.deuxfleurs.fr/documentation/quick-start/
+     */
+    GARAGE_S3_ACCESS_KEY_ID: z
+      .string()
+      .min(1, "GARAGE_S3_ACCESS_KEY_ID is required")
+      .describe("Garage S3 access key ID"),
+
+    /**
+     * Garage S3 Secret Access Key
+     *
+     * The secret access key for authenticating with Garage S3.
+     * Generated along with the access key ID.
+     *
+     * ⚠️ SECURITY:
+     * - Keep this secret and never commit to version control
+     * - Never log or expose in error messages
+     * - Use different keys for each environment
+     * - Rotate if compromised
+     *
+     * @example "82fdcd964cb77bddbb6cb5170825fd8c2750eb29914169840372131e79765cb2"
+     * @see https://garagehq.deuxfleurs.fr/documentation/quick-start/
+     */
+    GARAGE_S3_SECRET_ACCESS_KEY: z
+      .string()
+      .min(1, "GARAGE_S3_SECRET_ACCESS_KEY is required")
+      .describe("Garage S3 secret access key"),
+
+    /**
+     * Garage S3 Bucket Name
+     *
+     * The default bucket name to use for storing files.
+     * Bucket must be created before use: docker exec starterkit-garage /garage bucket create <bucket-name>
+     *
+     * @example "uploads"
+     * @see https://garagehq.deuxfleurs.fr/documentation/quick-start/
+     */
+    GARAGE_S3_BUCKET: z
+      .string()
+      .min(1, "GARAGE_S3_BUCKET is required")
+      .default("uploads")
+      .describe("Garage S3 default bucket name"),
   },
 
   /**
@@ -600,6 +687,11 @@ export const env = createEnv({
     REDIS_DATABASE: process.env.REDIS_DATABASE,
     OUTPOST_API_URL: process.env.OUTPOST_API_URL,
     OUTPOST_API_KEY: process.env.OUTPOST_API_KEY,
+    GARAGE_S3_ENDPOINT: process.env.GARAGE_S3_ENDPOINT,
+    GARAGE_S3_REGION: process.env.GARAGE_S3_REGION,
+    GARAGE_S3_ACCESS_KEY_ID: process.env.GARAGE_S3_ACCESS_KEY_ID,
+    GARAGE_S3_SECRET_ACCESS_KEY: process.env.GARAGE_S3_SECRET_ACCESS_KEY,
+    GARAGE_S3_BUCKET: process.env.GARAGE_S3_BUCKET,
     // Map client environment variables here
     // Example:
     // NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,

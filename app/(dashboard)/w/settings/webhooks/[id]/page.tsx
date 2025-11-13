@@ -1,6 +1,6 @@
 import { getSession } from "@/lib/auth/get-session";
 import { outpost } from "@/webhooks/client/client";
-import { WebhookActionsDropdown } from "@/webhooks/_components/webhook-actions-dropdown";
+import { WebhookActionsDropdown } from "../_components/webhook-actions-dropdown";
 import {
   DashboardLayoutStickyDetailHeader,
   DashboardLayoutStickyDetailHeaderDescription,
@@ -26,7 +26,6 @@ export default async function WebhookDetailPage({
 
   const tenantId = ctx.currentOrganization?.id as string;
 
-  // Fetch the webhook destination
   const destination = await outpost.tenants(tenantId).destinations().get(id);
 
   if (!destination) {
@@ -46,11 +45,7 @@ export default async function WebhookDetailPage({
               {destination.type?.replace(/_/g, " ")}
             </DashboardLayoutStickyDetailHeaderDescription>
             <DashboardLayoutStickyDetailHeaderTitle>
-              {destination.type === "webhook"
-                ? (destination.config as { url?: string })?.url
-                : destination.type === "aws_sqs"
-                ? (destination.config as { queue_url?: string })?.queue_url
-                : `${destination.type} destination`}
+              {(destination.config as { url?: string })?.url}
             </DashboardLayoutStickyDetailHeaderTitle>
           </div>
 

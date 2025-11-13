@@ -19,13 +19,13 @@
 "use server";
 
 import { getLogtoContext } from "@logto/next/server-actions";
-import { redirect } from "next/navigation";
-
-import { logtoConfig } from "@/config/logto";
-import { Cookies, CookieKey } from "@/lib/cookies";
 import type { IdTokenClaims } from "@logto/node";
-import { UnauthorizedError } from "../api/errors";
-import { ROLES, type Permission } from "@/config/rbac";
+import { redirect } from "next/navigation";
+import { logtoConfig } from "@/config/logto";
+import { type Permission, ROLES } from "@/config/rbac";
+import { UnauthorizedError } from "@/lib/api/errors";
+import { getUserWithOrganizations } from "@/lib/auth/user-cache";
+import { CookieKey, Cookies } from "@/lib/cookies";
 
 export type UserSession = {
   user: {
@@ -41,11 +41,23 @@ export type UserSession = {
     id: string;
     name: string;
     description: string | null;
+    branding?: {
+      logoUrl?: string;
+      darkLogoUrl?: string;
+      favicon?: string;
+      darkFavicon?: string;
+    };
   }>;
   currentOrganization: {
     id: string;
     name: string;
     description: string | null;
+    branding?: {
+      logoUrl?: string;
+      darkLogoUrl?: string;
+      favicon?: string;
+      darkFavicon?: string;
+    };
   } | null;
   permissions: Permission[];
 };
@@ -53,9 +65,11 @@ export type UserSession = {
 /**
  * Get the current authenticated user session
  *
- * Fetches user info and organization data from Logto. If the user is not
- * authenticated, automatically redirects to /api/auth/signin which initiates
- * the Logto sign-in flow.
+ * Fetches user info and organization data from Redis cache or Logto.
+ * Uses a multi-layer caching strategy to minimize API calls.
+ *
+ * If the user is not authenticated, automatically redirects to /api/auth/signin
+ * which initiates the Logto sign-in flow.
  *
  * @param options.redirectIfUnauthenticated - Whether to redirect if not authenticated (default: true)
  * @returns User session data including user info and organizations
@@ -70,25 +84,29 @@ export type UserSession = {
  */
 export async function getSession(): Promise<UserSession> {
   try {
-    const ctx = await getLogtoContext(logtoConfig, {
-      fetchUserInfo: true,
-    });
+    const ctx = await getLogtoContext(logtoConfig);
 
     if (!ctx.isAuthenticated) {
       throw new UnauthorizedError("User is not authenticated");
     }
 
-    if (!ctx.userInfo?.sub || !ctx.userInfo?.email) {
-      throw new Error("User information is incomplete");
+    const userId = ctx.claims?.sub;
+    if (!userId) {
+      throw new Error("User ID not found in claims");
     }
 
-    const organizations =
-      ctx.userInfo.organization_data?.map((org) => ({
-        id: org.id,
-        name: org.name,
-        description: org.description,
-      })) || [];
+    // Fetch user data with caching
+    const userData = await getUserWithOrganizations(userId);
 
+    // Transform cached data to UserSession format
+    const organizations = userData.organizations.map((org) => ({
+      id: org.id,
+      name: org.name,
+      description: org.description,
+      branding: org.branding,
+    }));
+
+    // Get active workspace from cookie
     const activeWorkspaceId = await Cookies.get(CookieKey.ACTIVE_WORKSPACE_ID);
 
     let currentOrganization: UserSession["currentOrganization"] = null;
@@ -102,35 +120,33 @@ export async function getSession(): Promise<UserSession> {
       currentOrganization = organizations[0];
     }
 
-    // Extract permissions based on user's role(s) in current organization
     const permissions: Permission[] = [];
 
-    if (currentOrganization && ctx.userInfo.organization_roles) {
-      // Filter roles for current organization (format: "orgId:roleName")
-      const currentOrgRoles = ctx.userInfo.organization_roles
-        .filter((roleStr) => roleStr.startsWith(`${currentOrganization.id}:`))
-        .map((roleStr) => roleStr.split(":")[1]); // Extract role name
+    if (currentOrganization) {
+      const currentOrgData = userData.organizations.find(
+        (org) => org.id === currentOrganization.id,
+      );
 
-      // Map role names to permissions from RBAC config
-      for (const roleName of currentOrgRoles) {
-        const role = ROLES.find((r) => r.name === roleName);
-        if (role) {
-          permissions.push(...(role.permissions as Permission[]));
+      if (currentOrgData && currentOrgData.roleNames.length > 0) {
+        for (const roleName of currentOrgData.roleNames) {
+          const role = ROLES.find((r) => r.name === roleName);
+          if (role) {
+            permissions.push(...(role.permissions as Permission[]));
+          }
         }
       }
     }
 
-    // Deduplicate permissions
     const uniquePermissions = Array.from(new Set(permissions));
 
     return {
       user: {
-        sub: ctx.userInfo.sub,
-        email: ctx.userInfo.email,
-        emailVerified: ctx.userInfo.email_verified,
-        name: ctx.userInfo.name ?? null,
-        picture: ctx.userInfo.picture ?? null,
-        username: ctx.userInfo.username ?? null,
+        sub: userData.user.id,
+        email: userData.user.primaryEmail || "",
+        emailVerified: true,
+        name: userData.user.name,
+        picture: userData.user.avatar,
+        username: userData.user.username,
       },
       claims: ctx.claims,
       organizations,

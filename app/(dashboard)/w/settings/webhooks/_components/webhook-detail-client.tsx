@@ -22,7 +22,6 @@ export function WebhookDetailClient({ destination }: WebhookDetailClientProps) {
   const [timePeriod, setTimePeriod] = useState<TimePeriod>("24h");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
 
-  // Calculate start date based on time period
   const getStartDate = (period: TimePeriod): string => {
     switch (period) {
       case "24h":
@@ -43,13 +42,14 @@ export function WebhookDetailClient({ destination }: WebhookDetailClientProps) {
       timePeriod,
       statusFilter,
     ],
-    queryFn: () =>
-      internalApi.webhooks().listEvents(destination.id || "", {
+    queryFn() {
+      return internalApi.webhooks().listEvents(destination.id || "", {
         next: nextCursor || undefined,
         prev: prevCursor || undefined,
         start: getStartDate(timePeriod),
         status: statusFilter === "all" ? undefined : statusFilter,
-      }),
+      });
+    },
   });
 
   const events = data?.events || [];
@@ -59,51 +59,52 @@ export function WebhookDetailClient({ destination }: WebhookDetailClientProps) {
     prev: data?.prev || null,
   };
 
-  const handleNextPage = () => {
-    if (pagination.next) {
-      setNextCursor(pagination.next);
-      setPrevCursor(null);
+  function onNextPage() {
+    if (!pagination.next) {
+      return;
     }
-  };
 
-  const handlePrevPage = () => {
-    if (pagination.prev) {
-      setPrevCursor(pagination.prev);
-      setNextCursor(null);
+    setNextCursor(pagination.next);
+    setPrevCursor(null);
+  }
+
+  function onPrevPage() {
+    if (!pagination.prev) {
+      return;
     }
-  };
 
-  const handleTimePeriodChange = (period: TimePeriod) => {
+    setPrevCursor(pagination.prev);
+    setNextCursor(null);
+  }
+
+  function onTimePeriodChange(period: TimePeriod) {
     setTimePeriod(period);
-    // Reset pagination when time period changes
-    setNextCursor(null);
-    setPrevCursor(null);
-  };
 
-  const handleStatusFilterChange = (status: StatusFilter) => {
-    setStatusFilter(status);
-    // Reset pagination when status filter changes
     setNextCursor(null);
     setPrevCursor(null);
-  };
+  }
+
+  function onStatusFilterChange(status: StatusFilter) {
+    setStatusFilter(status);
+
+    setNextCursor(null);
+    setPrevCursor(null);
+  }
 
   return (
     <>
       <div className="mt-4 flex justify-start gap-2">
-        <WebhookEventsFilter
-          value={timePeriod}
-          onChange={handleTimePeriodChange}
-        />
+        <WebhookEventsFilter value={timePeriod} onChange={onTimePeriodChange} />
         <WebhookStatusFilter
           value={statusFilter}
-          onChange={handleStatusFilterChange}
+          onChange={onStatusFilterChange}
         />
       </div>
       <WebhookEventsTable
         events={events}
         pagination={pagination}
-        onNextPage={handleNextPage}
-        onPrevPage={handlePrevPage}
+        onNextPage={onNextPage}
+        onPrevPage={onPrevPage}
         destinationId={destination.id || ""}
         isLoading={isLoading}
       />

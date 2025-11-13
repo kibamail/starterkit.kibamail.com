@@ -65,6 +65,16 @@ import {
   updateWebhookDestinationSchema,
   listEventsResponseSchema,
 } from "@/app/api/internal/v1/webhooks/schema";
+import {
+  type UpdateLogoResponse,
+  updateLogoResponseSchema,
+} from "@/app/api/internal/v1/workspaces/[id]/logo/schema";
+import {
+  type UpdateWorkspaceInput,
+  type UpdateWorkspaceResponse,
+  updateWorkspaceSchema,
+  updateWorkspaceResponseSchema,
+} from "@/app/api/internal/v1/workspaces/[id]/schema";
 
 type ApiErrorResponse = {
   error: string;
@@ -92,7 +102,7 @@ class HttpClient {
     path: string,
     requestSchema: ZodType<TRequest> | null,
     responseSchema: ZodType<TResponse>,
-    data?: TRequest,
+    data?: TRequest
   ): Promise<TResponse> {
     const response = await fetch(path, {
       method,
@@ -113,7 +123,7 @@ class HttpClient {
               code: "custom" as const,
               path: field.split("."),
               message,
-            })),
+            }))
         );
 
         const zodError = new ZodError(issues);
@@ -153,14 +163,14 @@ class InvitationsApi extends HttpClient {
    */
   async update(
     invitationId: string,
-    data: UpdateInvitationStatusInput,
+    data: UpdateInvitationStatusInput
   ): Promise<UpdateInvitationStatusResponse> {
     return this.request(
       "PUT",
       `/api/internal/v1/invitations/${invitationId}/status`,
       updateInvitationStatusSchema,
       updateInvitationStatusResponseSchema,
-      data,
+      data
     );
   }
 }
@@ -216,7 +226,7 @@ class WorkspaceMembersApi extends HttpClient {
       `/api/internal/v1/workspaces/${this.workspaceId}/members`,
       inviteMembersSchema,
       inviteMembersResponseSchema,
-      data,
+      data
     );
   }
 
@@ -237,14 +247,14 @@ class WorkspaceMembersApi extends HttpClient {
    */
   async changeRole(
     memberId: string,
-    data: ChangeMemberRoleInput,
+    data: ChangeMemberRoleInput
   ): Promise<ChangeMemberRoleResponse> {
     return this.request(
       "PATCH",
       `/api/internal/v1/workspaces/${this.workspaceId}/members/${memberId}/role`,
       changeMemberRoleSchema,
       changeMemberRoleResponseSchema,
-      data,
+      data
     );
   }
 }
@@ -274,7 +284,7 @@ class WorkspacesApi extends HttpClient {
       "/api/internal/v1/workspaces",
       createWorkspaceSchema,
       createWorkspaceResponseSchema,
-      data,
+      data
     );
   }
 
@@ -295,7 +305,7 @@ class WorkspacesApi extends HttpClient {
       "POST",
       `/api/internal/v1/workspaces/${id}/activate`,
       null,
-      activateWorkspaceResponseSchema,
+      activateWorkspaceResponseSchema
     );
   }
 
@@ -330,6 +340,72 @@ class WorkspacesApi extends HttpClient {
   invitations() {
     return new WorkspaceInvitationsApi();
   }
+
+  /**
+   * Update workspace logo
+   *
+   * @param workspaceId - Workspace ID
+   * @param logoFile - Image file to upload
+   * @returns Upload result with logo URL
+   *
+   * @example
+   * ```ts
+   * const file = input.files[0]; // File from input element
+   * const result = await internalApi.workspaces().updateLogo('org_123', file)
+   * console.log(result.logoUrl) // Public URL of uploaded logo
+   * ```
+   */
+  async updateLogo(
+    workspaceId: string,
+    logoFile: File
+  ): Promise<UpdateLogoResponse> {
+    const formData = new FormData();
+    formData.append("logo", logoFile);
+
+    const response = await fetch(
+      `/api/internal/v1/workspaces/${workspaceId}/logo`,
+      {
+        method: "PATCH",
+        body: formData,
+      }
+    );
+
+    if (!response.ok) {
+      const errorData: ApiErrorResponse = await response.json();
+      throw new Error(errorData.error || "Logo upload failed");
+    }
+
+    const json = await response.json();
+    return json as UpdateLogoResponse;
+  }
+
+  /**
+   * Update workspace details
+   *
+   * @param workspaceId - Workspace ID
+   * @param data - Workspace update data (name, description, logoUrl)
+   * @returns Updated workspace
+   *
+   * @example
+   * ```ts
+   * const result = await internalApi.workspaces().update('org_123', {
+   *   name: 'New Name',
+   *   logoUrl: 'http://...'
+   * })
+   * ```
+   */
+  async update(
+    workspaceId: string,
+    data: UpdateWorkspaceInput
+  ): Promise<UpdateWorkspaceResponse> {
+    return this.request(
+      "PATCH",
+      `/api/internal/v1/workspaces/${workspaceId}`,
+      updateWorkspaceSchema,
+      updateWorkspaceResponseSchema,
+      data
+    );
+  }
 }
 
 /**
@@ -359,7 +435,7 @@ class WebhooksApi extends HttpClient {
       "/api/internal/v1/webhooks",
       createWebhookDestinationSchema,
       {} as any,
-      data,
+      data
     );
   }
 
@@ -380,14 +456,14 @@ class WebhooksApi extends HttpClient {
    */
   async update(
     webhookId: string,
-    data: UpdateWebhookDestinationInput,
+    data: UpdateWebhookDestinationInput
   ): Promise<any> {
     return this.request(
       "PATCH",
       `/api/internal/v1/webhooks/${webhookId}`,
       updateWebhookDestinationSchema,
       {} as any,
-      data,
+      data
     );
   }
 
@@ -424,7 +500,7 @@ class WebhooksApi extends HttpClient {
       "PUT",
       `/api/internal/v1/webhooks/${webhookId}/enable`,
       null,
-      {} as any,
+      {} as any
     );
   }
 
@@ -439,12 +515,12 @@ class WebhooksApi extends HttpClient {
    * await internalApi.webhooks().disable('dest_123')
    * ```
    */
-  async disable(webhookId: string): Promise<any> {
+  async disable(webhookId: string): Promise<void> {
     return this.request(
       "PUT",
       `/api/internal/v1/webhooks/${webhookId}/disable`,
       null,
-      {} as any,
+      {} as any
     );
   }
 
@@ -473,8 +549,8 @@ class WebhooksApi extends HttpClient {
       limit?: number;
       start?: string;
       status?: "success" | "failed";
-    },
-  ): Promise<ListEventsResponse["data"]> {
+    }
+  ): Promise<ListEventsResponse> {
     const queryParams = new URLSearchParams();
     if (params?.next) queryParams.set("next", params.next);
     if (params?.prev) queryParams.set("prev", params.prev);
@@ -483,11 +559,11 @@ class WebhooksApi extends HttpClient {
     if (params?.status) queryParams.set("status", params.status);
 
     const queryString = queryParams.toString();
-    const url = `/api/internal/v1/webhooks/${webhookId}/events${queryString ? `?${queryString}` : ""}`;
+    const url = `/api/internal/v1/webhooks/${webhookId}/events${
+      queryString ? `?${queryString}` : ""
+    }`;
 
-    return this.request("GET", url, null, listEventsResponseSchema).then(
-      (response) => response.data,
-    );
+    return this.request("GET", url, null, listEventsResponseSchema);
   }
 
   /**
@@ -505,7 +581,7 @@ class WebhooksApi extends HttpClient {
    */
   async listEventDeliveries(
     webhookId: string,
-    eventId: string,
+    eventId: string
   ): Promise<{ deliveries: unknown }> {
     const url = `/api/internal/v1/webhooks/${webhookId}/events/${eventId}/deliveries`;
 
@@ -521,7 +597,7 @@ class WebhooksApi extends HttpClient {
     }
 
     const data = await response.json();
-    return data.data;
+    return data;
   }
 }
 
@@ -551,7 +627,7 @@ class ApiKeysApi extends HttpClient {
       "/api/internal/v1/api-keys",
       createApiKeySchema,
       createApiKeyResponseSchema,
-      data,
+      data
     );
   }
 
@@ -572,7 +648,7 @@ class ApiKeysApi extends HttpClient {
       "GET",
       "/api/internal/v1/api-keys",
       null,
-      listApiKeysResponseSchema,
+      listApiKeysResponseSchema
     );
   }
 
@@ -593,7 +669,7 @@ class ApiKeysApi extends HttpClient {
       "DELETE",
       `/api/internal/v1/api-keys/${apiKeyId}`,
       null,
-      deleteApiKeyResponseSchema,
+      deleteApiKeyResponseSchema
     );
   }
 }
